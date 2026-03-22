@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Patterns Visualizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-hover: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --color-sw: #14b8a6;
+            --color-tp: #f59e0b;
+            --font-main: 'Inter', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 4rem 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+            font-weight: 600;
+        }
+
+        .nav-back:hover { color: var(--text-main); }
+
+        header { text-align: center; margin-bottom: 3rem; }
+        h1 { font-size: 2.5rem; color: var(--text-main); margin-bottom: 0.5rem; }
+        p.subtitle { color: var(--text-muted); }
+
+        /* Visualizer Area */
+        .visualizer-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .playground-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .play-btn {
+            background: var(--bg-hover);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        .play-btn:hover { background: rgba(255,255,255,0.1); }
+
+        .array-container {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 4rem 0;
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .array-cell {
+            width: 60px;
+            height: 60px;
+            background: #111827;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pointer {
+            position: absolute;
+            bottom: -35px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .pointer::before {
+            content: '↑';
+            font-size: 1.4rem;
+            margin-bottom: -4px;
+        }
+
+        .ptr-l { color: var(--color-tp); }
+        .ptr-r { color: var(--color-sw); }
+
+        .window-highlight {
+            position: absolute;
+            top: -5px; bottom: -5px;
+            background: rgba(20, 184, 166, 0.15);
+            border: 2px dashed var(--color-sw);
+            border-radius: 10px;
+            z-index: 0;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            pointer-events: none;
+        }
+
+        .play-desc {
+            text-align: center;
+            color: var(--text-muted);
+            min-height: 4rem;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+        }
+
+        .status-panel {
+            background:#111827;
+            padding:1.5rem;
+            border-radius:8px;
+            border:1px solid rgba(255,255,255,0.1);
+            font-family:var(--font-code);
+            font-size:1rem;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .status-item span { font-weight: 600; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="array_patterns_masterclass.html" class="nav-back">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to Masterclass
+        </a>
+
+        <header>
+            <h1>Array Patterns Visualizer</h1>
+            <p class="subtitle">Problem: Longest Substring Without Repeating Characters ("abcabcbb")</p>
+        </header>
+
+        <div class="visualizer-card">
+            <div class="playground-controls">
+                <button class="play-btn" onclick="pgStep()">Step Forward</button>
+                <button class="play-btn" onclick="pgReset()">Reset</button>
+            </div>
+
+            <div class="array-container" id="pg-array">
+                <div class="window-highlight" id="pg-window"></div>
+            </div>
+
+            <p class="play-desc" id="pg-desc">Click "Step Forward" to start iterating 'r'.</p>
+
+            <div class="status-panel">
+                <div class="status-item">State (Set): <span id="pg-state" style="color:var(--color-sw)">{}</span></div>
+                <div class="status-item">Best Length: <span id="pg-best" style="color:var(--color-tp)">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const pStr = "abcabcbb".split('');
+        let l = 0, r = 0, stateSet = new Set(), bestLen = 0;
+        let pgState = 1; // 1=expand, 2=shrink
+        
+        const cont = document.getElementById('pg-array');
+        const winHighlight = document.getElementById('pg-window');
+        const descTxt = document.getElementById('pg-desc');
+        const stateTxt = document.getElementById('pg-state');
+        const bestTxt = document.getElementById('pg-best');
+
+        function pgInit() {
+            cont.innerHTML = '';
+            cont.appendChild(winHighlight);
+            pStr.forEach((char, i) => {
+                const cell = document.createElement('div');
+                cell.className = 'array-cell';
+                cell.innerText = char;
+                cell.id = `cell-${i}`;
+                cont.appendChild(cell);
+            });
+            pgReset();
+        }
+
+        function pgReset() {
+            l = 0; r = 0; stateSet.clear(); bestLen = 0; pgState = 1;
+            updateUI();
+            descTxt.innerText = "Click Step Forward to process the first character.";
+        }
+
+        function pgStep() {
+            if (r >= pStr.length && stateSet.size === 0) {
+                descTxt.innerText = "Execution complete. Reset to try again.";
+                return;
+            }
+
+            const charR = pStr[r];
+            if (stateSet.has(charR)) {
+                pgState = 2;
+                const charL = pStr[l];
+                stateSet.delete(charL);
+                descTxt.innerText = `SHRINK: '${charR}' duplicate! Removing '${charL}' from left.`;
+                l++;
+            } else {
+                if (pgState === 2) {
+                    descTxt.innerText = `Condition fixed. Adding '${charR}'.`;
+                    pgState = 1;
+                } else {
+                    stateSet.add(charR);
+                    bestLen = Math.max(bestLen, r - l + 1);
+                    descTxt.innerText = `EXPAND: Added '${charR}'. Valid size: ${r - l + 1}. Updating Best.`;
+                    if(r < pStr.length - 1) r++;
+                    else descTxt.innerText += " Reached end.";
+                }
+            }
+            updateUI();
+        }
+
+        function updateUI() {
+            document.querySelectorAll('.pointer').forEach(el => el.remove());
+            if(l < pStr.length) document.getElementById(`cell-${l}`).innerHTML += `<div class="pointer ptr-l">L</div>`;
+            if(r < pStr.length) document.getElementById(`cell-${r}`).innerHTML += `<div class="pointer ptr-r" style="left:5px">R</div>`;
+            
+            if(l < pStr.length && r < pStr.length && l <= r) {
+                const lCell = document.getElementById(`cell-${l}`);
+                const rCell = document.getElementById(`cell-${r}`);
+                winHighlight.style.left = `${lCell.offsetLeft - 5}px`;
+                winHighlight.style.width = `${(rCell.offsetLeft + rCell.offsetWidth - lCell.offsetLeft) + 10}px`;
+                winHighlight.style.display = 'block';
+            } else { winHighlight.style.display = 'none'; }
+
+            document.querySelectorAll('.array-cell').forEach((c, i) => {
+                if (i >= l && i <= r && !stateSet.has(pStr[r]) && pgState !== 2) c.style.borderColor = "var(--color-sw)";
+                else if (i === r && pgState === 2) c.style.borderColor = "#ef4444";
+                else c.style.borderColor = "rgba(255,255,255,0.1)";
+            });
+
+            stateTxt.innerText = `{ ${Array.from(stateSet).join(', ')} }`;
+            bestTxt.innerText = bestLen;
+        }
+
+        pgInit();
+    </script>
+</body>
+</html>

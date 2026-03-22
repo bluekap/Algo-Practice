@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Patterns Revision Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-hover: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --color-sw: #14b8a6; /* Teal */
+            --color-tp: #f59e0b; /* Amber */
+            --color-ps: #a855f7; /* Purple */
+            --font-main: 'Inter', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 4rem 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Navigation Back Link */
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+            font-weight: 600;
+        }
+
+        .nav-back:hover {
+            color: var(--text-main);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--color-sw), var(--color-tp), var(--color-ps));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 { font-size: 2rem; margin-bottom: 1.5rem; color: var(--text-main); }
+        h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-main); }
+        h4 { font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--text-main); }
+
+        /* Flowchart */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            text-align: center;
+        }
+        .flow-node {
+            background: var(--bg-hover);
+            padding: 1.5rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .flow-arrow { font-size: 1.5rem; color: var(--text-muted); }
+
+        /* Templates */
+        .template-card {
+            background: #111827;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid;
+            font-family: var(--font-code);
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+        .t-sw { border-left-color: var(--color-sw); }
+        .t-tp { border-left-color: var(--color-tp); }
+        .t-ps { border-left-color: var(--color-ps); }
+        pre { margin: 0; line-height: 1.5; color: #6b7280; }
+        .code-slot { color: #f3f4f6; font-weight: 600; padding: 2px 4px; border-radius: 4px; background: rgba(255,255,255,0.05); }
+        .t-sw .code-slot { color: var(--color-sw); }
+        .t-tp .code-slot { color: var(--color-tp); }
+        .t-ps .code-slot { color: var(--color-ps); }
+
+        /* Mapping Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; }
+        .trigger-word { color: #cbd5e1; font-family: var(--font-code); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; margin-right: 4px;}
+
+        /* Quiz */
+        .quiz-card { background: #111827; border: 1px solid rgba(255,255,255,0.1); padding: 2rem; border-radius: 8px; margin-bottom: 1rem; }
+        .quiz-question { font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .quiz-opts { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .quiz-btn { flex: 1; min-width: 150px; padding: 0.75rem; background: var(--bg-hover); border: 2px solid transparent; border-radius: 8px; color: white; cursor: pointer; transition: all 0.2s; }
+        .quiz-btn:hover { border-color: var(--text-muted); }
+        .quiz-feedback { padding: 1rem; border-radius: 8px; display: none; font-weight: 500; margin-top: 1rem; }
+        .feedback-correct { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+        .feedback-incorrect { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+
+        .pattern-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700; font-size: 0.9rem; margin-top: 1rem; }
+        .badge-sw { background: rgba(20, 184, 166, 0.2); color: var(--color-sw); border: 1px solid var(--color-sw); }
+        .badge-tp { background: rgba(245, 158, 11, 0.2); color: var(--color-tp); border: 1px solid var(--color-tp); }
+        .badge-ps { background: rgba(168, 85, 247, 0.2); color: var(--color-ps); border: 1px solid var(--color-ps); }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="array_patterns_masterclass.html" class="nav-back">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to Masterclass
+        </a>
+
+        <header>
+            <h1>Array Patterns Guide</h1>
+            <p class="subtitle">Mental models, recognition triggers, and universal templates.</p>
+        </header>
+
+        <!-- Detector -->
+        <div class="section-card">
+            <h2>Pattern Detector</h2>
+            <div class="flowchart">
+                <div class="flow-node"><h3>1. Is the input a linear sequence?</h3><p style="color: var(--text-muted); font-size: 0.9rem;">(Array, String)</p></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node" style="border-left: 4px solid var(--color-ps);">
+                    <h3>2. Is it asking for multiple range sums?</h3>
+                    <div class="pattern-badge badge-ps">Prefix Sum</div>
+                </div>
+                <div class="flow-arrow">↓ No? Next...</div>
+                <div class="flow-node" style="border-left: 4px solid var(--color-sw);">
+                    <h3>3. CONTIGUOUS subarray/substring?</h3>
+                    <div class="pattern-badge badge-sw">Sliding Window</div>
+                </div>
+                <div class="flow-arrow">↓ No? Next...</div>
+                <div class="flow-node" style="border-left: 4px solid var(--color-tp);">
+                    <h3>4. Sorted? Comparing pairs?</h3>
+                    <div class="pattern-badge badge-tp">Two Pointers</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Templates -->
+        <div class="section-card">
+            <h2>Universal Skeleton Templates</h2>
+            <div class="template-card t-sw">
+<pre>def variable_window(nums):
+    l = 0
+    state = <span class="code-slot">{}  # Track your condition</span>
+    best = <span class="code-slot">0   # Track best result</span>
+    for r in range(len(nums)):
+        <span class="code-slot">add nums[r] to state</span>
+        while <span class="code-slot">condition is broken</span>:
+            <span class="code-slot">remove nums[l] from state</span>
+            l += 1
+        best = <span class="code-slot">max(best, r - l + 1)</span>
+    return best</pre>
+            </div>
+            <div class="template-card t-tp">
+<pre>def two_pointers_inward(nums, target):
+    l, r = 0, len(nums) - 1
+    while l < r:
+        curr = <span class="code-slot">nums[l] + nums[r]</span>
+        if <span class="code-slot">curr == target</span>: return [l, r]
+        elif <span class="code-slot">curr < target</span>: l += 1
+        else: r -= 1</pre>
+            </div>
+        </div>
+
+        <!-- Mental Models -->
+        <div class="section-card">
+            <h2>Expert Mental Models</h2>
+            <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--color-sw); margin-bottom: 1.5rem;">
+                <h3>The Core Idea: Sliding Window</h3>
+                <p>Add new element on the right, remove old on the left. Turns O(n²) into O(n).</p>
+            </div>
+            <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ef4444;">
+                <h3>Trick: 'while' vs 'if'</h3>
+                <p>Always use <code>while</code> for shrinking variable-size windows. A single step left might not be enough.</p>
+            </div>
+        </div>
+
+        <!-- Problem Mapping -->
+        <div class="section-card">
+            <h2>Problem Mapping</h2>
+            <table>
+                <thead><tr><th>Pattern</th><th>Triggers</th><th>Condition</th></tr></thead>
+                <tbody>
+                    <tr><td><span class="pattern-badge badge-sw">Var Window</span></td><td><span class="trigger-word">Longest</span><span class="trigger-word">Unique</span></td><td><code>s[r] in state</code></td></tr>
+                    <tr><td><span class="pattern-badge badge-tp">Two Pointers</span></td><td><span class="trigger-word">Sorted</span><span class="trigger-word">Pair Sum</span></td><td><code>l >= r</code></td></tr>
+                    <tr><td><span class="pattern-badge badge-ps">Prefix Sum</span></td><td><span class="trigger-word">Range query</span></td><td>Match target</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Quiz -->
+        <div class="section-card">
+            <h2>Identify the Pattern</h2>
+            <div class="quiz-card" id="q1">
+                <p class="quiz-question">1. "Find the minimal length of a contiguous subarray whose sum is >= k."</p>
+                <div class="quiz-opts">
+                    <button class="quiz-btn" onclick="checkQuiz(1, 'sw')">Sliding Window</button>
+                    <button class="quiz-btn" onclick="checkQuiz(1, 'tp')">Two Pointers</button>
+                </div>
+                <div id="q1-feed" class="quiz-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkQuiz(qNum, selected) {
+            const feed = document.getElementById(`q${qNum}-feed`);
+            feed.style.display = 'block';
+            if (selected === 'sw') {
+                feed.className = 'quiz-feedback feedback-correct';
+                feed.innerText = 'Correct! Contiguous + Sum condition = Sliding Window.';
+            } else {
+                feed.className = 'quiz-feedback feedback-incorrect';
+                feed.innerText = 'Incorrect. Try thinking about contiguous elements.';
+            }
+        }
+    </script>
+</body>
+</html>

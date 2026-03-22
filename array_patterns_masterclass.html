@@ -1,0 +1,159 @@
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-hover: rgba(51, 65, 85, 0.8);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --color-sw: #14b8a6;
+            --color-tp: #f59e0b;
+            --color-ps: #a855f7;
+            --font-main: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-main);
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-back {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-weight: 600;
+        }
+
+        .nav-back:hover { color: var(--text-main); }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 800px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, var(--color-sw), var(--color-tp), var(--color-ps));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(16px);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: var(--bg-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .icon-wrapper {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card.guide .icon-wrapper { background: rgba(20, 184, 166, 0.2); color: var(--color-sw); }
+        .card.viz .icon-wrapper { background: rgba(245, 158, 11, 0.2); color: var(--color-tp); }
+
+        .card-title { font-size: 1.75rem; font-weight: 700; }
+        .card-desc { color: var(--text-muted); font-size: 1.1rem; flex-grow: 1; }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            color: var(--color-sw);
+        }
+        .card.viz .card-footer { color: var(--color-tp); }
+
+        .card-footer svg { width: 24px; height: 24px; transition: transform 0.3s ease; }
+        .card:hover .card-footer svg { transform: translateX(8px); }
+
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="nav-back">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Back to Hub
+    </a>
+
+    <div class="header">
+        <h1>Array Patterns Masterclass</h1>
+        <p>Master the top patterns for Google interviews: Sliding Window, Two Pointers, and Prefix Sums.</p>
+    </div>
+
+    <div class="grid">
+        <a href="array_patterns_guide.html" class="card guide">
+            <div class="icon-wrapper">📖</div>
+            <h2 class="card-title">Revision Guide</h2>
+            <p class="card-desc">Pattern detector, universal skeleton templates, and expert mental models for interviews.</p>
+            <div class="card-footer">
+                <span>Start Learning</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </div>
+        </a>
+
+        <a href="array_patterns_visualizer.html" class="card viz">
+            <div class="icon-wrapper">🖥️</div>
+            <h2 class="card-title">Visual Playground</h2>
+            <p class="card-desc">Interactive variable sliding window simulation. Step through execution to see pointers in action.</p>
+            <div class="card-footer">
+                <span>Launch Visualizer</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </div>
+        </a>
+    </div>
+
+</body>
+</html>
