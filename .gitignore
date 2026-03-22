@@ -1,0 +1,10 @@
+PROJECT_RULES.md
+.DS_Store
+.gemini/
+.agents/
+.agent/
+_agents/
+_agent/
+node_modules/
+dist/
+build/
