@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Python Executer & Visualizer</title>
+    <title>Live Python Debugger — AlgoPractice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     
     <!-- CodeMirror Core and Theme -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
@@ -11,13 +14,15 @@
     
     <style>
         :root {
-            --bg-base: #1e1e24;
-            --bg-surface: #282a36; 
-            --bg-elevated: #3b3e4f;
-            --text-main: #f8f8f2;
-            --blue: #3b82f6;
-            --border: #44475a;
-            --font-code: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Consolas, monospace;
+            --bg-dark: #07090f;
+            --bg-surface: #0d1117;
+            --bg-elevated: #1e293b;
+            --text-main: #e2e8f0;
+            --text-muted: #475569;
+            --accent: #a78bfa;
+            --border: #1e293b;
+            --font-main: 'Outfit', sans-serif;
+            --font-code: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
         }
 
         * {
@@ -27,22 +32,22 @@
         }
 
         body {
-            background-color: var(--bg-base);
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-family: var(--font-main);
             height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
         header {
-            background-color: var(--bg-surface);
+            background: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
             border-bottom: 1px solid var(--border);
-            padding: 15px 24px;
+            padding: 14px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.4);
             z-index: 10;
         }
 
@@ -53,54 +58,74 @@
         }
 
         .left-pane {
-            width: 45%;
-            border-right: 1px solid var(--border);
+            width: 0;
+            flex-shrink: 0;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             background-color: var(--bg-surface);
+            border-right: 0px solid var(--border);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-right-width 0.3s;
             position: relative;
+        }
+
+        .left-pane.open {
+            width: 45%;
+            border-right-width: 1px;
         }
         
         .pane-header {
             padding: 10px 16px;
             background-color: var(--bg-elevated);
-            font-size: 13px;
+            font-family: var(--font-code);
+            font-size: 11px;
             font-weight: 600;
-            color: #8be9fd;
+            color: #374151;
             border-bottom: 1px solid var(--border);
-            letter-spacing: 0.5px;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-        }
-
-        .test-case-bar {
-            background-color: var(--bg-surface);
-            padding: 12px 16px;
-            border-top: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
-        
-        .test-case-bar input {
-            flex: 1;
-            background-color: var(--bg-elevated);
-            border: 1px solid var(--border);
+
+        .pane-dots { display: flex; gap: 5px; }
+        .pane-dot { width: 9px; height: 9px; border-radius: 50%; }
+        .pane-dot.red { background: #ef4444; }
+        .pane-dot.yellow { background: #f59e0b; }
+        .pane-dot.green { background: #22c55e; }
+
+        .args-input {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid #334155;
             color: var(--text-main);
-            padding: 10px;
-            border-radius: 4px;
+            padding: 8px 14px;
+            border-radius: 6px;
             font-family: var(--font-code);
-            font-size: 14px;
+            font-size: 12px;
+            width: 340px;
             outline: none;
+            transition: border-color 0.15s;
         }
-        .test-case-bar input:focus {
-            border-color: #8be9fd;
+
+        .args-input:focus {
+            border-color: #a78bfa;
+        }
+
+        .args-label {
+            font-size: 11px;
+            color: #475569;
+            font-family: var(--font-code);
+            letter-spacing: 0.05em;
+            white-space: nowrap;
         }
 
         .right-pane {
-            width: 55%;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            background-color: #ffffff; 
+            background-color: #ffffff;
             position: relative;
         }
 
@@ -116,23 +141,47 @@
             right: 0 !important;
         }
 
-        .btn {
-            background-color: var(--blue);
-            color: white;
-            border: none;
-            padding: 12px 24px;
+        .btn-edit {
+            background: rgba(255,255,255,0.06);
+            color: var(--text-muted-bright, #94a3b8);
+            border: 1px solid #334155;
+            padding: 9px 16px;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 15px;
-            transition: background 0.2s, transform 0.1s;
+            font-family: var(--font-main);
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.03em;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+        }
+
+        .btn-edit:hover { background: rgba(255,255,255,0.1); border-color: #a78bfa; color: #a78bfa; }
+        .btn-edit.active { background: #160d30; border-color: #3730a3; color: #a78bfa; }
+
+        .btn {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 0 20px rgba(167, 139, 250, 0.25);
         }
 
-        .btn:hover { background-color: #2563eb; }
-        .btn:active { transform: scale(0.98); }
+        .btn:hover { background: linear-gradient(135deg, #6d28d9, #8b5cf6); box-shadow: 0 0 30px rgba(167, 139, 250, 0.4); }
+        .btn:active { transform: scale(0.97); }
 
         .placeholder {
             flex: 1;
@@ -168,30 +217,39 @@
 
     <header>
         <div style="display:flex; align-items:center; gap:12px;">
-            <div style="background-color:#f1fa8c; color:#282a36; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px;">Py</div>
-            <div style="font-weight: 600; font-size: 18px; letter-spacing:0.3px;">Live Python Debugger - LeetCode Mode</div>
+            <div style="background:linear-gradient(135deg,#7c3aed,#a78bfa); width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; font-family:'Outfit',sans-serif; color:white; letter-spacing:0.02em;">Py</div>
+            <div>
+                <div style="font-weight:700; font-size:15px; font-family:'Outfit',sans-serif; color:#e2e8f0;">Live Python Debugger</div>
+                <div style="font-size:11px; color:#475569; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em;">LEETCODE MODE</div>
+            </div>
         </div>
+        <div style="display:flex; align-items:center; gap:10px; flex:1; margin: 0 24px;">
+            <span class="args-label">TEST ARGS:</span>
+            <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
+                <input type="text" id="test_args" class="args-input" placeholder='e.g. [2,7,11,15], 9  OR  "racecar"' style="width: 100%;">
+                <div id="args_hint_display" style="font-size: 10px; font-family: var(--font-code); color: #475569; letter-spacing: 0.05em;">Detecting...</div>
+            </div>
+        </div>
+        <button class="btn-edit" id="edit-btn" onclick="toggleEditor()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Edit Code
+        </button>
         <button class="btn" onclick="runCode()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            Visualize Execution
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Visualize
         </button>
     </header>
 
     <div class="main-container">
-        <!-- Editor Pane -->
-        <div class="left-pane">
-            <div class="pane-header">Code Editor</div>
+        <!-- Editor Pane (slide-in panel) -->
+        <div class="left-pane" id="left-pane">
+            <div class="pane-header"><div class="pane-dots"><div class="pane-dot red"></div><div class="pane-dot yellow"></div><div class="pane-dot green"></div></div>code_editor.py</div>
             <textarea id="code_input"></textarea>
-            
-            <div class="test-case-bar">
-                <span style="font-size:12px; font-weight:bold; color:#8be9fd;">Test Cases (comma-separated args):</span>
-                <input type="text" id="test_args" placeholder="e.g. [2,7,11,15], 9  OR  &quot;racecar&quot;">
-            </div>
         </div>
         
         <!-- Visualizer Pane -->
         <div class="right-pane">
-            <div class="pane-header" style="background-color: #f1f5f9; color: #475569; border-bottom: 1px solid #cbd5e1;">Memory & Execution State</div>
+            <div class="pane-header" style="background-color: #f1f5f9; color: #475569; border-bottom: 1px solid #cbd5e1; font-family: 'JetBrains Mono', monospace;">memory_state.viz</div>
             
             <div id="placeholder" class="placeholder">
                 <h2>Ready to Trace</h2>
@@ -249,6 +307,72 @@
 
         editor.setValue(defaultCode);
         document.getElementById('test_args').value = '"A man, a plan, a canal: Panama"';
+
+        // --- SMART ARGUMENT DETECTOR ---
+        function updateArgsHint() {
+            const code = editor.getValue();
+            // Regex to find: def methodName(self, arg1, arg2...)
+            // It also handles type hints like arg1: List[int]
+            const match = code.match(/def\s+([a-zA-Z0-9_]+)\s*\(\s*self\s*(?:,\s*([^)]*))?\)/);
+            
+            const hintDisplay = document.getElementById('args_hint_display');
+            const inputField = document.getElementById('test_args');
+            
+            if (match) {
+                const methodName = match[1];
+                const rawArgs = match[2] || "";
+                
+                // Split by comma but ignore commas inside brackets (for type hints)
+                let splitArgs = [];
+                let current = "";
+                let depth = 0;
+                for (let char of rawArgs) {
+                    if (char === '[') depth++;
+                    if (char === ']') depth--;
+                    if (char === ',' && depth === 0) {
+                        splitArgs.push(current);
+                        current = "";
+                    } else {
+                        current += char;
+                    }
+                }
+                if (current.trim()) splitArgs.push(current);
+
+                const args = splitArgs.map(a => a.split(':')[0].trim())
+                                     .filter(a => a && a !== 'self');
+                
+                if (args.length > 0) {
+                    hintDisplay.textContent = `Needs ${args.length} args: (${args.join(', ')})`;
+                    hintDisplay.style.color = '#a78bfa';
+                    inputField.placeholder = `e.g. ${args.map(() => 'val').join(', ')}`;
+                } else {
+                    hintDisplay.textContent = `No args needed besides self.`;
+                    hintDisplay.style.color = '#475569';
+                    inputField.placeholder = 'No args needed';
+                }
+            } else {
+                hintDisplay.textContent = 'No Solution method detected.';
+                hintDisplay.style.color = '#ef4444';
+            }
+        }
+
+        editor.on('change', () => {
+            updateArgsHint();
+        });
+
+        // Initialize hint
+        updateArgsHint();
+
+        function toggleEditor() {
+            const pane = document.getElementById('left-pane');
+            const btn = document.getElementById('edit-btn');
+            const isOpen = pane.classList.toggle('open');
+            btn.classList.toggle('active', isOpen);
+            // Update the text node after the SVG
+            const textNode = [...btn.childNodes].find(n => n.nodeType === 3);
+            if (textNode) textNode.textContent = isOpen ? '\n            Close Editor\n        ' : '\n            Edit Code\n        ';
+            if (isOpen) setTimeout(() => editor.refresh(), 310);
+        }
 
         function runCode() {
             let code = editor.getValue().trim();

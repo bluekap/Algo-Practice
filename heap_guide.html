@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heap Revision Guide — AlgoPractice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07090f;
+            --bg-header: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
+            --border-primary: #1e293b;
+            --accent-purple: #a78bfa;
+            --accent-blue: #38bdf8;
+            --text-main: #e2e8f0;
+            --text-muted: #475569;
+            --text-muted-bright: #94a3b8;
+            --font-main: 'Outfit', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+            --card-bg: #0d1117;
+            --code-bg: #020408;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ── NAVIGATION ── */
+        .nav-back {
+            position: absolute;
+            top: 22px;
+            left: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.15s;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .nav-back:hover {
+            color: var(--text-main);
+        }
+
+        /* ── HEADER ── */
+        .header {
+            background: var(--bg-header);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 44px 28px 0;
+            position: relative;
+        }
+
+        .header-content {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        .header-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 2px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #a78bfa 30%, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 10px;
+            color: #475569;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            margin: 0 0 14px;
+            color: #334155;
+            font-size: 12px;
+        }
+
+        /* ── TABS ── */
+        .tabs {
+            display: flex;
+            gap: 0;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            border-bottom: 2px solid var(--accent-purple);
+            color: var(--accent-purple);
+            font-weight: 700;
+        }
+
+        /* ── MAIN CONTENT ── */
+        main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 22px 28px;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* ── LEARN VIEW ── */
+        .learn-container {
+            display: flex;
+            gap: 18px;
+        }
+
+        .side-nav {
+            width: 175px;
+            flex-shrink: 0;
+        }
+
+        .concept-btn {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 8px 10px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-family: inherit;
+            margin-bottom: 3px;
+            line-height: 1.4;
+            transition: all 0.15s;
+            text-align: left;
+        }
+
+        .concept-btn.active {
+            background: #160d30;
+            border: 1px solid #3730a3;
+            color: var(--accent-purple);
+        }
+
+        .concept-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-primary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .card-header {
+            padding: 13px 18px;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 15px;
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 14px 18px;
+        }
+
+        .card-body p {
+            margin: 0 0 3px;
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--text-muted-bright);
+        }
+
+        .card-body strong {
+            color: #c4b5fd;
+            font-weight: 600;
+        }
+
+        /* ── CODE BLOCK ── */
+        .code-container {
+            background: var(--code-bg);
+            border: 1px solid #1a2436;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            padding: 8px 14px;
+            border-bottom: 1px solid #1a2436;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dots {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .dot.red { background: #ef4444; }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #22c55e; }
+
+        .code-lang {
+            font-size: 10px;
+            color: #374151;
+            letter-spacing: 0.08em;
+            text-transform: lowercase;
+        }
+
+        pre {
+            margin: 0;
+            padding: 14px 18px;
+            font-size: 12px;
+            line-height: 1.75;
+            overflow-x: auto;
+            font-family: var(--font-code);
+        }
+
+        /* Syntax Highlighting */
+        .hl-keyword { color: #d8b4fe; }
+        .hl-string { color: #86efac; }
+        .hl-comment { color: #4b5563; }
+        .hl-builtin { color: #67e8f9; }
+        .hl-default { color: #93c5fd; }
+
+        /* ── PROBLEMS VIEW ── */
+        .problems-intro {
+            color: #374151;
+            font-size: 12px;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        .problem-item {
+            background: var(--card-bg);
+            border: 1px solid #131c2e;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .problem-item.expanded {
+            border-color: #2d3748;
+        }
+
+        .problem-header {
+            padding: 13px 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            user-select: none;
+        }
+
+        .diff-badge {
+            border-radius: 5px;
+            padding: 1px 9px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            flex-shrink: 0;
+        }
+
+        .prob-num {
+            font-size: 11px;
+            color: #374151;
+            flex-shrink: 0;
+        }
+
+        .prob-title {
+            font-size: 13px;
+            color: #e2e8f0;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .pattern-badge {
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1px solid #164e63;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .expand-icon {
+            color: #374151;
+            font-size: 11px;
+            transition: transform 0.2s;
+        }
+
+        .problem-details {
+            display: none;
+            border-top: 1px solid #131c2e;
+            padding: 16px 18px;
+        }
+
+        .problem-item.expanded .problem-details {
+            display: block;
+        }
+
+        .problem-desc {
+            margin: 0 0 14px;
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.75;
+        }
+
+        .hint-box {
+            background: #060e1c;
+            border: 1px solid #1e3a5f;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+        }
+
+        .hint-title {
+            font-size: 10px;
+            color: #3b82f6;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .hint-text {
+            margin: 0;
+            color: #7dd3fc;
+            font-size: 12px;
+            line-height: 1.75;
+        }
+
+        .prob-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            border-radius: 6px;
+            padding: 7px 13px;
+            font-size: 11px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+        }
+
+        .btn-toggle-sol {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid #334155;
+        }
+
+        .btn-toggle-sol.active {
+            background: #160d30;
+            color: var(--accent-purple);
+            border-color: #3730a3;
+        }
+
+        .solution-container {
+            display: none;
+            margin-top: 14px;
+        }
+
+        .solution-container.active {
+            display: block;
+        }
+
+        /* ── CHEATSHEET ── */
+        .cheatsheet {
+            background: var(--card-bg);
+            border: 1px solid #131c2e;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-top: 8px;
+        }
+
+        .cheat-title {
+            font-size: 11px;
+            color: var(--accent-purple);
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .cheat-row {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 8px;
+            align-items: baseline;
+        }
+
+        .cheat-pattern {
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+            width: 140px;
+        }
+
+        .cheat-desc {
+            color: #374151;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .learn-container {
+                flex-direction: column;
+            }
+            .side-nav {
+                width: 100%;
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+            .concept-btn {
+                width: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="heap_masterclass.html" class="nav-back">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Back to Masterclass
+    </a>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title-row">
+                <span style="font-size: 22px;">🏔️</span>
+                <h1>Heaps in Python</h1>
+                <span class="badge">GOOGLE INTERVIEW PREP</span>
+            </div>
+            <p class="subtitle">Fundamentals → patterns → 4 LeetCode problems (Easy–Hard)</p>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="learn">📚 Learn</button>
+                <button class="tab-btn" data-tab="problems">🧩 Problems</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- LEARN SECTION -->
+        <section id="learn" class="content-section learn-container active">
+            <div class="side-nav" id="concept-nav">
+                <!-- Nav buttons added via JS -->
+            </div>
+
+            <div class="concept-content" id="active-concept">
+                <!-- Concept card added via JS -->
+            </div>
+        </section>
+
+        <!-- PROBLEMS SECTION -->
+        <section id="problems" class="content-section">
+            <p class="problems-intro">4 curated problems · Easy → Hard · covers all essential heap patterns</p>
+            <div id="problems-list">
+                <!-- Problems added via JS -->
+            </div>
+
+            <!-- Cheatsheet -->
+            <div class="cheatsheet">
+                <div class="cheat-title">📋 PATTERN CHEATSHEET</div>
+                <div id="cheatsheet-content">
+                    <!-- Cheat rows added via JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const heapData = {
+            concepts: [
+                {
+                    id: "intro", title: "What is a Heap?", icon: "🏔️",
+                    content: `A heap is a complete binary tree stored in an array where every parent satisfies the heap property.\n\n• **Min-Heap**: Parent ≤ Children → root is always the smallest\n• **Max-Heap**: Parent ≥ Children → root is always the largest\n\nPython's heapq module gives you a **min-heap** by default.`,
+                    code: `import heapq\n\n# Build a min-heap\nheap = []\nheapq.heappush(heap, 5)\nheapq.heappush(heap, 1)\nheapq.heappush(heap, 8)\nheapq.heappush(heap, 3)\n\nprint(heap)                  # [1, 3, 8, 5]\nprint(heap[0])               # 1  ← always the minimum\n\n# Remove and return minimum\nprint(heapq.heappop(heap))   # 1\nprint(heap)                  # [3, 5, 8]`
+                },
+                {
+                    id: "ops", title: "Core Operations", icon: "⚙️",
+                    content: `Key heapq operations and time complexities:\n\n• **heappush(h, x)** → O(log n) — insert element\n• **heappop(h)** → O(log n) — remove & return min\n• **h[0]** → O(1) — peek min without removing\n• **heapify(list)** → O(n) — convert list in-place\n• **heappushpop(h, x)** → O(log n) — push then pop (faster than both)\n• **nsmallest(k, iter) / nlargest** → O(n log k)`,
+                    code: `import heapq\n\nnums = [5, 1, 8, 3, 9, 2]\n\n# heapify converts list in-place — O(n)\nheapq.heapify(nums)\nprint(nums)                      # [1, 3, 2, 5, 9, 8]\n\n# Top-k helpers\nprint(heapq.nsmallest(3, nums))  # [1, 2, 3]\nprint(heapq.nlargest(3, nums))   # [9, 8, 5]\n\n# heappushpop: push x, then pop min atomically\nresult = heapq.heappushpop(nums, 0)\nprint(result)                    # 0`
+                },
+                {
+                    id: "maxheap", title: "Max-Heap Trick", icon: "🔄",
+                    content: `Python only ships with min-heap. The universal trick to get a **max-heap** is to **negate values** on the way in, and negate again on the way out.\n\nWhy it works:\n• Largest number becomes most negative\n• Min-heap surfaces the most negative first\n• Negating the result restores the original value\n\nThis is tested constantly in Google interviews!`,
+                    code: `import heapq\n\nmax_heap = []\nfor val in [5, 1, 8, 3, 9]:\n    heapq.heappush(max_heap, -val)   # negate on push\n\nprint(-heapq.heappop(max_heap))  # 9  ← negate on pop\nprint(-heapq.heappop(max_heap))  # 8\nprint(-heapq.heappop(max_heap))  # 5\n\n# Alternatively, use nlargest directly\nnums = [5, 1, 8, 3, 9]\nprint(heapq.nlargest(3, nums))   # [9, 8, 5]`
+                },
+                {
+                    id: "tuples", title: "Heaps with Tuples", icon: "📦",
+                    content: `Push **tuples** to attach metadata — Python compares them element by element, so the heap orders by the first element automatically.\n\nCommon patterns:\n• **(priority, value)** — task scheduling\n• **(distance, node)** — Dijkstra's algorithm\n• **(freq, item)** — top-k frequent elements\n• **(val, idx, node)** — index breaks ties safely`,
+                    code: `import heapq\n\n# Priority queue with (priority, task)\ntasks = []\nheapq.heappush(tasks, (3, "low priority"))\nheapq.heappush(tasks, (1, "urgent!"))\nheapq.heappush(tasks, (2, "medium"))\n\nwhile tasks:\n    pri, task = heapq.heappop(tasks)\n    print(f"[{pri}] {task}")\n# [1] urgent!\n# [2] medium\n# [3] low priority\n\n# Use index to break ties (avoids comparing objects)\nheapq.heappush(tasks, (1, 0, obj_a))\nheapq.heappush(tasks, (1, 1, obj_b))`
+                },
+                {
+                    id: "patterns", title: "Interview Patterns", icon: "🎯",
+                    content: `The 5 patterns that cover ~90% of heap problems at Google:\n\n**1. Top-K** — keep a heap of exactly size K\n**2. Two Heaps** — max-heap (lo) + min-heap (hi) for median\n**3. Merge K Sorted** — heap picks the global minimum each step\n**4. Greedy + Heap** — always process cheapest/fastest next\n**5. Sliding Window** — track max/min efficiently in a window`,
+                    code: `import heapq\n\n# Pattern 1: Kth Largest in O(n log k)\ndef kth_largest(nums, k):\n    heap = nums[:k]\n    heapq.heapify(heap)          # min-heap of size k\n    for n in nums[k:]:\n        if n > heap[0]:          # larger than kth?\n            heapq.heapreplace(heap, n)\n    return heap[0]               # root = kth largest\n\nprint(kth_largest([3,2,1,5,6,4], 2))  # 5\n\n# Pattern 2: Merge K sorted arrays\ndef merge_k(lists):\n    h = [(lst[0], i, 0) for i, lst in enumerate(lists) if lst]\n    heapq.heapify(h)\n    res = []\n    while h:\n        val, i, j = heapq.heappop(h)\n        res.append(val)\n        if j + 1 < len(lists[i]):\n            heapq.heappush(h, (lists[i][j+1], i, j+1))\n    return res`
+                }
+            ],
+            problems: [
+                {
+                    difficulty: "Easy", color: "#4ade80", dimColor: "#166534", bg: "#052e16",
+                    title: "Kth Largest Element in a Stream", number: 703,
+                    link: "https://leetcode.com/problems/kth-largest-element-in-a-stream/",
+                    pattern: "Top-K · Min-Heap",
+                    description: "Design a class to find the kth largest element in an evolving stream of numbers. Must support add() queries efficiently.",
+                    hint: "Maintain a min-heap of exactly k elements. The root heap[0] is always the kth largest. When size exceeds k, pop the smallest.",
+                    solution: `import heapq\n\nclass KthLargest:\n    def __init__(self, k, nums):\n        self.k = k\n        self.heap = []\n        for n in nums:\n            self.add(n)\n\n    def add(self, val) -> int:\n        heapq.heappush(self.heap, val)\n        if len(self.heap) > self.k:\n            heapq.heappop(self.heap)\n        return self.heap[0]        # kth largest\n\n# Time: O(log k) per add  |  Space: O(k)`
+                },
+                {
+                    difficulty: "Medium", color: "#facc15", dimColor: "#854d0e", bg: "#1c1400",
+                    title: "K Closest Points to Origin", number: 973,
+                    link: "https://leetcode.com/problems/k-closest-points-to-origin/",
+                    pattern: "Top-K · Max-Heap",
+                    description: "Given an array of points, return the k closest to the origin (0,0). Distance is Euclidean but you don't need the sqrt.",
+                    hint: "Use a max-heap of size k storing (-dist, x, y). When the heap exceeds k, pop — this evicts the farthest point automatically.",
+                    solution: `import heapq\n\ndef kClosest(points, k):\n    heap = []\n    for x, y in points:\n        dist = -(x*x + y*y)        # negate for max-heap\n        heapq.heappush(heap, (dist, x, y))\n        if len(heap) > k:\n            heapq.heappop(heap)    # removes farthest\n    return [[x, y] for (_, x, y) in heap]\n\n# Time: O(n log k)  |  Space: O(k)`
+                },
+                {
+                    difficulty: "Hard", color: "#fb923c", dimColor: "#9a3412", bg: "#1c0800",
+                    title: "Find Median from Data Stream", number: 295,
+                    link: "https://leetcode.com/problems/find-median-from-data-stream/",
+                    pattern: "Two Heaps",
+                    description: "Support addNum() and findMedian() on a growing stream. findMedian() must run in O(1). Classic two-heaps problem.",
+                    hint: "lo = max-heap (negated) for lower half, hi = min-heap for upper half. Always push to lo first, rebalance so |lo| is never less than |hi|.",
+                    solution: `import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        self.lo = []   # max-heap (values negated)\n        self.hi = []   # min-heap\n\n    def addNum(self, num: int) -> None:\n        heapq.heappush(self.lo, -num)\n        # Move lo's max to hi to maintain ordering\n        heapq.heappush(self.hi, -heapq.heappop(self.lo))\n        # Keep lo size >= hi size\n        if len(self.hi) > len(self.lo):\n            heapq.heappush(self.lo, -heapq.heappop(self.hi))\n\n    def findMedian(self) -> float:\n        if len(self.lo) > len(self.hi):\n            return -self.lo[0]\n        return (-self.lo[0] + self.hi[0]) / 2\n\n# Time: O(log n) add  |  O(1) median  |  Space: O(n)`
+                },
+                {
+                    difficulty: "Hard", color: "#f87171", dimColor: "#991b1b", bg: "#1f0000",
+                    title: "Merge K Sorted Lists", number: 23,
+                    link: "https://leetcode.com/problems/merge-k-sorted-lists/",
+                    pattern: "Merge K Sorted",
+                    description: "Merge k sorted linked lists into one sorted linked list. Naive approach is O(nk) — heap brings it down to O(n log k).",
+                    hint: "Seed the heap with each list's head as (val, list_index, node). Always pop the global min, append to result, then push that node's next.",
+                    solution: `import heapq\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef mergeKLists(lists):\n    heap = []\n    for i, node in enumerate(lists):\n        if node:\n            heapq.heappush(heap, (node.val, i, node))\n\n    dummy = ListNode(0)\n    curr = dummy\n    while heap:\n        val, i, node = heapq.heappop(heap)\n        curr.next = node\n        curr = curr.next\n        if node.next:\n            heapq.heappush(heap, (node.next.val, i, node.next))\n    return dummy.next\n\n# Time: O(n log k)  |  Space: O(k)`
+                }
+            ]
+        };
+
+        const cheatsheetData = [
+            ["Top-K Largest", "min-heap size k → root = kth largest", "#4ade80"],
+            ["Top-K Smallest", "max-heap size k → root = kth smallest", "#4ade80"],
+            ["Two Heaps", "lo=max-heap + hi=min-heap → O(1) median", "#facc15"],
+            ["Merge K Sorted", "(val, i, j) → always pop global minimum", "#facc15"],
+            ["Dijkstra / Greedy", "(cost, node) → process cheapest edge first", "#f87171"],
+        ];
+
+        // ── HELPERS ──
+        function renderMd(text) {
+            return text.split("\n").map(line => {
+                if (!line.trim()) return '<div style="height: 6px;"></div>';
+                const processed = line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+                return `<p>${processed}</p>`;
+            }).join('');
+        }
+
+        function renderCode(code) {
+            return code.split("\n").map(line => {
+                let colorClass = "hl-default";
+                const trimmed = line.trimStart();
+                
+                if (trimmed.startsWith("#")) {
+                    colorClass = "hl-comment";
+                } else if (/\b(import|def|class|return|if|elif|else|for|while|and|or|not|in|is|None|True|False|self|print|pass)\b/.test(line)) {
+                    colorClass = "hl-keyword";
+                } else if (/["']/.test(line)) {
+                    colorClass = "hl-string";
+                } else if (/^\s*(heapq\.|heappush|heappop|heapify|nlargest|nsmallest)/.test(line)) {
+                    colorClass = "hl-builtin";
+                }
+
+                return `<div class="${colorClass}">${escapeHtml(line) || " "}</div>`;
+            }).join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ── DOM STATE ──
+        let activeTab = 'learn';
+        let activeConceptId = 'intro';
+        const expandedProblems = new Set();
+        const revealedSolutions = new Set();
+
+        // ── TAB INITIALIZATION ──
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.toggle('active', s.id === tab));
+                activeTab = tab;
+            });
+        });
+
+        // ── LEARN INITIALIZATION ──
+        function renderConcept() {
+            const concept = heapData.concepts.find(c => c.id === activeConceptId);
+            const container = document.getElementById('active-concept');
+            
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <span style="font-size:18px">${concept.icon}</span>
+                        <h2>${concept.title}</h2>
+                    </div>
+                    <div class="card-body">
+                        ${renderMd(concept.content)}
+                    </div>
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                        </div>
+                        <span class="code-lang">python</span>
+                    </div>
+                    <pre>${renderCode(concept.code)}</pre>
+                </div>
+            `;
+        }
+
+        function initConcepts() {
+            const nav = document.getElementById('concept-nav');
+            heapData.concepts.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = `concept-btn ${c.id === activeConceptId ? 'active' : ''}`;
+                btn.innerHTML = `<span>${c.icon}</span><span>${c.title}</span>`;
+                btn.addEventListener('click', () => {
+                    activeConceptId = c.id;
+                    document.querySelectorAll('.concept-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderConcept();
+                });
+                nav.appendChild(btn);
+            });
+            renderConcept();
+        }
+
+        // ── PROBLEMS INITIALIZATION ──
+        function initProblems() {
+            const list = document.getElementById('problems-list');
+            heapData.problems.forEach((p, idx) => {
+                const item = document.createElement('div');
+                item.className = 'problem-item';
+                item.innerHTML = `
+                    <div class="problem-header">
+                        <span class="diff-badge" style="background:${p.bg}; border:1px solid ${p.dimColor}; color:${p.color}">${p.difficulty}</span>
+                        <span class="prob-num">#${p.number}</span>
+                        <span class="prob-title">${p.title}</span>
+                        <span class="pattern-badge">${p.pattern}</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="problem-details">
+                        <p class="problem-desc">${p.description}</p>
+                        <div class="hint-box">
+                            <div class="hint-title">💡 HINT</div>
+                            <p class="hint-text">${p.hint}</p>
+                        </div>
+                        <div class="prob-actions">
+                            <a href="${p.link}" target="_blank" class="action-btn btn-secondary">🔗 Open LeetCode</a>
+                            <button class="action-btn btn-toggle-sol" data-idx="${idx}">👁 View Solution</button>
+                        </div>
+                        <div class="solution-container" data-idx="${idx}">
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <div class="dots">
+                                        <div class="dot red"></div>
+                                        <div class="dot yellow"></div>
+                                        <div class="dot green"></div>
+                                    </div>
+                                    <span class="code-lang">solution.py</span>
+                                </div>
+                                <pre>${renderCode(p.solution)}</pre>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                const header = item.querySelector('.problem-header');
+                const expandIcon = item.querySelector('.expand-icon');
+                header.addEventListener('click', () => {
+                    const isExpanded = item.classList.toggle('expanded');
+                    expandIcon.textContent = isExpanded ? '▲' : '▼';
+                });
+
+                const solBtn = item.querySelector('.btn-toggle-sol');
+                const solContainer = item.querySelector('.solution-container');
+                solBtn.addEventListener('click', () => {
+                    const isActive = solContainer.classList.toggle('active');
+                    solBtn.classList.toggle('active', isActive);
+                    solBtn.textContent = isActive ? '🙈 Hide Solution' : '👁 View Solution';
+                });
+
+                list.appendChild(item);
+            });
+        }
+
+        function initCheatsheet() {
+            const content = document.getElementById('cheatsheet-content');
+            cheatsheetData.forEach(([pattern, desc, color]) => {
+                const row = document.createElement('div');
+                row.className = 'cheat-row';
+                row.innerHTML = `
+                    <span class="cheat-pattern" style="color:${color}">${pattern}</span>
+                    <span class="cheat-desc">${desc}</span>
+                `;
+                content.appendChild(row);
+            });
+        }
+
+        // 🚀 LIFT OFF
+        initConcepts();
+        initProblems();
+        initCheatsheet();
+
+    </script>
+</body>
+</html>

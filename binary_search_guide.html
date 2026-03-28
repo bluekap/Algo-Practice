@@ -3,225 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Binary Search Revision Guide</title>
+    <title>Binary Search Revision Guide — AlgoPractice</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #171f3a 100%);
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --primary-accent: #3b82f6;
-            --secondary-accent: #10b981;
-            --warning-accent: #f59e0b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --code-bg: #1e293b;
+            --bg-dark: #07090f;
+            --card-bg: #0d1117;
+            --code-bg: #020408;
+            --border: #1e293b;
+            --color-p1: #3b82f6;
+            --color-p2: #10b981;
+            --color-warn: #f59e0b;
+            --text-main: #e2e8f0;
+            --text-muted: #475569;
+            --text-muted-bright: #94a3b8;
+            --font-main: 'Outfit', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-gradient);
+            font-family: var(--font-main);
+            background: var(--bg-dark);
             color: var(--text-main);
-            min-height: 100vh;
-            padding: 4rem 2rem;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #93c5fd, #3b82f6);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        p.subtitle {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-        }
-
-        .guide-section {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        /* ── HEADER ── */
+        .page-header {
+            background: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 44px 28px 22px;
             position: relative;
-            overflow: hidden;
+            text-align: center;
         }
 
-        .guide-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-        }
-
-        .pattern-1::before { background: var(--primary-accent); }
-        .pattern-2::before { background: var(--secondary-accent); }
-        .exception::before { background: var(--warning-accent); }
-
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .pattern-1 h2 { color: #60a5fa; }
-        .pattern-2 h2 { color: #34d399; }
-        .exception h2 { color: #fbbf24; }
-
-        .mental-model {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-            border-left: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        pre {
-            background: var(--code-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
-            overflow-x: auto;
-            border: 1px solid var(--card-border);
-            font-family: 'Fira Code', monospace;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        code {
-            font-family: 'Fira Code', monospace;
-        }
-
-        .syntax-kw { color: #ff7b72; }
-        .syntax-bl { color: #d2a8ff; }
-        .syntax-op { color: #79c0ff; }
-        .syntax-num { color: #a5d6ff; }
-        .syntax-cm { color: #8b949e; font-style: italic; }
-        
-        .direction-note {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-        }
-
-        .highlight-up { color: #ef4444; font-weight: bold; }
-        .highlight-down { color: #3b82f6; font-weight: bold; }
-        
         .nav-back {
+            position: absolute;
+            top: 22px;
+            left: 28px;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 8px;
             color: var(--text-muted);
             text-decoration: none;
-            margin-bottom: 2rem;
-            transition: color 0.2s;
+            transition: color 0.15s;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .nav-back:hover { color: var(--text-main); }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #93c5fd, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .page-header p { color: var(--text-muted); font-size: 13px; }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px;
+        }
+
+        /* ── SECTION CARDS ── */
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+        }
+
+        .pattern-1::before { background: var(--color-p1); }
+        .pattern-2::before { background: var(--color-p2); }
+        .exception::before { background: var(--color-warn); }
+
+        .section-card-header {
+            padding: 13px 18px 13px 22px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-card-header h2 {
+            margin: 0;
+            font-size: 15px;
             font-weight: 600;
         }
 
-        .nav-back:hover {
-            color: var(--text-main);
+        .pattern-1 .section-card-header h2 { color: #60a5fa; }
+        .pattern-2 .section-card-header h2 { color: #34d399; }
+        .exception .section-card-header h2 { color: #fbbf24; }
+
+        .section-card-body { padding: 18px 18px 18px 22px; }
+
+        /* ── MENTAL MODEL BOX ── */
+        .mental-model {
+            background: #0a0f1a;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            color: var(--text-muted-bright);
+            line-height: 1.8;
+        }
+
+        .mental-model strong { color: #c4b5fd; }
+
+        /* ── DIRECTION NOTE ── */
+        .direction-note {
+            background: #0a0f1a;
+            border: 1px dashed #2d3748;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            font-family: var(--font-code);
+            font-size: 12px;
+            line-height: 2;
+            color: var(--text-muted-bright);
+        }
+
+        .highlight-up { color: #ef4444; font-weight: bold; }
+        .highlight-down { color: #60a5fa; font-weight: bold; }
+        .kw { color: #d8b4fe; }
+        .cm { color: #4b5563; font-style: italic; }
+
+        /* ── CODE BLOCKS ── */
+        .code-container {
+            background: var(--code-bg);
+            border: 1px solid #1a2436;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            padding: 7px 13px;
+            border-bottom: 1px solid #1a2436;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .dots { display: flex; gap: 5px; }
+        .dot { width: 9px; height: 9px; border-radius: 50%; }
+        .dot.red { background: #ef4444; }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #22c55e; }
+        .code-lang { font-size: 10px; color: #374151; letter-spacing: 0.08em; margin-left: 4px; }
+
+        pre {
+            margin: 0;
+            padding: 14px 18px;
+            font-family: var(--font-code);
+            font-size: 12px;
+            line-height: 1.75;
+            overflow-x: auto;
+            color: #93c5fd;
+        }
+
+        /* ── EXCEPTION NOTE ── */
+        .exception-note {
+            font-size: 13px;
+            color: var(--text-muted-bright);
+            line-height: 1.75;
+            margin-top: 12px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="page-header">
         <a href="binary_search_masterclass.html" class="nav-back">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Back to Masterclass
         </a>
+        <h1>Binary Search Revision Guide</h1>
+        <p>Definitive mental models and templates for both patterns</p>
+    </div>
 
-        <header>
-            <h1>Binary Search Revision Guide</h1>
-            <p class="subtitle">The definitive mental models and templates for binary search</p>
-        </header>
+    <div class="container">
 
-        <div class="guide-section pattern-1">
-            <h2><span style="font-size: 1.2em;">🎯</span> Pattern 1 — Known Target</h2>
-            
-            <div class="mental-model">
-                <strong>Mental Model:</strong> We are looking for an <em>exact</em> element. If we don't find it at mid, we completely discard mid because it's not the target.
+        <!-- Pattern 1 -->
+        <div class="section-card pattern-1">
+            <div class="section-card-header">
+                <span style="font-size:16px">🎯</span>
+                <h2>Pattern 1 — Known Target</h2>
             </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> We are looking for an <em>exact</em> element. If we don't find it at mid, we completely discard mid because it's not the target.
+                </div>
 
-            <div class="direction-note">
-                <strong>Crucial Direction Fix:</strong><br><br>
-                <code class="syntax-kw">if</code> <code>nums[mid] < target:</code><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<code>left = mid + 1</code> &nbsp;&nbsp;<span class="syntax-cm"># target is to the right, move left <span class="highlight-up">UP</span></span><br>
-                <code class="syntax-kw">else</code><code>:</code><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<code>right = mid - 1</code> &nbsp;<span class="syntax-cm"># target is to the left, move right <span class="highlight-down">DOWN</span></span>
+                <div class="direction-note">
+                    <strong style="color: var(--text-main);">Crucial Direction Fix:</strong><br>
+                    <span class="kw">if</span> nums[mid] &lt; target:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;left = mid + 1 &nbsp;&nbsp;<span class="cm"># target is to the right → move left <span class="highlight-up">UP</span></span><br>
+                    <span class="kw">else</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;right = mid - 1 &nbsp;<span class="cm"># target is to the left → move right <span class="highlight-down">DOWN</span></span>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python</span>
+                    </div>
+                    <pre><span class="kw">while</span> left &lt;= right:
+    mid = (left + right) // 2
+    <span class="kw">if</span> nums[mid] == target:
+        <span class="kw">return</span> mid
+    <span class="kw">elif</span> nums[mid] &lt; target:
+        left = mid + 1
+    <span class="kw">else</span>:
+        right = mid - 1
+<span class="kw">return</span> -1</pre>
+                </div>
             </div>
-
-            <pre><span class="syntax-kw">while</span> left <= right:
-    mid = (left + right) <span class="syntax-op">//</span> <span class="syntax-num">2</span>
-    <span class="syntax-kw">if</span> nums[mid] == target:
-        <span class="syntax-kw">return</span> mid
-    <span class="syntax-kw">elif</span> nums[mid] < target:
-        left = mid + <span class="syntax-num">1</span>
-    <span class="syntax-kw">else</span>:
-        right = mid - <span class="syntax-num">1</span>
-<span class="syntax-kw">return</span> <span class="syntax-num">-1</span></pre>
         </div>
 
-        <div class="guide-section pattern-2">
-            <h2><span style="font-size: 1.2em;">🧱</span> Pattern 2 — Boundary / Condition</h2>
-            
-            <div class="mental-model">
-                <strong>Mental Model:</strong> We are looking for the <em>first</em> element that satisfies a condition (a boundary). When we find it, it <em>could</em> be the answer, so we keep it in our search space (<code>right = mid</code>). We don't stop until <code>left == right</code>.
+        <!-- Pattern 2 -->
+        <div class="section-card pattern-2">
+            <div class="section-card-header">
+                <span style="font-size:16px">🧱</span>
+                <h2>Pattern 2 — Boundary / Condition</h2>
             </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> We are looking for the <em>first</em> element that satisfies a condition (a boundary). When we find it, it <em>could</em> be the answer, so we keep it in our search space (<code style="font-family:var(--font-code);color:#93c5fd;background:rgba(255,255,255,0.04);padding:1px 4px;border-radius:3px;">right = mid</code>). We don't stop until <code style="font-family:var(--font-code);color:#93c5fd;background:rgba(255,255,255,0.04);padding:1px 4px;border-radius:3px;">left == right</code>.
+                </div>
 
-            <pre><span class="syntax-kw">while</span> left < right:
-    mid = (left + right) <span class="syntax-op">//</span> <span class="syntax-num">2</span>
-    <span class="syntax-kw">if</span> some_condition:
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python</span>
+                    </div>
+                    <pre><span class="kw">while</span> left &lt; right:
+    mid = (left + right) // 2
+    <span class="kw">if</span> some_condition:
         right = mid
-    <span class="syntax-kw">else</span>:
-        left = mid + <span class="syntax-num">1</span>
-<span class="syntax-kw">return</span> nums[left]</pre>
+    <span class="kw">else</span>:
+        left = mid + 1
+<span class="kw">return</span> nums[left]</pre>
+                </div>
+            </div>
         </div>
 
-        <div class="guide-section exception">
-            <h2><span style="font-size: 1.2em;">⚠️</span> The One Exception: Problem 33</h2>
-            
-            <div class="mental-model" style="border-left-color: var(--warning-accent);">
-                <strong>Search in Rotated Sorted Array</strong> looks like Pattern 1 since there's an exact target, but it actually needs the <code>nums[mid] == target</code> early return <em>inside</em> a Pattern 2 loop condition logic. 
+        <!-- Exception -->
+        <div class="section-card exception">
+            <div class="section-card-header">
+                <span style="font-size:16px">⚠️</span>
+                <h2>The One Exception: Problem 33</h2>
             </div>
-            
-            <p style="color: var(--text-muted); font-size: 1.05rem;">
-                This is the only hybrid you'll typically encounter. Usually, if there's a specific target, use Pattern 1. If you're finding a boundary, use Pattern 2. Problem 33 requires checking bounds of the rotated array while also checking for the exact target.
-            </p>
+            <div class="section-card-body">
+                <div class="mental-model" style="border-left: 3px solid var(--color-warn);">
+                    <strong>Search in Rotated Sorted Array</strong> looks like Pattern 1 since there's an exact target, but it actually needs the <code style="font-family:var(--font-code);color:#93c5fd;background:rgba(255,255,255,0.04);padding:1px 4px;border-radius:3px;">nums[mid] == target</code> early return <em>inside</em> a Pattern 2 loop condition logic.
+                </div>
+
+                <p class="exception-note">
+                    This is the only hybrid you'll typically encounter. Usually, if there's a specific target, use Pattern 1. If you're finding a boundary, use Pattern 2. Problem 33 requires checking bounds of the rotated array while also checking for the exact target.
+                </p>
+            </div>
         </div>
 
     </div>

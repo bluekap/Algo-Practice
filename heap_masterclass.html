@@ -3,62 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Array Patterns Masterclass — AlgoPractice</title>
+    <title>Heap Masterclass — AlgoPractice</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #07090f;
-            --bg-card: rgba(13, 17, 23, 0.9);
-            --bg-hover: rgba(30, 41, 59, 0.8);
-            --color-guide: #14b8a6;
-            --color-viz: #f59e0b;
-            --text-main: #e2e8f0;
-            --text-muted: #475569;
-            --text-muted-bright: #94a3b8;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-hover: rgba(51, 65, 85, 0.8);
+            
+            --color-guide: #a78bfa;     /* Purple/Violet */
+            --color-viz: #38bdf8;       /* Blue/Cyan */
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
             --font-main: 'Outfit', sans-serif;
+            --font-code: 'Fira Code', monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: var(--font-main);
-            background: var(--bg-dark);
+            background: linear-gradient(135deg, #07090f 0%, #120825 100%);
             color: var(--text-main);
             line-height: 1.6;
             padding-bottom: 2rem;
             min-height: 100vh;
         }
 
+        h1, h2, h3 { font-weight: 700; }
+        
         .nav-back {
             position: absolute;
-            top: 22px;
-            left: 28px;
+            top: 2rem;
+            left: 2rem;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
             color: var(--text-muted);
             text-decoration: none;
-            transition: color 0.15s;
+            transition: color 0.2s;
             font-weight: 600;
-            font-size: 13px;
             z-index: 10;
         }
 
-        .nav-back:hover { color: var(--text-main); }
-
+        .nav-back:hover {
+            color: var(--text-main);
+        }
+        
         .header {
             text-align: center;
             padding: 4rem 1rem 2rem;
-            background: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
-            border-bottom: 1px solid #1e293b;
+            background: linear-gradient(180deg, rgba(18, 8, 37, 0.8) 0%, rgba(7, 9, 15, 0) 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             position: relative;
         }
 
         .header h1 {
             font-size: 2.8rem;
-            background: linear-gradient(90deg, #14b8a6, #f59e0b, #a855f7);
+            background: linear-gradient(90deg, #a78bfa, #38bdf8);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -66,7 +71,7 @@
         }
 
         .header p {
-            color: var(--text-muted-bright);
+            color: var(--text-muted);
             font-size: 1.1rem;
             max-width: 600px;
             margin: 0 auto;
@@ -83,9 +88,10 @@
 
         .card {
             background: var(--bg-card);
-            border: 1px solid #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 2.5rem;
+            backdrop-filter: blur(16px);
             text-decoration: none;
             color: inherit;
             transition: all 0.3s ease;
@@ -97,27 +103,35 @@
         .card:hover {
             transform: translateY(-5px);
             background: var(--bg-hover);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: rgba(167, 139, 250, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         .icon-wrapper {
             width: 64px;
             height: 64px;
             border-radius: 16px;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
-            border: 1px solid #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .card.guide .icon-wrapper { background: rgba(20, 184, 166, 0.15); border-color: rgba(20, 184, 166, 0.3); }
-        .card.viz .icon-wrapper { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); }
+        .card.guide .icon-wrapper { background: rgba(167, 139, 250, 0.15); border-color: rgba(167, 139, 250, 0.3); }
+        .card.viz .icon-wrapper { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3); }
 
-        .card-title { font-size: 1.5rem; font-weight: 600; }
-        .card-desc { color: var(--text-muted-bright); line-height: 1.6; flex-grow: 1; }
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
 
         .card-footer {
             display: flex;
@@ -127,11 +141,18 @@
             color: var(--color-guide);
             font-weight: 600;
         }
-
+        
         .card.viz .card-footer { color: var(--color-viz); }
 
-        .card-footer svg { width: 20px; height: 20px; transition: transform 0.3s ease; }
-        .card:hover .card-footer svg { transform: translateX(5px); }
+        .card-footer svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-footer svg {
+            transform: translateX(5px);
+        }
     </style>
 </head>
 <body>
@@ -142,30 +163,30 @@
     </a>
 
     <div class="header">
-        <h1>Array Patterns Masterclass</h1>
-        <p>Master the top patterns for Google interviews: Sliding Window, Two Pointers, and Prefix Sums.</p>
+        <h1>Heap Masterclass</h1>
+        <p>Master priorities, Top-K patterns, and the "Two Heaps" trick for median tracking.</p>
     </div>
 
     <div class="grid">
-        <a href="array_patterns_guide.html" class="card guide">
+        <a href="heap_guide.html" class="card guide">
             <div class="icon-wrapper">📖</div>
             <h2 class="card-title">Revision Guide</h2>
-            <p class="card-desc">Pattern detector, universal skeleton templates, and expert mental models for interviews.</p>
+            <p class="card-desc">Deep dive into Python's heapq, max-heap tricks, and the 5 essential interview patterns.</p>
             <div class="card-footer">
-                <span>Start Learning</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <span>Read Guide</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </div>
         </a>
 
-        <a href="array_patterns_visualizer.html" class="card viz">
-            <div class="icon-wrapper">🖥️</div>
+        <div class="card viz" style="opacity: 0.6; cursor: not-allowed;">
+            <div class="icon-wrapper">⛰️</div>
             <h2 class="card-title">Visual Playground</h2>
-            <p class="card-desc">Interactive variable sliding window simulation. Step through execution to see pointers in action.</p>
+            <p class="card-desc">Interactive heap visualizer to see push/pop operations in real-time (Coming Soon).</p>
             <div class="card-footer">
-                <span>Launch Visualizer</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <span>Coming Soon</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </div>
-        </a>
+        </div>
     </div>
 
 </body>

@@ -3,105 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Array Patterns Visualizer</title>
+    <title>Array Patterns Visualizer — AlgoPractice</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --bg-hover: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-dark: #07090f;
+            --card-bg: #0d1117;
+            --code-bg: #020408;
+            --border: #1e293b;
             --color-sw: #14b8a6;
             --color-tp: #f59e0b;
-            --font-main: 'Inter', sans-serif;
-            --font-code: 'Fira Code', monospace;
+            --text-main: #e2e8f0;
+            --text-muted: #475569;
+            --text-muted-bright: #94a3b8;
+            --font-main: 'Outfit', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: var(--font-main);
-            background-color: var(--bg-dark);
+            background: var(--bg-dark);
             color: var(--text-main);
             line-height: 1.6;
-            padding: 4rem 2rem;
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        /* ── HEADER ── */
+        .page-header {
+            background: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 44px 28px 22px;
+            position: relative;
+            text-align: center;
         }
 
         .nav-back {
+            position: absolute;
+            top: 22px;
+            left: 28px;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 8px;
             color: var(--text-muted);
             text-decoration: none;
-            margin-bottom: 2rem;
-            transition: color 0.2s;
+            transition: color 0.15s;
             font-weight: 600;
+            font-size: 13px;
         }
 
         .nav-back:hover { color: var(--text-main); }
 
-        header { text-align: center; margin-bottom: 3rem; }
-        h1 { font-size: 2.5rem; color: var(--text-main); margin-bottom: 0.5rem; }
-        p.subtitle { color: var(--text-muted); }
-
-        /* Visualizer Area */
-        .visualizer-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #14b8a6, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
         }
 
+        .page-header p { color: var(--text-muted); font-size: 13px; }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px;
+        }
+
+        /* ── VISUALIZER CARD ── */
+        .visualizer-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .vis-header {
+            padding: 10px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dots { display: flex; gap: 5px; }
+        .dot { width: 9px; height: 9px; border-radius: 50%; }
+        .dot.red { background: #ef4444; }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #22c55e; }
+        .vis-title { font-size: 10px; color: #374151; letter-spacing: 0.08em; margin-left: 4px; }
+
+        .vis-body { padding: 24px; }
+
+        /* ── CONTROLS ── */
         .playground-controls {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 8px;
+            margin-bottom: 24px;
             justify-content: center;
         }
 
         .play-btn {
-            background: var(--bg-hover);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            background: #1e293b;
+            color: var(--text-muted-bright);
+            border: 1px solid var(--border);
+            padding: 8px 18px;
+            border-radius: 6px;
             cursor: pointer;
             font-family: var(--font-main);
-            transition: all 0.2s;
+            font-size: 12px;
             font-weight: 600;
+            transition: all 0.15s;
+            letter-spacing: 0.04em;
         }
-        .play-btn:hover { background: rgba(255,255,255,0.1); }
 
+        .play-btn:hover {
+            background: #334155;
+            color: var(--text-main);
+            border-color: #a78bfa;
+        }
+
+        /* ── ARRAY ── */
         .array-container {
             display: flex;
-            gap: 0.5rem;
+            gap: 8px;
             justify-content: center;
-            margin: 4rem 0;
+            margin: 3rem 0 2rem;
             position: relative;
             padding-bottom: 2rem;
         }
 
         .array-cell {
-            width: 60px;
-            height: 60px;
-            background: #111827;
-            border: 2px solid rgba(255,255,255,0.1);
+            width: 56px;
+            height: 56px;
+            background: #0a0f1a;
+            border: 2px solid var(--border);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 600;
+            font-family: var(--font-code);
             position: relative;
             transition: all 0.3s;
         }
@@ -109,8 +158,9 @@
         .pointer {
             position: absolute;
             bottom: -35px;
-            font-size: 0.9rem;
+            font-size: 11px;
             font-weight: bold;
+            font-family: var(--font-code);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -119,7 +169,7 @@
 
         .pointer::before {
             content: '↑';
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             margin-bottom: -4px;
         }
 
@@ -129,7 +179,7 @@
         .window-highlight {
             position: absolute;
             top: -5px; bottom: -5px;
-            background: rgba(20, 184, 166, 0.15);
+            background: rgba(20, 184, 166, 0.08);
             border: 2px dashed var(--color-sw);
             border-radius: 10px;
             z-index: 0;
@@ -137,58 +187,66 @@
             pointer-events: none;
         }
 
+        /* ── DESCRIPTION ── */
         .play-desc {
             text-align: center;
-            color: var(--text-muted);
-            min-height: 4rem;
-            font-size: 1.1rem;
-            margin-top: 2rem;
+            color: var(--text-muted-bright);
+            min-height: 3.5rem;
+            font-size: 13px;
+            margin-top: 16px;
+            line-height: 1.75;
         }
 
+        /* ── STATUS PANEL ── */
         .status-panel {
-            background:#111827;
-            padding:1.5rem;
-            border-radius:8px;
-            border:1px solid rgba(255,255,255,0.1);
-            font-family:var(--font-code);
-            font-size:1rem;
-            margin-top: 2rem;
+            background: var(--code-bg);
+            border: 1px solid #1a2436;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 16px;
             display: flex;
             justify-content: space-around;
+            font-family: var(--font-code);
+            font-size: 12px;
         }
 
+        .status-item { color: var(--text-muted); }
         .status-item span { font-weight: 600; }
-
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="page-header">
         <a href="array_patterns_masterclass.html" class="nav-back">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Back to Masterclass
         </a>
+        <h1>Array Patterns Visualizer</h1>
+        <p>Problem: Longest Substring Without Repeating Characters ("abcabcbb")</p>
+    </div>
 
-        <header>
-            <h1>Array Patterns Visualizer</h1>
-            <p class="subtitle">Problem: Longest Substring Without Repeating Characters ("abcabcbb")</p>
-        </header>
-
+    <div class="container">
         <div class="visualizer-card">
-            <div class="playground-controls">
-                <button class="play-btn" onclick="pgStep()">Step Forward</button>
-                <button class="play-btn" onclick="pgReset()">Reset</button>
+            <div class="vis-header">
+                <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <span class="vis-title">sliding_window.py — interactive</span>
             </div>
+            <div class="vis-body">
+                <div class="playground-controls">
+                    <button class="play-btn" onclick="pgStep()">▶ Step Forward</button>
+                    <button class="play-btn" onclick="pgReset()">↺ Reset</button>
+                </div>
 
-            <div class="array-container" id="pg-array">
-                <div class="window-highlight" id="pg-window"></div>
-            </div>
+                <div class="array-container" id="pg-array">
+                    <div class="window-highlight" id="pg-window"></div>
+                </div>
 
-            <p class="play-desc" id="pg-desc">Click "Step Forward" to start iterating 'r'.</p>
+                <p class="play-desc" id="pg-desc">Click "Step Forward" to start iterating 'r'.</p>
 
-            <div class="status-panel">
-                <div class="status-item">State (Set): <span id="pg-state" style="color:var(--color-sw)">{}</span></div>
-                <div class="status-item">Best Length: <span id="pg-best" style="color:var(--color-tp)">0</span></div>
+                <div class="status-panel">
+                    <div class="status-item">State (Set): <span id="pg-state" style="color:var(--color-sw)">{}</span></div>
+                    <div class="status-item">Best Length: <span id="pg-best" style="color:var(--color-tp)">0</span></div>
+                </div>
             </div>
         </div>
     </div>
@@ -267,7 +325,7 @@
             document.querySelectorAll('.array-cell').forEach((c, i) => {
                 if (i >= l && i <= r && !stateSet.has(pStr[r]) && pgState !== 2) c.style.borderColor = "var(--color-sw)";
                 else if (i === r && pgState === 2) c.style.borderColor = "#ef4444";
-                else c.style.borderColor = "rgba(255,255,255,0.1)";
+                else c.style.borderColor = "var(--border)";
             });
 
             stateTxt.innerText = `{ ${Array.from(stateSet).join(', ')} }`;
