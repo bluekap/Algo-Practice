@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DP Revision Guide — AlgoPractice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07090f;
+            --card-bg: #0d1117;
+            --code-bg: #020408;
+            --border: #1e293b;
+            --color-p1: #f59e0b;
+            --color-p2: #10b981;
+            --color-p3: #3b82f6;
+            --color-p4: #a855f7;
+            --color-p5: #ef4444;
+            --text-main: #e2e8f0;
+            --text-muted: #475569;
+            --text-muted-bright: #94a3b8;
+            --font-main: 'Outfit', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .page-header {
+            background: linear-gradient(160deg, #1a1200 0%, #0d1117 55%, #071a10 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 44px 28px 22px;
+            position: relative;
+            text-align: center;
+        }
+        .nav-back {
+            position: absolute;
+            top: 22px; left: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.15s;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .nav-back:hover { color: var(--text-main); }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #fcd34d, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+        .page-header p { color: var(--text-muted); font-size: 13px; }
+        .container { max-width: 860px; margin: 0 auto; padding: 28px; }
+
+        /* Decision Framework */
+        .framework-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+        .framework-box h2 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #fcd34d;
+            margin-bottom: 14px;
+        }
+        .decision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+        .decision-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 13px;
+        }
+        .decision-item .signal { color: #94a3b8; margin-bottom: 4px; font-size: 12px; }
+        .decision-item .pattern { font-weight: 600; }
+
+        /* Section Cards */
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            position: relative;
+        }
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+        }
+        .p1::before { background: var(--color-p1); }
+        .p2::before { background: var(--color-p2); }
+        .p3::before { background: var(--color-p3); }
+        .p4::before { background: var(--color-p4); }
+        .p5::before { background: var(--color-p5); }
+
+        .section-card-header {
+            padding: 13px 18px 13px 22px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-card-header h2 { margin: 0; font-size: 15px; font-weight: 600; }
+        .p1 .section-card-header h2 { color: #fcd34d; }
+        .p2 .section-card-header h2 { color: #34d399; }
+        .p3 .section-card-header h2 { color: #60a5fa; }
+        .p4 .section-card-header h2 { color: #c084fc; }
+        .p5 .section-card-header h2 { color: #f87171; }
+
+        .section-card-body { padding: 18px 18px 18px 22px; }
+
+        .mental-model {
+            background: #0a0f1a;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            color: var(--text-muted-bright);
+            line-height: 1.8;
+        }
+        .mental-model strong { color: #c4b5fd; }
+
+        .recurrence {
+            background: #0a0f1a;
+            border: 1px dashed #2d3748;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            font-family: var(--font-code);
+            font-size: 12px;
+            line-height: 2;
+            color: var(--text-muted-bright);
+        }
+        .recurrence .label { color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; display: block; font-family: var(--font-main); }
+        .hl-yellow { color: #fcd34d; font-weight: bold; }
+        .hl-green { color: #34d399; font-weight: bold; }
+        .hl-blue { color: #60a5fa; font-weight: bold; }
+        .hl-purple { color: #c084fc; font-weight: bold; }
+        .hl-red { color: #f87171; font-weight: bold; }
+        .kw { color: #d8b4fe; }
+        .cm { color: #4b5563; font-style: italic; }
+
+        .code-container {
+            background: var(--code-bg);
+            border: 1px solid #1a2436;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .code-header {
+            padding: 7px 13px;
+            border-bottom: 1px solid #1a2436;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .dots { display: flex; gap: 5px; }
+        .dot { width: 9px; height: 9px; border-radius: 50%; }
+        .dot.red { background: #ef4444; }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #22c55e; }
+        .code-lang { font-size: 10px; color: #374151; letter-spacing: 0.08em; margin-left: 4px; }
+        pre {
+            margin: 0;
+            padding: 14px 18px;
+            font-family: var(--font-code);
+            font-size: 12px;
+            line-height: 1.75;
+            overflow-x: auto;
+            color: #93c5fd;
+        }
+
+        .problems-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .problem-tag {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            color: var(--text-muted-bright);
+        }
+        .problem-tag.hard { border-color: rgba(239,68,68,0.4); color: #f87171; }
+        .problem-tag.medium { border-color: rgba(245,158,11,0.4); color: #fcd34d; }
+        .problem-tag.easy { border-color: rgba(34,197,94,0.4); color: #4ade80; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="dp_masterclass.html" class="nav-back">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to Masterclass
+        </a>
+        <h1>Dynamic Programming Revision Guide</h1>
+        <p>5 core patterns, mental models, recurrences, and templates</p>
+    </div>
+
+    <div class="container">
+
+        <!-- Decision Framework -->
+        <div class="framework-box">
+            <h2>🧭 Pattern Decision Framework</h2>
+            <div class="decision-grid">
+                <div class="decision-item">
+                    <div class="signal">Signal: single index, linear state</div>
+                    <div class="pattern" style="color:#fcd34d">→ 1D DP (dp[i])</div>
+                </div>
+                <div class="decision-item">
+                    <div class="signal">Signal: grid, two strings/sequences</div>
+                    <div class="pattern" style="color:#34d399">→ 2D DP (dp[i][j])</div>
+                </div>
+                <div class="decision-item">
+                    <div class="signal">Signal: items with weight/value, capacity</div>
+                    <div class="pattern" style="color:#60a5fa">→ Knapsack DP</div>
+                </div>
+                <div class="decision-item">
+                    <div class="signal">Signal: longest common/increasing subsequence</div>
+                    <div class="pattern" style="color:#c084fc">→ LCS / LIS DP</div>
+                </div>
+                <div class="decision-item">
+                    <div class="signal">Signal: subarray/substring, merge intervals</div>
+                    <div class="pattern" style="color:#f87171">→ Interval DP (dp[i][j])</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern 1: 1D DP -->
+        <div class="section-card p1">
+            <div class="section-card-header">
+                <span style="font-size:16px">🪜</span>
+                <h2>Pattern 1 — 1D DP (Linear State)</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> Each cell <code>dp[i]</code> answers: <em>"What is the best answer considering the first i elements?"</em> You only look back at a fixed number of previous states. Think of it as climbing stairs — each step depends on a few steps behind you.
+                </div>
+                <div class="recurrence">
+                    <span class="label">Climbing Stairs / Fibonacci recurrence</span>
+                    <span class="hl-yellow">dp[i]</span> = <span class="hl-green">dp[i-1]</span> + <span class="hl-blue">dp[i-2]</span><br>
+                    <span class="cm"># base cases: dp[0] = 1, dp[1] = 1</span>
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — climbing stairs template</span>
+                    </div>
+                    <pre><span class="kw">def</span> climbStairs(n):
+    <span class="kw">if</span> n &lt;= 1: <span class="kw">return</span> 1
+    dp = [0] * (n + 1)
+    dp[0], dp[1] = 1, 1
+    <span class="kw">for</span> i <span class="kw">in</span> range(2, n + 1):
+        dp[i] = dp[i-1] + dp[i-2]
+    <span class="kw">return</span> dp[n]
+
+<span class="cm"># Space-optimized (O(1) space):</span>
+<span class="kw">def</span> climbStairsOpt(n):
+    a, b = 1, 1
+    <span class="kw">for</span> _ <span class="kw">in</span> range(2, n + 1):
+        a, b = b, a + b
+    <span class="kw">return</span> b</pre>
+                </div>
+                <div class="problems-row">
+                    <span class="problem-tag easy">70. Climbing Stairs</span>
+                    <span class="problem-tag medium">198. House Robber</span>
+                    <span class="problem-tag medium">322. Coin Change</span>
+                    <span class="problem-tag medium">139. Word Break</span>
+                    <span class="problem-tag medium">300. Longest Increasing Subsequence</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern 2: 2D Grid DP -->
+        <div class="section-card p2">
+            <div class="section-card-header">
+                <span style="font-size:16px">🗺️</span>
+                <h2>Pattern 2 — 2D Grid DP</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> <code>dp[i][j]</code> answers: <em>"What is the best answer to reach cell (i, j)?"</em> You can only come from the top or left (for path problems). Fill the table row by row. The answer is always at <code>dp[m-1][n-1]</code>.
+                </div>
+                <div class="recurrence">
+                    <span class="label">Unique Paths / Min Path Sum recurrence</span>
+                    <span class="hl-green">dp[i][j]</span> = grid[i][j] + min(<span class="hl-blue">dp[i-1][j]</span>, <span class="hl-yellow">dp[i][j-1]</span>)<br>
+                    <span class="cm"># base case: first row and first column filled with prefix sums</span>
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — min path sum template</span>
+                    </div>
+                    <pre><span class="kw">def</span> minPathSum(grid):
+    m, n = len(grid), len(grid[0])
+    dp = [[0]*n <span class="kw">for</span> _ <span class="kw">in</span> range(m)]
+    dp[0][0] = grid[0][0]
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, m): dp[i][0] = dp[i-1][0] + grid[i][0]
+    <span class="kw">for</span> j <span class="kw">in</span> range(1, n): dp[0][j] = dp[0][j-1] + grid[0][j]
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, m):
+        <span class="kw">for</span> j <span class="kw">in</span> range(1, n):
+            dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])
+    <span class="kw">return</span> dp[m-1][n-1]</pre>
+                </div>
+                <div class="problems-row">
+                    <span class="problem-tag medium">62. Unique Paths</span>
+                    <span class="problem-tag medium">64. Minimum Path Sum</span>
+                    <span class="problem-tag medium">221. Maximal Square</span>
+                    <span class="problem-tag hard">85. Maximal Rectangle</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern 3: Knapsack -->
+        <div class="section-card p3">
+            <div class="section-card-header">
+                <span style="font-size:16px">🎒</span>
+                <h2>Pattern 3 — 0/1 Knapsack</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> For each item, you make a binary choice: <em>take it or leave it.</em> <code>dp[i][w]</code> = max value using first <code>i</code> items with capacity <code>w</code>. The key insight: if you take item <code>i</code>, you use up <code>weight[i]</code> capacity, so you look back at <code>dp[i-1][w - weight[i]]</code>.
+                </div>
+                <div class="recurrence">
+                    <span class="label">0/1 Knapsack recurrence</span>
+                    <span class="hl-blue">dp[i][w]</span> = max(<span class="hl-yellow">dp[i-1][w]</span>,  <span class="cm"># skip item i</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-green">dp[i-1][w - wt[i]]</span> + val[i])  <span class="cm"># take item i</span>
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — 0/1 knapsack template</span>
+                    </div>
+                    <pre><span class="kw">def</span> knapsack(weights, values, capacity):
+    n = len(weights)
+    dp = [[0] * (capacity + 1) <span class="kw">for</span> _ <span class="kw">in</span> range(n + 1)]
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, n + 1):
+        <span class="kw">for</span> w <span class="kw">in</span> range(capacity + 1):
+            dp[i][w] = dp[i-1][w]  <span class="cm"># skip</span>
+            <span class="kw">if</span> weights[i-1] &lt;= w:
+                dp[i][w] = max(dp[i][w],
+                    dp[i-1][w - weights[i-1]] + values[i-1])
+    <span class="kw">return</span> dp[n][capacity]
+
+<span class="cm"># Coin Change variant (unbounded — item reuse allowed):</span>
+<span class="kw">def</span> coinChange(coins, amount):
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    <span class="kw">for</span> coin <span class="kw">in</span> coins:
+        <span class="kw">for</span> w <span class="kw">in</span> range(coin, amount + 1):
+            dp[w] = min(dp[w], dp[w - coin] + 1)
+    <span class="kw">return</span> dp[amount] <span class="kw">if</span> dp[amount] != float('inf') <span class="kw">else</span> -1</pre>
+                </div>
+                <div class="problems-row">
+                    <span class="problem-tag medium">322. Coin Change</span>
+                    <span class="problem-tag medium">416. Partition Equal Subset Sum</span>
+                    <span class="problem-tag medium">518. Coin Change II</span>
+                    <span class="problem-tag hard">474. Ones and Zeroes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern 4: LCS / LIS -->
+        <div class="section-card p4">
+            <div class="section-card-header">
+                <span style="font-size:16px">🧬</span>
+                <h2>Pattern 4 — LCS / LIS (Subsequence DP)</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model (LCS):</strong> <code>dp[i][j]</code> = length of LCS of <code>s1[:i]</code> and <code>s2[:j]</code>. If characters match, extend the diagonal. If not, take the best of skipping one character from either string.<br><br>
+                    <strong>Mental Model (LIS):</strong> <code>dp[i]</code> = length of LIS ending at index <code>i</code>. For each <code>i</code>, scan all <code>j &lt; i</code> where <code>nums[j] &lt; nums[i]</code> and extend.
+                </div>
+                <div class="recurrence">
+                    <span class="label">LCS recurrence</span>
+                    <span class="kw">if</span> s1[i-1] == s2[j-1]: <span class="hl-purple">dp[i][j]</span> = <span class="hl-blue">dp[i-1][j-1]</span> + 1<br>
+                    <span class="kw">else</span>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-purple">dp[i][j]</span> = max(<span class="hl-yellow">dp[i-1][j]</span>, <span class="hl-green">dp[i][j-1]</span>)
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — LCS + LIS templates</span>
+                    </div>
+                    <pre><span class="kw">def</span> lcs(s1, s2):
+    m, n = len(s1), len(s2)
+    dp = [[0]*(n+1) <span class="kw">for</span> _ <span class="kw">in</span> range(m+1)]
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, m+1):
+        <span class="kw">for</span> j <span class="kw">in</span> range(1, n+1):
+            <span class="kw">if</span> s1[i-1] == s2[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+            <span class="kw">else</span>:
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    <span class="kw">return</span> dp[m][n]
+
+<span class="kw">def</span> lis(nums):  <span class="cm"># O(n^2) — easy to remember</span>
+    n = len(nums)
+    dp = [1] * n
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, n):
+        <span class="kw">for</span> j <span class="kw">in</span> range(i):
+            <span class="kw">if</span> nums[j] &lt; nums[i]:
+                dp[i] = max(dp[i], dp[j] + 1)
+    <span class="kw">return</span> max(dp)</pre>
+                </div>
+                <div class="problems-row">
+                    <span class="problem-tag medium">1143. Longest Common Subsequence</span>
+                    <span class="problem-tag medium">300. Longest Increasing Subsequence</span>
+                    <span class="problem-tag medium">72. Edit Distance</span>
+                    <span class="problem-tag hard">115. Distinct Subsequences</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern 5: Interval DP -->
+        <div class="section-card p5">
+            <div class="section-card-header">
+                <span style="font-size:16px">🔗</span>
+                <h2>Pattern 5 — Interval DP</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> <code>dp[i][j]</code> = best answer for the subproblem on the range <code>[i, j]</code>. You iterate by <em>length</em> of the interval (from small to large), and for each interval you try every possible split point <code>k</code>. The answer is always <code>dp[0][n-1]</code>.
+                </div>
+                <div class="recurrence">
+                    <span class="label">Interval DP recurrence (e.g. Matrix Chain / Burst Balloons)</span>
+                    <span class="hl-red">dp[i][j]</span> = min/max over all k in [i, j-1]:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-yellow">dp[i][k]</span> + <span class="hl-green">dp[k+1][j]</span> + cost(i, k, j)
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — interval DP template (burst balloons)</span>
+                    </div>
+                    <pre><span class="kw">def</span> maxCoins(nums):
+    nums = [1] + nums + [1]  <span class="cm"># pad boundaries</span>
+    n = len(nums)
+    dp = [[0] * n <span class="kw">for</span> _ <span class="kw">in</span> range(n)]
+
+    <span class="kw">for</span> length <span class="kw">in</span> range(2, n):       <span class="cm"># interval length</span>
+        <span class="kw">for</span> i <span class="kw">in</span> range(0, n - length):  <span class="cm"># left boundary</span>
+            j = i + length               <span class="cm"># right boundary</span>
+            <span class="kw">for</span> k <span class="kw">in</span> range(i+1, j):     <span class="cm"># last balloon to burst</span>
+                coins = nums[i] * nums[k] * nums[j]
+                dp[i][j] = max(dp[i][j],
+                    dp[i][k] + dp[k][j] + coins)
+    <span class="kw">return</span> dp[0][n-1]</pre>
+                </div>
+                <div class="problems-row">
+                    <span class="problem-tag hard">312. Burst Balloons</span>
+                    <span class="problem-tag medium">516. Longest Palindromic Subsequence</span>
+                    <span class="problem-tag medium">647. Palindromic Substrings</span>
+                    <span class="problem-tag hard">1000. Minimum Cost to Merge Stones</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

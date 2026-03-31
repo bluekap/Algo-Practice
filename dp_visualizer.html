@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DP Visual Playground — AlgoPractice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --panel: rgba(22,27,34,0.9);
+            --border: rgba(255,255,255,0.1);
+            --accent: #f59e0b;
+            --accent2: #10b981;
+            --text: #e6edf3;
+            --muted: #8b949e;
+            --cell-default: rgba(255,255,255,0.04);
+            --cell-active: rgba(245,158,11,0.35);
+            --cell-done: rgba(16,185,129,0.18);
+            --cell-source: rgba(96,165,250,0.25);
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-sans: 'Outfit', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-sans);
+            background: radial-gradient(circle at 50% 0%, #1a1200 0%, var(--bg) 70%);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            padding: 0.9rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+            flex-shrink: 0;
+        }
+        .title { font-size: 1.1rem; font-weight: 600; color: var(--accent); }
+        .tabs { display: flex; gap: 0.4rem; }
+        .tab {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--muted);
+            padding: 0.4rem 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 500;
+            font-family: var(--font-sans);
+            transition: all 0.2s;
+        }
+        .tab:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+        .tab.active { color: var(--accent); border-color: var(--border); background: rgba(245,158,11,0.1); }
+        main { display: flex; flex: 1; overflow: hidden; }
+
+        /* LEFT PANEL */
+        .left-panel {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            gap: 1.2rem;
+            overflow-y: auto;
+            border-right: 1px solid var(--border);
+        }
+        .controls {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            background: var(--panel);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+        .input-group { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; min-width: 120px; }
+        .input-group label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        input {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.45rem 0.7rem;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+            transition: border-color 0.2s;
+        }
+        input:focus { outline: none; border-color: var(--accent); }
+        button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 0.55rem 1.1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            font-size: 0.88rem;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        button:hover { opacity: 0.85; }
+        button:active { transform: scale(0.97); }
+        button.secondary {
+            background: rgba(255,255,255,0.08);
+            color: var(--text);
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+        button.secondary:hover { background: rgba(255,255,255,0.13); }
+
+        /* DP TABLE */
+        .table-wrapper {
+            overflow: auto;
+            flex-shrink: 0;
+        }
+        .dp-table {
+            border-collapse: separate;
+            border-spacing: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+        }
+        .dp-table th {
+            color: var(--muted);
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .dp-table td {
+            width: 46px;
+            height: 40px;
+            text-align: center;
+            border-radius: 6px;
+            background: var(--cell-default);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: background 0.3s, border-color 0.3s, transform 0.2s;
+            font-weight: 600;
+            color: var(--muted);
+            position: relative;
+        }
+        .dp-table td.filled { color: var(--text); background: var(--cell-done); border-color: rgba(16,185,129,0.3); }
+        .dp-table td.active { background: var(--cell-active); border-color: rgba(245,158,11,0.6); color: #fff; transform: scale(1.12); z-index: 2; box-shadow: 0 0 12px rgba(245,158,11,0.4); }
+        .dp-table td.source { background: var(--cell-source); border-color: rgba(96,165,250,0.4); color: #93c5fd; }
+        .dp-table td.header-cell { background: transparent; border: none; color: var(--muted); font-size: 0.7rem; }
+
+        .playback {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+        .explanation-box {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 1.2rem 1.4rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            min-height: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+        .explanation-box::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: var(--accent);
+        }
+        .legend {
+            display: flex;
+            gap: 1.2rem;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; gap: 0.4rem; color: var(--muted); }
+        .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+        /* RIGHT PANEL — code */
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0d1117;
+            min-width: 280px;
+        }
+        .code-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.2rem 0;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            line-height: 1.65;
+        }
+        .code-line {
+            display: flex;
+            padding: 0 1.2rem;
+            border-left: 3px solid transparent;
+            transition: background 0.2s, border-left-color 0.2s;
+        }
+        .code-line.active {
+            background: rgba(245,158,11,0.15);
+            border-left-color: var(--accent);
+        }
+        .ln { color: var(--muted); width: 2rem; flex-shrink: 0; text-align: right; padding-right: 0.8rem; opacity: 0.5; user-select: none; }
+        .lc { white-space: pre; color: #c9d1d9; flex: 1; }
+        .kw { color: #ff7b72; }
+        .fn { color: #d2a8ff; }
+        .num { color: #79c0ff; }
+        .cm { color: #4b5563; font-style: italic; }
+        .st { color: #a5d6ff; }
+        .complexity-bar {
+            padding: 1rem 1.5rem;
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+        .cv { color: var(--accent); font-weight: 600; font-family: var(--font-mono); }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: color 0.15s;
+        }
+        .nav-back:hover { color: var(--text); }
+    </style>
+</head>
+<body>
+<header>
+    <a href="dp_masterclass.html" class="nav-back">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Back
+    </a>
+    <h1 class="title">DP Visual Playground</h1>
+    <div class="tabs">
+        <button class="tab active" onclick="switchMode(0)">1D — Climbing Stairs</button>
+        <button class="tab" onclick="switchMode(1)">1D — House Robber</button>
+        <button class="tab" onclick="switchMode(2)">Knapsack — Coin Change</button>
+        <button class="tab" onclick="switchMode(3)">2D — LCS</button>
+        <button class="tab" onclick="switchMode(4)">2D — Min Path Sum</button>
+    </div>
+</header>
+<main>
+    <div class="left-panel">
+        <div class="controls" id="controls-area">
+            <!-- dynamic -->
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--cell-active)"></div>Current cell</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--cell-source)"></div>Source cells</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--cell-done)"></div>Computed</div>
+        </div>
+        <div class="table-wrapper" id="table-area"></div>
+        <div class="playback">
+            <button class="secondary" onclick="resetViz()">Reset</button>
+            <button class="secondary" onclick="prevStep()">◀ Prev</button>
+            <button id="play-btn" onclick="togglePlay()">▶ Play</button>
+            <button class="secondary" onclick="nextStep()">Next ▶</button>
+        </div>
+        <div class="explanation-box" id="explanation">Configure inputs and press Start to begin.</div>
+    </div>
+    <div class="right-panel">
+        <div class="code-scroll" id="code-panel"></div>
+        <div class="complexity-bar">
+            <span>Time: <span class="cv" id="tc">—</span></span>
+            <span>Space: <span class="cv" id="sc">—</span></span>
+            <span>Step <span class="cv" id="step-cur">0</span> / <span class="cv" id="step-tot">0</span></span>
+        </div>
+    </div>
+</main>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let mode = 0;
+let steps = [];
+let stepIdx = 0;
+let playing = false;
+let playTimer = null;
+
+// ─── MODE CONFIGS ─────────────────────────────────────────────────────────────
+const MODES = [
+    {
+        label: "Climbing Stairs",
+        tc: "O(n)", sc: "O(n)",
+        inputs: [{ id: "n-input", label: "n (stairs)", default: "8" }],
+        code: [
+            "def climbStairs(n):",
+            "    if n <= 1: return 1",
+            "    dp = [0] * (n + 1)",
+            "    dp[0], dp[1] = 1, 1",
+            "    for i in range(2, n + 1):",
+            "        dp[i] = dp[i-1] + dp[i-2]",
+            "    return dp[n]"
+        ],
+        generate: generateClimbingStairs
+    },
+    {
+        label: "House Robber",
+        tc: "O(n)", sc: "O(n)",
+        inputs: [{ id: "houses-input", label: "House values", default: "2,7,9,3,1,6,4" }],
+        code: [
+            "def rob(nums):",
+            "    if not nums: return 0",
+            "    if len(nums) == 1: return nums[0]",
+            "    dp = [0] * len(nums)",
+            "    dp[0] = nums[0]",
+            "    dp[1] = max(nums[0], nums[1])",
+            "    for i in range(2, len(nums)):",
+            "        dp[i] = max(dp[i-1],",
+            "                    dp[i-2] + nums[i])",
+            "    return dp[-1]"
+        ],
+        generate: generateHouseRobber
+    },
+    {
+        label: "Coin Change",
+        tc: "O(amount × coins)", sc: "O(amount)",
+        inputs: [
+            { id: "coins-input", label: "Coins", default: "1,3,4,5" },
+            { id: "amount-input", label: "Amount", default: "7" }
+        ],
+        code: [
+            "def coinChange(coins, amount):",
+            "    dp = [inf] * (amount + 1)",
+            "    dp[0] = 0",
+            "    for coin in coins:",
+            "        for w in range(coin, amount+1):",
+            "            dp[w] = min(dp[w],",
+            "                        dp[w - coin] + 1)",
+            "    return dp[amount] if dp[amount]!=inf else -1"
+        ],
+        generate: generateCoinChange
+    },
+    {
+        label: "LCS",
+        tc: "O(m × n)", sc: "O(m × n)",
+        inputs: [
+            { id: "s1-input", label: "String 1", default: "ABCBDAB" },
+            { id: "s2-input", label: "String 2", default: "BDCAB" }
+        ],
+        code: [
+            "def lcs(s1, s2):",
+            "    m, n = len(s1), len(s2)",
+            "    dp = [[0]*(n+1) for _ in range(m+1)]",
+            "    for i in range(1, m+1):",
+            "        for j in range(1, n+1):",
+            "            if s1[i-1] == s2[j-1]:",
+            "                dp[i][j] = dp[i-1][j-1] + 1",
+            "            else:",
+            "                dp[i][j] = max(dp[i-1][j],",
+            "                               dp[i][j-1])",
+            "    return dp[m][n]"
+        ],
+        generate: generateLCS
+    },
+    {
+        label: "Min Path Sum",
+        tc: "O(m × n)", sc: "O(m × n)",
+        inputs: [{ id: "grid-input", label: "Grid rows (;-separated)", default: "1,3,1;1,5,1;4,2,1" }],
+        code: [
+            "def minPathSum(grid):",
+            "    m, n = len(grid), len(grid[0])",
+            "    dp = [[0]*n for _ in range(m)]",
+            "    dp[0][0] = grid[0][0]",
+            "    for i in range(1,m): dp[i][0]=dp[i-1][0]+grid[i][0]",
+            "    for j in range(1,n): dp[0][j]=dp[0][j-1]+grid[0][j]",
+            "    for i in range(1, m):",
+            "        for j in range(1, n):",
+            "            dp[i][j] = grid[i][j] + min(",
+            "                dp[i-1][j], dp[i][j-1])",
+            "    return dp[m-1][n-1]"
+        ],
+        generate: generateMinPath
+    }
+];
+
+// ─── STEP GENERATORS ─────────────────────────────────────────────────────────
+
+function generateClimbingStairs() {
+    const n = parseInt(document.getElementById('n-input').value) || 8;
+    const dp = new Array(n + 1).fill(null);
+    const s = [];
+    s.push({ dp: [...dp], active: -1, sources: [], line: 0, msg: `Start: <code>climbStairs(${n})</code>. We'll build dp[0..${n}].` });
+    if (n <= 1) {
+        s.push({ dp: [...dp], active: -1, sources: [], line: 1, msg: `n ≤ 1, return 1 directly.` });
+        return { steps: s, type: '1d', n: n + 1 };
+    }
+    s.push({ dp: [...dp], active: -1, sources: [], line: 2, msg: `Create dp array of size ${n + 1}, all zeros.` });
+    dp[0] = 1; dp[1] = 1;
+    s.push({ dp: [...dp], active: 0, sources: [], line: 3, msg: `Base cases: <code>dp[0] = 1</code> (1 way to stay at ground), <code>dp[1] = 1</code> (1 way to reach step 1).` });
+    for (let i = 2; i <= n; i++) {
+        s.push({ dp: [...dp], active: i, sources: [i - 1, i - 2], line: 4, msg: `Loop: computing <code>dp[${i}]</code>. We can come from step ${i - 1} or step ${i - 2}.` });
+        dp[i] = dp[i - 1] + dp[i - 2];
+        s.push({ dp: [...dp], active: i, sources: [i - 1, i - 2], line: 5, msg: `<code>dp[${i}] = dp[${i - 1}] + dp[${i - 2}] = ${dp[i - 1]} + ${dp[i - 2]} = ${dp[i]}</code>` });
+    }
+    s.push({ dp: [...dp], active: n, sources: [], line: 6, msg: `Done! Answer: <code>dp[${n}] = ${dp[n]}</code> ways to climb ${n} stairs.` });
+    return { steps: s, type: '1d', n: n + 1 };
+}
+
+function generateHouseRobber() {
+    const raw = document.getElementById('houses-input').value;
+    const nums = raw.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+    const n = nums.length;
+    const dp = new Array(n).fill(null);
+    const s = [];
+    s.push({ dp: [...dp], active: -1, sources: [], line: 0, msg: `Start: <code>rob([${nums}])</code>. dp[i] = max money robbing houses 0..i.` });
+    dp[0] = nums[0];
+    s.push({ dp: [...dp], active: 0, sources: [], line: 4, msg: `Base: <code>dp[0] = nums[0] = ${nums[0]}</code>. Only one house, rob it.` });
+    if (n > 1) {
+        dp[1] = Math.max(nums[0], nums[1]);
+        s.push({ dp: [...dp], active: 1, sources: [0], line: 5, msg: `Base: <code>dp[1] = max(${nums[0]}, ${nums[1]}) = ${dp[1]}</code>. Best of first two houses.` });
+    }
+    for (let i = 2; i < n; i++) {
+        s.push({ dp: [...dp], active: i, sources: [i - 1, i - 2], line: 6, msg: `Computing <code>dp[${i}]</code>: skip house ${i} (keep dp[${i - 1}]=${dp[i - 1]}) OR rob it (dp[${i - 2}]=${dp[i - 2]} + ${nums[i]}).` });
+        dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+        s.push({ dp: [...dp], active: i, sources: [i - 1, i - 2], line: 7, msg: `<code>dp[${i}] = max(${dp[i - 1]}, ${dp[i - 2]} + ${nums[i]}) = ${dp[i]}</code>` });
+    }
+    s.push({ dp: [...dp], active: n - 1, sources: [], line: 9, msg: `Done! Max money: <code>dp[${n - 1}] = ${dp[n - 1]}</code>` });
+    return { steps: s, type: '1d', n, labels: nums.map((v, i) => `h${i}:${v}`) };
+}
+
+function generateCoinChange() {
+    const coins = document.getElementById('coins-input').value.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+    const amount = parseInt(document.getElementById('amount-input').value) || 7;
+    const INF = 9999;
+    const dp = new Array(amount + 1).fill(INF);
+    dp[0] = 0;
+    const s = [];
+    s.push({ dp: [...dp], active: -1, sources: [], line: 0, msg: `Start: coins=[${coins}], amount=${amount}. dp[w] = min coins to make amount w.` });
+    s.push({ dp: [...dp], active: 0, sources: [], line: 2, msg: `Base: <code>dp[0] = 0</code>. Zero coins needed to make amount 0.` });
+    for (const coin of coins) {
+        s.push({ dp: [...dp], active: -1, sources: [], line: 3, msg: `Processing coin = ${coin}. Updating all amounts from ${coin} to ${amount}.` });
+        for (let w = coin; w <= amount; w++) {
+            const prev = dp[w];
+            s.push({ dp: [...dp], active: w, sources: [w - coin], line: 4, msg: `<code>dp[${w}] = min(dp[${w}]=${prev === INF ? '∞' : prev}, dp[${w - coin}]+1=${dp[w - coin] === INF ? '∞' : dp[w - coin] + 1})</code> using coin ${coin}.` });
+            dp[w] = Math.min(dp[w], dp[w - coin] + 1);
+            s.push({ dp: [...dp], active: w, sources: [w - coin], line: 5, msg: `Updated: <code>dp[${w}] = ${dp[w] === INF ? '∞' : dp[w]}</code>` });
+        }
+    }
+    const ans = dp[amount] === INF ? -1 : dp[amount];
+    s.push({ dp: [...dp], active: amount, sources: [], line: 7, msg: `Done! Min coins for amount ${amount}: <code>${ans}</code>` });
+    return { steps: s, type: '1d', n: amount + 1, displayInf: true };
+}
+
+function generateLCS() {
+    const s1 = document.getElementById('s1-input').value.trim();
+    const s2 = document.getElementById('s2-input').value.trim();
+    const m = s1.length, n = s2.length;
+    const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+    const steps = [];
+    steps.push({ dp: dp.map(r => [...r]), active: null, sources: [], line: 0, msg: `Start: LCS of "${s1}" and "${s2}". dp[i][j] = LCS length of s1[:i] and s2[:j].` });
+    steps.push({ dp: dp.map(r => [...r]), active: null, sources: [], line: 2, msg: `Initialize (m+1)×(n+1) table with zeros. Row 0 and col 0 are base cases (empty string).` });
+    for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+            const match = s1[i - 1] === s2[j - 1];
+            steps.push({ dp: dp.map(r => [...r]), active: [i, j], sources: match ? [[i - 1, j - 1]] : [[i - 1, j], [i, j - 1]], line: match ? 5 : 8, msg: match ? `s1[${i - 1}]='${s1[i - 1]}' == s2[${j - 1}]='${s2[j - 1]}' ✓ Match! <code>dp[${i}][${j}] = dp[${i - 1}][${j - 1}] + 1 = ${dp[i - 1][j - 1] + 1}</code>` : `s1[${i - 1}]='${s1[i - 1]}' ≠ s2[${j - 1}]='${s2[j - 1]}'. <code>dp[${i}][${j}] = max(dp[${i - 1}][${j}]=${dp[i - 1][j]}, dp[${i}][${j - 1}]=${dp[i][j - 1]}) = ${Math.max(dp[i - 1][j], dp[i][j - 1])}</code>` });
+            dp[i][j] = match ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
+        }
+    }
+    steps.push({ dp: dp.map(r => [...r]), active: [m, n], sources: [], line: 10, msg: `Done! LCS length = <code>dp[${m}][${n}] = ${dp[m][n]}</code>` });
+    return { steps, type: '2d', rows: m + 1, cols: n + 1, rowLabels: ['', ...s1.split('')], colLabels: ['', ...s2.split('')] };
+}
+
+function generateMinPath() {
+    const raw = document.getElementById('grid-input').value;
+    const grid = raw.split(';').map(row => row.split(',').map(x => parseInt(x.trim())));
+    const m = grid.length, n = grid[0].length;
+    const dp = Array.from({ length: m }, () => new Array(n).fill(0));
+    const steps = [];
+    steps.push({ dp: dp.map(r => [...r]), active: null, sources: [], line: 0, msg: `Start: minPathSum on ${m}×${n} grid. dp[i][j] = min cost to reach cell (i,j).` });
+    dp[0][0] = grid[0][0];
+    steps.push({ dp: dp.map(r => [...r]), active: [0, 0], sources: [], line: 3, msg: `Base: <code>dp[0][0] = grid[0][0] = ${grid[0][0]}</code>` });
+    for (let i = 1; i < m; i++) {
+        dp[i][0] = dp[i - 1][0] + grid[i][0];
+        steps.push({ dp: dp.map(r => [...r]), active: [i, 0], sources: [[i - 1, 0]], line: 4, msg: `First col: <code>dp[${i}][0] = dp[${i - 1}][0] + grid[${i}][0] = ${dp[i - 1][0]} + ${grid[i][0]} = ${dp[i][0]}</code>` });
+    }
+    for (let j = 1; j < n; j++) {
+        dp[0][j] = dp[0][j - 1] + grid[0][j];
+        steps.push({ dp: dp.map(r => [...r]), active: [0, j], sources: [[0, j - 1]], line: 5, msg: `First row: <code>dp[0][${j}] = dp[0][${j - 1}] + grid[0][${j}] = ${dp[0][j - 1]} + ${grid[0][j]} = ${dp[0][j]}</code>` });
+    }
+    for (let i = 1; i < m; i++) {
+        for (let j = 1; j < n; j++) {
+            const best = Math.min(dp[i - 1][j], dp[i][j - 1]);
+            steps.push({ dp: dp.map(r => [...r]), active: [i, j], sources: [[i - 1, j], [i, j - 1]], line: 8, msg: `<code>dp[${i}][${j}] = grid[${i}][${j}] + min(dp[${i - 1}][${j}]=${dp[i - 1][j]}, dp[${i}][${j - 1}]=${dp[i][j - 1]}) = ${grid[i][j]} + ${best} = ${grid[i][j] + best}</code>` });
+            dp[i][j] = grid[i][j] + best;
+        }
+    }
+    steps.push({ dp: dp.map(r => [...r]), active: [m - 1, n - 1], sources: [], line: 10, msg: `Done! Min path sum = <code>dp[${m - 1}][${n - 1}] = ${dp[m - 1][n - 1]}</code>` });
+    return { steps, type: '2d', rows: m, cols: n };
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+let vizData = null;
+
+function switchMode(m) {
+    mode = m;
+    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === m));
+    renderControls();
+    renderCode();
+    resetViz();
+}
+
+function renderControls() {
+    const cfg = MODES[mode];
+    const area = document.getElementById('controls-area');
+    let html = '';
+    cfg.inputs.forEach(inp => {
+        html += `<div class="input-group"><label>${inp.label}</label><input id="${inp.id}" value="${inp.default}" onchange="resetViz()"></div>`;
+    });
+    html += `<button onclick="startViz()">Start</button>`;
+    area.innerHTML = html;
+}
+
+function renderCode() {
+    const cfg = MODES[mode];
+    const panel = document.getElementById('code-panel');
+    document.getElementById('tc').textContent = cfg.tc;
+    document.getElementById('sc').textContent = cfg.sc;
+    let html = '';
+    cfg.code.forEach((line, i) => {
+        let f = line.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        f = f.replace(/\b(def|if|for|in|return|else|not)\b/g, '<span class="kw">$1</span>');
+        f = f.replace(/\b(climbStairs|rob|coinChange|lcs|minPathSum|min|max|len|range)\b/g, '<span class="fn">$1</span>');
+        f = f.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+        f = f.replace(/#.*/g, m => `<span class="cm">${m}</span>`);
+        html += `<div class="code-line" id="cl-${i}"><div class="ln">${i + 1}</div><div class="lc">${f}</div></div>`;
+    });
+    panel.innerHTML = html;
+}
+
+function startViz() {
+    stopPlay();
+    const cfg = MODES[mode];
+    vizData = cfg.generate();
+    steps = vizData.steps;
+    stepIdx = 0;
+    document.getElementById('step-tot').textContent = steps.length;
+    renderStep();
+}
+
+function resetViz() {
+    stopPlay();
+    vizData = null;
+    steps = [];
+    stepIdx = 0;
+    document.getElementById('table-area').innerHTML = '';
+    document.getElementById('explanation').innerHTML = 'Configure inputs and press Start to begin.';
+    document.getElementById('step-cur').textContent = '0';
+    document.getElementById('step-tot').textContent = '0';
+    document.querySelectorAll('.code-line').forEach(el => el.classList.remove('active'));
+}
+
+function renderStep() {
+    if (!steps.length) return;
+    const step = steps[stepIdx];
+    document.getElementById('step-cur').textContent = stepIdx + 1;
+    document.getElementById('explanation').innerHTML = step.msg;
+
+    // highlight code line
+    document.querySelectorAll('.code-line').forEach(el => el.classList.remove('active'));
+    const cl = document.getElementById('cl-' + step.line);
+    if (cl) { cl.classList.add('active'); cl.scrollIntoView({ block: 'nearest' }); }
+
+    // render table
+    if (vizData.type === '1d') render1DTable(step);
+    else render2DTable(step);
+}
+
+function render1DTable(step) {
+    const { dp, active, sources, n } = { ...step, n: vizData.n };
+    const labels = vizData.labels;
+    let html = '<table class="dp-table"><thead><tr><th></th>';
+    for (let i = 0; i < n; i++) html += `<th>${labels ? labels[i] : 'i=' + i}</th>`;
+    html += '</tr></thead><tbody><tr><th>dp</th>';
+    for (let i = 0; i < n; i++) {
+        let cls = '';
+        if (i === active) cls = 'active';
+        else if (sources.includes(i)) cls = 'source';
+        else if (dp[i] !== null) cls = 'filled';
+        const val = dp[i] === null ? '' : (dp[i] === 9999 ? '∞' : dp[i]);
+        html += `<td class="${cls}">${val}</td>`;
+    }
+    html += '</tr></tbody></table>';
+    document.getElementById('table-area').innerHTML = html;
+}
+
+function render2DTable(step) {
+    const { dp, active, sources } = step;
+    const rows = vizData.rows, cols = vizData.cols;
+    const rowLabels = vizData.rowLabels, colLabels = vizData.colLabels;
+    const isActive = (r, c) => active && active[0] === r && active[1] === c;
+    const isSource = (r, c) => sources.some(s => s[0] === r && s[1] === c);
+
+    let html = '<table class="dp-table"><thead><tr><th></th>';
+    for (let j = 0; j < cols; j++) html += `<th>${colLabels ? colLabels[j] : 'j=' + j}</th>`;
+    html += '</tr></thead><tbody>';
+    for (let i = 0; i < rows; i++) {
+        html += `<tr><th>${rowLabels ? rowLabels[i] : 'i=' + i}</th>`;
+        for (let j = 0; j < cols; j++) {
+            let cls = '';
+            if (isActive(i, j)) cls = 'active';
+            else if (isSource(i, j)) cls = 'source';
+            else if (dp[i][j] !== 0 || (i === 0 && j === 0)) cls = 'filled';
+            html += `<td class="${cls}">${dp[i][j]}</td>`;
+        }
+        html += '</tr>';
+    }
+    html += '</tbody></table>';
+    document.getElementById('table-area').innerHTML = html;
+}
+
+// ─── PLAYBACK ─────────────────────────────────────────────────────────────────
+function nextStep() {
+    if (!steps.length) { startViz(); return; }
+    if (stepIdx < steps.length - 1) { stepIdx++; renderStep(); }
+    else stopPlay();
+}
+function prevStep() {
+    if (stepIdx > 0) { stepIdx--; renderStep(); }
+}
+function togglePlay() {
+    if (playing) stopPlay();
+    else startPlay();
+}
+function startPlay() {
+    if (!steps.length) startViz();
+    playing = true;
+    document.getElementById('play-btn').textContent = '⏸ Pause';
+    playTimer = setInterval(() => {
+        if (stepIdx < steps.length - 1) { stepIdx++; renderStep(); }
+        else stopPlay();
+    }, 600);
+}
+function stopPlay() {
+    playing = false;
+    clearInterval(playTimer);
+    document.getElementById('play-btn').textContent = '▶ Play';
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderControls();
+renderCode();
+</script>
+</body>
+</html>

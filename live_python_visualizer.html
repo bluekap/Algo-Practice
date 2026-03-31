@@ -311,9 +311,10 @@
         // --- SMART ARGUMENT DETECTOR ---
         function updateArgsHint() {
             const code = editor.getValue();
-            // Regex to find: def methodName(self, arg1, arg2...)
-            // It also handles type hints like arg1: List[int]
-            const match = code.match(/def\s+([a-zA-Z0-9_]+)\s*\(\s*self\s*(?:,\s*([^)]*))?\)/);
+            // Find the first method inside class Solution (the public entry method)
+            // We look for lines indented with exactly 4 spaces: "    def methodName(self..."
+            const match = code.match(/^    def\s+([a-zA-Z0-9_]+)\s*\(\s*self\s*(?:,\s*([^)]*))?\)/m)
+                       || code.match(/def\s+([a-zA-Z0-9_]+)\s*\(\s*self\s*(?:,\s*([^)]*))?\)/);
             
             const hintDisplay = document.getElementById('args_hint_display');
             const inputField = document.getElementById('test_args');
@@ -381,13 +382,22 @@
                 return;
             }
 
+            // --- AUTO-INJECT TYPING IMPORTS ---
+            const typingImport = 'from typing import List, Optional, Dict, Tuple, Set';
+            if (!code.includes('from typing import')) {
+                code = typingImport + '\n' + code;
+            }
+
             // --- LEETCODE AUTO-PARSER ---
             if (code.includes('class Solution')) {
-                // Find the first defined method that takes 'self'
-                // Regex matches: def methodName(self...
-                const match = code.match(/def\s+([a-zA-Z0-9_]+)\s*\(\s*self/);
-                if (match) {
-                    const methodName = match[1];
+                // Find the first method inside class Solution that takes 'self'
+                // Matches: def methodName(self, ...) — skips nested helpers like union/find
+                const classMatch = code.match(/class Solution[\s\S]*?(?=\nclass |\Z)/);
+                const classBody = classMatch ? classMatch[0] : code;
+                const methodMatch = classBody.match(/def\s+([a-zA-Z0-9_]+)\s*\(\s*self/);
+
+                if (methodMatch) {
+                    const methodName = methodMatch[1];
                     let args = document.getElementById('test_args').value.trim();
                     if (!args) args = 'None'; 
                     // Append the instantiation and call

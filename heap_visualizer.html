@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heap Visualizer — AlgoPractice</title>
+    <meta name="description" content="Interactive heap visualizer showing push, pop, and heapify operations on both tree and array representations with step-by-step animations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07090f;
+            --bg-header: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
+            --border-primary: #1e293b;
+            --accent-purple: #a78bfa;
+            --accent-blue: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-yellow: #facc15;
+            --accent-red: #f87171;
+            --text-main: #e2e8f0;
+            --text-muted: #475569;
+            --text-bright: #94a3b8;
+            --font-main: 'Outfit', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+            --card-bg: #0d1117;
+            --code-bg: #020408;
+
+            --node-size: 52px;
+            --level-h: 90px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body { height: 100%; overflow: hidden; }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: var(--bg-header);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 12px 24px 12px 160px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .nav-back {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-bright);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: color 0.15s;
+            white-space: nowrap;
+        }
+        .nav-back:hover { color: var(--text-main); }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            white-space: nowrap;
+        }
+
+        .header-badge {
+            background: #160d30;
+            border: 1px solid #3730a3;
+            border-radius: 4px;
+            padding: 3px 10px;
+            font-size: 10px;
+            color: var(--accent-purple);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Mode tabs in header */
+        .mode-tabs {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+            background: var(--code-bg);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 3px;
+        }
+
+        .mode-tab {
+            padding: 6px 14px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-bright);
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+            font-family: var(--font-main);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mode-tab.active {
+            background: var(--accent-purple);
+            color: #0f0820;
+        }
+
+        .mode-tab:hover:not(.active) {
+            color: var(--text-main);
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* ── MAIN LAYOUT ── */
+        .main-container {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* ── VIZ PANEL ── */
+        .viz-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 14px;
+            min-width: 0;
+        }
+
+        /* ── CONTROLS ── */
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: #0a0f1a;
+            border: 1px solid var(--border-primary);
+            border-radius: 10px;
+            padding: 12px 16px;
+            flex-shrink: 0;
+        }
+
+        .ctrl-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ctrl-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        input[type="number"], input[type="text"] {
+            background: var(--code-bg);
+            border: 1px solid var(--border-primary);
+            color: var(--text-main);
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-family: var(--font-code);
+            font-size: 13px;
+            width: 80px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        input[type="number"]:focus, input[type="text"]:focus { border-color: var(--accent-purple); }
+
+        input[type="text"].wide { width: 180px; }
+
+        input[type="range"] {
+            accent-color: var(--accent-purple);
+            width: 80px;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border: none;
+            font-family: var(--font-main);
+        }
+
+        .btn-primary {
+            background: var(--accent-purple);
+            color: #0f0820;
+        }
+        .btn-primary:hover { background: #c4b5fd; transform: translateY(-1px); }
+
+        .btn-blue {
+            background: transparent;
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+        }
+        .btn-blue:hover { background: rgba(56,189,248,0.1); }
+
+        .btn-red {
+            background: transparent;
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+        .btn-red:hover { background: rgba(248,113,113,0.1); }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-bright);
+            border: 1px solid var(--border-primary);
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,0.04); color: var(--text-main); }
+
+        .divider { width: 1px; height: 28px; background: var(--border-primary); margin: 0 4px; }
+
+        /* ── VISUALIZATION AREA ── */
+        .viz-area {
+            flex: 1;
+            position: relative;
+            background: radial-gradient(ellipse at 50% 30%, #0f1623 0%, #07090f 70%);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .viz-empty {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .viz-empty .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
+        .viz-empty p { font-size: 14px; }
+
+        #tree-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .node {
+            position: absolute;
+            width: var(--node-size);
+            height: var(--node-size);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-family: var(--font-code);
+            font-size: 15px;
+            z-index: 2;
+            cursor: default;
+            user-select: none;
+            /* Default node style */
+            background: #1b2537;
+            border: 2px solid #334155;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                        background 0.25s ease,
+                        border-color 0.25s ease,
+                        box-shadow 0.25s ease;
+        }
+
+        .node.root {
+            background: #1e1040;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 14px rgba(167,139,250,0.2);
+        }
+
+        .node.comparing {
+            border-color: var(--accent-blue);
+            background: rgba(56,189,248,0.15);
+            box-shadow: 0 0 14px rgba(56,189,248,0.35);
+        }
+
+        .node.swapping {
+            border-color: var(--accent-yellow);
+            background: rgba(250,204,21,0.15);
+            box-shadow: 0 0 18px rgba(250,204,21,0.4);
+            transform: scale(1.12) !important;
+        }
+
+        .node.done {
+            border-color: var(--accent-green);
+            background: rgba(74,222,128,0.1);
+            box-shadow: 0 0 12px rgba(74,222,128,0.3);
+        }
+
+        .node.removing {
+            border-color: var(--accent-red);
+            background: rgba(248,113,113,0.15);
+            box-shadow: 0 0 14px rgba(248,113,113,0.35);
+        }
+
+        /* Node index badge */
+        .node-badge {
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: var(--text-muted);
+            font-family: var(--font-code);
+            white-space: nowrap;
+        }
+
+        /* ── LEGEND ── */
+        .legend {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            padding: 0 4px;
+            flex-shrink: 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-bright);
+        }
+
+        .legend-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+        }
+
+        /* ── ARRAY VIEW ── */
+        .array-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-primary);
+            border-radius: 10px;
+            padding: 12px 16px;
+            flex-shrink: 0;
+        }
+
+        .array-section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .array-section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .dot { width: 9px; height: 9px; border-radius: 50%; }
+        .dot.r { background: #ef4444; }
+        .dot.y { background: #f59e0b; }
+        .dot.g { background: #22c55e; }
+
+        .array-slots {
+            display: flex;
+            gap: 6px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            min-height: 72px;
+            align-items: flex-end;
+        }
+
+        .array-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .parent-label {
+            font-size: 9px;
+            color: var(--text-muted);
+            font-family: var(--font-code);
+            height: 12px;
+            white-space: nowrap;
+        }
+
+        .array-box {
+            width: 42px;
+            height: 42px;
+            background: var(--code-bg);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-code);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--text-main);
+        }
+
+        .array-box.root-box { border-color: var(--accent-purple); color: var(--accent-purple); }
+        .array-box.comparing-box { border-color: var(--accent-blue); background: rgba(56,189,248,0.1); color: var(--accent-blue); }
+        .array-box.swapping-box { border-color: var(--accent-yellow); background: rgba(250,204,21,0.1); color: var(--accent-yellow); }
+
+        .array-idx { font-size: 10px; color: var(--text-muted); font-family: var(--font-code); }
+
+        .array-formula {
+            font-size: 9px;
+            color: #334155;
+            font-family: var(--font-code);
+            height: 12px;
+        }
+
+        /* ── SIDE PANEL ── */
+        .side-panel {
+            width: 300px;
+            flex-shrink: 0;
+            background: var(--card-bg);
+            border-left: 1px solid var(--border-primary);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .side-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .side-header-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-purple);
+        }
+
+        .state-bar {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-primary);
+            background: var(--code-bg);
+            flex-shrink: 0;
+        }
+
+        .state-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        .state-row:last-child { margin-bottom: 0; }
+
+        .state-key { color: var(--text-muted); font-family: var(--font-code); }
+        .state-val { color: var(--accent-purple); font-family: var(--font-code); font-weight: 600; }
+
+        .log-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .log-entry {
+            background: rgba(255,255,255,0.02);
+            border-left: 3px solid var(--border-primary);
+            padding: 8px 10px;
+            border-radius: 0 5px 5px 0;
+            font-size: 12px;
+            line-height: 1.55;
+            color: var(--text-bright);
+            animation: slideIn 0.25s ease;
+        }
+
+        .log-entry.info { border-left-color: var(--accent-blue); }
+        .log-entry.swap { border-left-color: var(--accent-yellow); }
+        .log-entry.done { border-left-color: var(--accent-green); }
+        .log-entry.remove { border-left-color: var(--accent-red); }
+
+        .log-entry code {
+            font-family: var(--font-code);
+            font-size: 11px;
+            color: var(--accent-purple);
+            background: rgba(167,139,250,0.12);
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+
+        .log-step {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+            font-family: var(--font-code);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(8px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ── HEAPIFY PANEL in side ── */
+        .heapify-panel {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-primary);
+            flex-shrink: 0;
+        }
+
+        .heapify-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .heapify-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ── TOOLTIP ── */
+        .tooltip {
+            position: absolute;
+            background: #1e293b;
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-family: var(--font-code);
+            color: var(--text-main);
+            pointer-events: none;
+            z-index: 100;
+            white-space: nowrap;
+            display: none;
+            transform: translateX(-50%);
+        }
+
+        /* ── ANIMATIONS DISABLED for swapping nodes ── */
+        .node.no-transition { transition: none !important; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .side-panel { width: 260px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="heap_masterclass.html" class="nav-back">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Masterclass
+        </a>
+        <span class="header-title">🏔️ Heap Visualizer</span>
+        <span class="header-badge">Python heapq</span>
+
+        <div class="mode-tabs" id="mode-tabs">
+            <button class="mode-tab active" id="tab-min" onclick="setHeapType('min')">MIN-HEAP</button>
+            <button class="mode-tab" id="tab-max" onclick="setHeapType('max')">MAX-HEAP</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <!-- ── VISUALIZATION PANEL ── -->
+        <div class="viz-panel">
+
+            <!-- Controls Row -->
+            <div class="controls">
+                <!-- Push -->
+                <div class="ctrl-group">
+                    <span class="ctrl-label">Push</span>
+                    <input type="number" id="heap-input" placeholder="value" min="-99" max="999" 
+                           onkeydown="if(event.key==='Enter') pushHandler()">
+                    <button class="btn btn-primary" id="btn-push" onclick="pushHandler()">PUSH</button>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Pop / Clear -->
+                <div class="ctrl-group">
+                    <button class="btn btn-blue" id="btn-pop" onclick="popHandler()">POP ROOT</button>
+                    <button class="btn btn-ghost" onclick="clearHeap()">CLEAR</button>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Demo -->
+                <div class="ctrl-group">
+                    <span class="ctrl-label">Demo</span>
+                    <button class="btn btn-ghost" onclick="loadDemo()">LOAD DEMO</button>
+                </div>
+
+                <!-- Spacer -->
+                <div style="flex:1"></div>
+
+                <!-- Speed -->
+                <div class="ctrl-group">
+                    <span class="ctrl-label">Speed</span>
+                    <span style="font-size:10px;color:var(--text-muted)">🐢</span>
+                    <input type="range" min="200" max="1800" value="900" step="100" id="speed-range">
+                    <span style="font-size:10px;color:var(--text-muted)">🐇</span>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="legend">
+                <div class="legend-item" style="color: var(--accent-purple)">
+                    <div class="legend-dot"></div> Root
+                </div>
+                <div class="legend-item" style="color: var(--accent-blue)">
+                    <div class="legend-dot"></div> Comparing
+                </div>
+                <div class="legend-item" style="color: var(--accent-yellow)">
+                    <div class="legend-dot"></div> Swapping
+                </div>
+                <div class="legend-item" style="color: var(--accent-green)">
+                    <div class="legend-dot"></div> Settled
+                </div>
+                <div class="legend-item" style="color: var(--accent-red)">
+                    <div class="legend-dot"></div> Removing
+                </div>
+            </div>
+
+            <!-- Tree Area -->
+            <div class="viz-area" id="viz-area">
+                <svg id="tree-svg"></svg>
+                <div class="viz-empty" id="viz-empty">
+                    <div class="icon">🏔️</div>
+                    <p>Push values or load a demo to visualize</p>
+                </div>
+            </div>
+
+            <!-- Array View -->
+            <div class="array-section">
+                <div class="array-section-header">
+                    <div class="code-dots">
+                        <div class="dot r"></div>
+                        <div class="dot y"></div>
+                        <div class="dot g"></div>
+                    </div>
+                    <span class="array-section-title">Array Representation — heap[]</span>
+                </div>
+                <div class="array-slots" id="array-slots">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ── SIDE PANEL ── -->
+        <div class="side-panel">
+            <div class="side-header">
+                <span>⚡</span>
+                <span class="side-header-title">Execution Log</span>
+            </div>
+
+            <div class="state-bar">
+                <div class="state-row">
+                    <span class="state-key">heap.size</span>
+                    <span class="state-val" id="state-size">0</span>
+                </div>
+                <div class="state-row">
+                    <span class="state-key">heap[0] (root)</span>
+                    <span class="state-val" id="state-root">—</span>
+                </div>
+                <div class="state-row">
+                    <span class="state-key">mode</span>
+                    <span class="state-val" id="state-mode">min-heap</span>
+                </div>
+            </div>
+
+            <div class="log-content" id="log-content">
+                <div class="log-entry info">
+                    <div class="log-step">READY</div>
+                    Push a value or load a demo.
+                </div>
+            </div>
+
+            <div class="heapify-panel">
+                <div class="heapify-label">⚙️ Heapify from Array</div>
+                <div class="heapify-row">
+                    <input type="text" class="wide" id="heapify-input" placeholder="e.g. 5,3,8,1,9">
+                    <button class="btn btn-red" id="btn-heapify" onclick="heapifyHandler()">BUILD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        /* ═══════════════════════════════════════════
+           STATE
+        ═══════════════════════════════════════════ */
+        let nodes = [];       // { element, val }
+        let heapType = 'min';
+        let isAnimating = false;
+        let stepCount = 0;
+
+        const vizArea    = document.getElementById('viz-area');
+        const treeSvg    = document.getElementById('tree-svg');
+        const logContent = document.getElementById('log-content');
+        const stateSize  = document.getElementById('state-size');
+        const stateRoot  = document.getElementById('state-root');
+        const stateMode  = document.getElementById('state-mode');
+        const vizEmpty   = document.getElementById('viz-empty');
+        const tooltip    = document.getElementById('tooltip');
+        const speedRange = document.getElementById('speed-range');
+
+        const NODE_SIZE = 52;
+        const LEVEL_H   = 90;
+
+        /* ═══════════════════════════════════════════
+           UTILS
+        ═══════════════════════════════════════════ */
+        function sleep(ms) {
+            // Map speed slider (200-1800) to actual delay. Higher = slower.
+            const factor = (2000 - parseInt(speedRange.value)) / 1000;
+            return new Promise(r => setTimeout(r, ms * factor));
+        }
+
+        function compare(a, b) {
+            return heapType === 'min' ? a < b : a > b;
+        }
+
+        function compareEq(a, b) {
+            return heapType === 'min' ? a <= b : a >= b;
+        }
+
+        function setButtons(disabled) {
+            ['btn-push', 'btn-pop', 'btn-heapify', 'btn-build'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.disabled = disabled;
+            });
+        }
+
+        /* ═══════════════════════════════════════════
+           POSITIONING
+        ═══════════════════════════════════════════ */
+        function getPos(index) {
+            const level    = Math.floor(Math.log2(index + 1));
+            const count    = Math.pow(2, level);
+            const posInLvl = index - (count - 1);
+            const w        = vizArea.clientWidth;
+            const x        = (posInLvl * (w / count)) + (w / count / 2) - (NODE_SIZE / 2);
+            const y        = 40 + level * LEVEL_H;
+            return { x, y };
+        }
+
+        /* ═══════════════════════════════════════════
+           RENDERING
+        ═══════════════════════════════════════════ */
+        function updateTree() {
+            vizEmpty.style.display = nodes.length === 0 ? 'block' : 'none';
+
+            nodes.forEach((node, i) => {
+                const { x, y } = getPos(i);
+                node.element.style.transform = `translate(${x}px, ${y}px)`;
+                // Update root class
+                node.element.classList.toggle('root', i === 0);
+            });
+
+            updateLines();
+            updateArrayView();
+            updateStateBar();
+        }
+
+        function updateLines() {
+            treeSvg.innerHTML = '';
+            for (let i = 0; i < nodes.length; i++) {
+                const l = 2 * i + 1, r = 2 * i + 2;
+                if (l < nodes.length) drawLine(i, l);
+                if (r < nodes.length) drawLine(i, r);
+            }
+        }
+
+        function drawLine(pi, ci, highlighted = false) {
+            const pp = getPos(pi), cp = getPos(ci);
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', pp.x + NODE_SIZE / 2);
+            line.setAttribute('y1', pp.y + NODE_SIZE / 2);
+            line.setAttribute('x2', cp.x + NODE_SIZE / 2);
+            line.setAttribute('y2', cp.y + NODE_SIZE / 2);
+            line.setAttribute('stroke', highlighted ? 'rgba(167,139,250,0.5)' : '#1e3a5f');
+            line.setAttribute('stroke-width', highlighted ? '2.5' : '1.5');
+            treeSvg.appendChild(line);
+        }
+
+        function updateArrayView() {
+            const container = document.getElementById('array-slots');
+            container.innerHTML = nodes.map((n, i) => {
+                const parentIdx = i === 0 ? null : Math.floor((i - 1) / 2);
+                const leftIdx   = 2 * i + 1 < nodes.length ? 2 * i + 1 : null;
+                const rightIdx  = 2 * i + 2 < nodes.length ? 2 * i + 2 : null;
+                const parentStr = parentIdx !== null ? `p:${parentIdx}` : 'root';
+                const childStr  = (leftIdx !== null || rightIdx !== null)
+                    ? `c:${[leftIdx, rightIdx].filter(x => x !== null).join(',')}`
+                    : '';
+
+                return `
+                    <div class="array-slot">
+                        <div class="parent-label">${parentStr}</div>
+                        <div class="array-box ${i === 0 ? 'root-box' : ''}" id="ab-${i}">${n.val}</div>
+                        <div class="array-idx">[${i}]</div>
+                        <div class="array-formula">${childStr}</div>
+                    </div>`;
+            }).join('');
+        }
+
+        function updateStateBar() {
+            stateSize.textContent = nodes.length;
+            stateRoot.textContent = nodes.length > 0 ? nodes[0].val : '—';
+            stateMode.textContent = heapType + '-heap';
+        }
+
+        /* ═══════════════════════════════════════════
+           NODE CREATION/DESTRUCTION
+        ═══════════════════════════════════════════ */
+        function createNode(val) {
+            const el = document.createElement('div');
+            el.className = 'node';
+            el.textContent = val;
+
+            // Tooltip on hover
+            el.addEventListener('mouseenter', (e) => {
+                const idx = nodes.findIndex(n => n.element === el);
+                if (idx < 0) return;
+                const parent = idx === 0 ? 'root' : `parent[${Math.floor((idx-1)/2)}]=${nodes[Math.floor((idx-1)/2)]?.val}`;
+                const lc = 2*idx+1 < nodes.length ? `L[${2*idx+1}]=${nodes[2*idx+1].val}` : 'L=null';
+                const rc = 2*idx+2 < nodes.length ? `R[${2*idx+2}]=${nodes[2*idx+2].val}` : 'R=null';
+                tooltip.innerHTML = `[${idx}] ${parent}<br>${lc} &nbsp; ${rc}`;
+                tooltip.style.display = 'block';
+                const pos = getPos(idx);
+                tooltip.style.left = (pos.x + NODE_SIZE / 2) + 'px';
+                tooltip.style.top  = (pos.y - 42) + 'px';
+            });
+            el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+            vizArea.appendChild(el);
+            return el;
+        }
+
+        function removeNodeEl(node) {
+            if (node.element && node.element.parentNode) {
+                node.element.remove();
+            }
+        }
+
+        /* ═══════════════════════════════════════════
+           LOGGING
+        ═══════════════════════════════════════════ */
+        function addLog(msg, type = '') {
+            stepCount++;
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerHTML = `<div class="log-step">STEP ${stepCount}</div>${msg}`;
+            logContent.insertBefore(entry, logContent.firstChild);
+        }
+
+        function clearLog() {
+            stepCount = 0;
+            logContent.innerHTML = '<div class="log-entry info"><div class="log-step">READY</div>Log cleared.</div>';
+        }
+
+        /* ═══════════════════════════════════════════
+           HEAP TYPE TOGGLE
+        ═══════════════════════════════════════════ */
+        function setHeapType(type) {
+            if (isAnimating) return;
+            heapType = type;
+            document.getElementById('tab-min').classList.toggle('active', type === 'min');
+            document.getElementById('tab-max').classList.toggle('active', type === 'max');
+            updateStateBar();
+            addLog(`Switched to <code>${type.toUpperCase()}-HEAP</code>. Push new values or heapify to rebuild.`, 'info');
+        }
+
+        /* ═══════════════════════════════════════════
+           PUSH (heappush) — O(log n)
+        ═══════════════════════════════════════════ */
+        async function pushHandler() {
+            if (isAnimating) return;
+            const rawVal = document.getElementById('heap-input').value.trim();
+            const val = parseInt(rawVal);
+            if (isNaN(val) || rawVal === '') return;
+            document.getElementById('heap-input').value = '';
+
+            isAnimating = true;
+            setButtons(true);
+
+            const idx = nodes.length;
+            addLog(`<strong>heappush(heap, ${val})</strong><br>Insert at index <code>${idx}</code> (last position).`, 'info');
+
+            const el = createNode(val);
+            nodes.push({ element: el, val });
+            updateTree();
+            await sleep(400);
+
+            // Bubble Up
+            let curr = idx;
+            while (curr > 0) {
+                const parent = Math.floor((curr - 1) / 2);
+                const op = heapType === 'min' ? '<' : '>';
+
+                nodes[curr].element.classList.add('comparing');
+                nodes[parent].element.classList.add('comparing');
+                highlightArrBox(curr, 'comparing-box');
+                highlightArrBox(parent, 'comparing-box');
+                drawHighlightLine(parent, curr);
+
+                addLog(`Compare <code>[${curr}]=${nodes[curr].val}</code> with parent <code>[${parent}]=${nodes[parent].val}</code>`, '');
+                await sleep(600);
+
+                if (compare(nodes[curr].val, nodes[parent].val)) {
+                    addLog(`Violation! <code>${nodes[curr].val} ${op} ${nodes[parent].val}</code> — Swap ↑`, 'swap');
+
+                    nodes[curr].element.classList.replace('comparing', 'swapping');
+                    nodes[parent].element.classList.replace('comparing', 'swapping');
+                    highlightArrBox(curr, 'swapping-box');
+                    highlightArrBox(parent, 'swapping-box');
+                    await sleep(300);
+
+                    [nodes[curr], nodes[parent]] = [nodes[parent], nodes[curr]];
+                    updateTree();
+                    clearHighlightLine();
+                    await sleep(600);
+
+                    nodes[curr].element.classList.remove('swapping');
+                    nodes[parent].element.classList.remove('swapping');
+                    highlightArrBox(curr, '');
+                    highlightArrBox(parent, '');
+                    curr = parent;
+                } else {
+                    clearHighlightLine();
+                    addLog(`<code>${nodes[curr].val}</code> ≥ parent <code>${nodes[parent].val}</code> — heap property ✓`, 'done');
+                    nodes[curr].element.classList.remove('comparing');
+                    nodes[parent].element.classList.remove('comparing');
+                    highlightArrBox(curr, '');
+                    highlightArrBox(parent, '');
+                    nodes[curr].element.classList.add('done');
+                    setTimeout(() => nodes[curr]?.element.classList.remove('done'), 1000);
+                    break;
+                }
+            }
+
+            if (curr === 0) {
+                addLog(`<code>${nodes[0].val}</code> is now the root. Bubble-up complete.`, 'done');
+                nodes[0].element.classList.add('done');
+                setTimeout(() => nodes[0]?.element.classList.remove('done'), 1000);
+            }
+
+            updateArrayView();
+            isAnimating = false;
+            setButtons(false);
+        }
+
+        /* ═══════════════════════════════════════════
+           POP (heappop) — O(log n)
+        ═══════════════════════════════════════════ */
+        async function popHandler() {
+            if (isAnimating || nodes.length === 0) return;
+            isAnimating = true;
+            setButtons(true);
+
+            const rootVal = nodes[0].val;
+            addLog(`<strong>heappop(heap)</strong><br>Remove root <code>${rootVal}</code>.`, 'remove');
+
+            nodes[0].element.classList.add('removing');
+            await sleep(500);
+
+            if (nodes.length === 1) {
+                removeNodeEl(nodes[0]);
+                nodes = [];
+                updateTree();
+                addLog(`Heap is now empty.`, 'info');
+                isAnimating = false;
+                setButtons(false);
+                return;
+            }
+
+            // Move last to root
+            const lastNode = nodes.pop();
+            addLog(`Move last element <code>${lastNode.val}</code> to root position [0].`, 'info');
+            removeNodeEl(nodes[0]);
+            nodes[0] = lastNode;
+            updateTree();
+            await sleep(600);
+
+            // Bubble Down
+            let curr = 0;
+            while (true) {
+                const l = 2 * curr + 1;
+                const r = 2 * curr + 2;
+                let target = curr;
+
+                if (l < nodes.length && compare(nodes[l].val, nodes[target].val)) target = l;
+                if (r < nodes.length && compare(nodes[r].val, nodes[target].val)) target = r;
+
+                // Highlight the comparison trio
+                nodes[curr].element.classList.add('comparing');
+                highlightArrBox(curr, 'comparing-box');
+                if (l < nodes.length) { nodes[l].element.classList.add('comparing'); highlightArrBox(l, 'comparing-box'); }
+                if (r < nodes.length) { nodes[r].element.classList.add('comparing'); highlightArrBox(r, 'comparing-box'); }
+                if (target !== curr) drawHighlightLine(curr, target);
+
+                addLog(`Node <code>[${curr}]=${nodes[curr].val}</code>${l < nodes.length ? ` — L:<code>${nodes[l].val}</code>` : ''}${r < nodes.length ? ` R:<code>${nodes[r].val}</code>` : ''}`, '');
+                await sleep(500);
+
+                if (target !== curr) {
+                    const op = heapType === 'min' ? '<' : '>';
+                    addLog(`<code>${nodes[target].val} ${op} ${nodes[curr].val}</code> — Swap ↓ with child <code>[${target}]</code>`, 'swap');
+
+                    // Clean up the non-swapped sibling immediately
+                    const sibling = (target === l) ? r : l;
+                    if (sibling < nodes.length) { nodes[sibling].element.classList.remove('comparing'); highlightArrBox(sibling, ''); }
+
+                    nodes[curr].element.classList.replace('comparing', 'swapping');
+                    nodes[target].element.classList.replace('comparing', 'swapping');
+                    highlightArrBox(curr, 'swapping-box');
+                    highlightArrBox(target, 'swapping-box');
+
+                    [nodes[curr], nodes[target]] = [nodes[target], nodes[curr]];
+                    updateTree();
+                    clearHighlightLine();
+                    await sleep(600);
+
+                    nodes[curr].element.classList.remove('swapping');
+                    nodes[target].element.classList.remove('swapping');
+                    highlightArrBox(curr, '');
+                    highlightArrBox(target, '');
+                    curr = target;
+                } else {
+                    clearHighlightLine();
+                    addLog(`Heap property satisfied — <code>${nodes[curr].val}</code> settled at [${curr}]. ✓`, 'done');
+                    nodes[curr].element.classList.remove('comparing');
+                    nodes[curr].element.classList.add('done');
+                    if (l < nodes.length) { nodes[l].element.classList.remove('comparing'); highlightArrBox(l, ''); }
+                    if (r < nodes.length) { nodes[r].element.classList.remove('comparing'); highlightArrBox(r, ''); }
+                    highlightArrBox(curr, '');
+                    setTimeout(() => nodes[curr]?.element.classList.remove('done'), 1000);
+                    break;
+                }
+            }
+
+            updateArrayView();
+            isAnimating = false;
+            setButtons(false);
+        }
+
+        /* ═══════════════════════════════════════════
+           HEAPIFY — O(n) using sift-down from n//2-1 to 0
+        ═══════════════════════════════════════════ */
+        async function heapifyHandler() {
+            if (isAnimating) return;
+            const raw = document.getElementById('heapify-input').value.trim();
+            if (!raw) return;
+
+            const vals = raw.split(',').map(s => parseInt(s.trim())).filter(v => !isNaN(v));
+            if (vals.length === 0) return;
+
+            // Clear existing
+            nodes.forEach(n => removeNodeEl(n));
+            nodes = [];
+            clearLog();
+
+            isAnimating = true;
+            setButtons(true);
+            addLog(`<strong>heapify(array)</strong><br>Build ${heapType}-heap from <code>[${vals.join(', ')}]</code> in O(n).`, 'info');
+
+            // Insert all without animating
+            vals.forEach(v => {
+                const el = createNode(v);
+                nodes.push({ element: el, val: v });
+            });
+            updateTree();
+            await sleep(600);
+
+            // Sift down from floor((n-1)/2) down to 0
+            const start = Math.floor((nodes.length - 1) / 2);
+            addLog(`Start sift-down from index <code>${start}</code> (last non-leaf) to <code>0</code>.`, 'info');
+
+            for (let i = start; i >= 0; i--) {
+                addLog(`Sift-down index <code>${i}</code> (val=${nodes[i].val})`, 'info');
+                nodes[i].element.classList.add('comparing');
+                await sleep(400);
+                nodes[i].element.classList.remove('comparing');
+                await siftDown(i);
+                await sleep(200);
+            }
+
+            addLog(`Heap built! Root = <code>${nodes[0].val}</code>.`, 'done');
+            nodes[0].element.classList.add('done');
+            setTimeout(() => nodes[0]?.element.classList.remove('done'), 1200);
+
+            updateArrayView();
+            isAnimating = false;
+            setButtons(false);
+        }
+
+        async function siftDown(i) {
+            let curr = i;
+            while (true) {
+                const l = 2 * curr + 1;
+                const r = 2 * curr + 2;
+                let target = curr;
+
+                if (l < nodes.length && compare(nodes[l].val, nodes[target].val)) target = l;
+                if (r < nodes.length && compare(nodes[r].val, nodes[target].val)) target = r;
+
+                if (target !== curr) {
+                    nodes[curr].element.classList.add('swapping');
+                    nodes[target].element.classList.add('swapping');
+                    addLog(`Swap <code>[${curr}]=${nodes[curr].val}</code> ↔ <code>[${target}]=${nodes[target].val}</code>`, 'swap');
+                    [nodes[curr], nodes[target]] = [nodes[target], nodes[curr]];
+                    updateTree();
+                    await sleep(500);
+                    nodes[curr].element.classList.remove('swapping');
+                    nodes[target].element.classList.remove('swapping');
+                    curr = target;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        /* ═══════════════════════════════════════════
+           ARRAY HIGHLIGHT HELPERS
+        ═══════════════════════════════════════════ */
+        function highlightArrBox(idx, cls) {
+            const box = document.getElementById(`ab-${idx}`);
+            if (!box) return;
+            // Always restore root-box for index 0 when clearing
+            let base = 'array-box';
+            if (cls) base += ' ' + cls;
+            else if (idx === 0) base += ' root-box';
+            box.className = base;
+        }
+
+        function clearAllHighlights() {
+            nodes.forEach((n, i) => {
+                n.element.classList.remove('comparing', 'swapping', 'done', 'removing');
+                highlightArrBox(i, '');
+            });
+        }
+
+        function drawHighlightLine(pi, ci) {
+            const old = document.getElementById('hl-line');
+            if (old) old.remove();
+            if (pi < 0 || ci >= nodes.length) return;
+            const pp = getPos(pi), cp = getPos(ci);
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('id', 'hl-line');
+            line.setAttribute('x1', pp.x + NODE_SIZE / 2);
+            line.setAttribute('y1', pp.y + NODE_SIZE / 2);
+            line.setAttribute('x2', cp.x + NODE_SIZE / 2);
+            line.setAttribute('y2', cp.y + NODE_SIZE / 2);
+            line.setAttribute('stroke', 'rgba(56,189,248,0.6)');
+            line.setAttribute('stroke-width', '3');
+            line.setAttribute('stroke-dasharray', '6,3');
+            treeSvg.appendChild(line);
+        }
+
+        function clearHighlightLine() {
+            const old = document.getElementById('hl-line');
+            if (old) old.remove();
+        }
+
+        /* ═══════════════════════════════════════════
+           CLEAR
+        ═══════════════════════════════════════════ */
+        function clearHeap() {
+            if (isAnimating) return;
+            nodes.forEach(n => removeNodeEl(n));
+            nodes = [];
+            updateTree();
+            clearLog();
+        }
+
+        /* ═══════════════════════════════════════════
+           DEMO
+        ═══════════════════════════════════════════ */
+        async function loadDemo() {
+            if (isAnimating) return;
+            nodes.forEach(n => removeNodeEl(n));
+            nodes = [];
+            clearLog();
+            updateTree();
+            document.getElementById('heapify-input').value = '15,10,8,5,3,12,7';
+            await heapifyHandler();
+        }
+
+        /* ═══════════════════════════════════════════
+           INIT
+        ═══════════════════════════════════════════ */
+        updateTree();
+        window.addEventListener('resize', () => { if (!isAnimating) updateTree(); });
+    </script>
+</body>
+</html>

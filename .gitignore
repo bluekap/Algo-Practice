@@ -3,6 +3,7 @@ PROJECT_RULES.md
 .gemini/
 .agents/
 .agent/
+.vscode/
 _agents/
 _agent/
 node_modules/
