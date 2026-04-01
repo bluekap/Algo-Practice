@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knapsack DP — AlgoPractice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <style>
+        .page-header {
+            background: linear-gradient(160deg, #071527 0%, #0d1117 55%, #051421 100%);
+        }
+        .page-header h1 {
+            background: linear-gradient(90deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .mental-model strong { color: #60a5fa; }
+        .example-box h3 { color: #60a5fa; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="dp_guide.html" class="nav-back">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to DP Guide
+        </a>
+        <h1>Knapsack DP</h1>
+        <p>Signal: binary selection, finite resources, bounded optimization</p>
+    </div>
+
+    <div class="container">
+        <div class="section-card">
+            <div class="section-card-header">
+                <span style="font-size:16px">🎒</span>
+                <h2>Pattern Breakdown</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> For each item, you make a binary choice: <em>take it or leave it.</em> <code>dp[i][w]</code> = max value using first <code>i</code> items with capacity <code>w</code>. The key insight: if you take item <code>i</code>, you use up <code>weight[i]</code> capacity, so you look back at <code>dp[i-1][w - weight[i]]</code>.
+                </div>
+                <div class="recurrence">
+                    <span class="label">0/1 Knapsack recurrence</span>
+                    <span class="hl-blue">dp[i][w]</span> = max(<span class="hl-yellow">dp[i-1][w]</span>,  <span class="cm"># skip item i</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-green">dp[i-1][w - wt[i]]</span> + val[i])  <span class="cm"># take item i</span>
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — 0/1 knapsack template</span>
+                    </div>
+                    <pre><span class="kw">def</span> knapsack(weights, values, capacity):
+    n = len(weights)
+    dp = [[0] * (capacity + 1) <span class="kw">for</span> _ <span class="kw">in</span> range(n + 1)]
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, n + 1):
+        <span class="kw">for</span> w <span class="kw">in</span> range(capacity + 1):
+            dp[i][w] = dp[i-1][w]  <span class="cm"># skip</span>
+            <span class="kw">if</span> weights[i-1] &lt;= w:
+                dp[i][w] = max(dp[i][w],
+                    dp[i-1][w - weights[i-1]] + values[i-1])
+    <span class="kw">return</span> dp[n][capacity]
+
+<span class="cm"># Coin Change variant (unbounded — item reuse allowed):</span>
+<span class="kw">def</span> coinChange(coins, amount):
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    <span class="kw">for</span> coin <span class="kw">in</span> coins:
+        <span class="kw">for</span> w <span class="kw">in</span> range(coin, amount + 1):
+            dp[w] = min(dp[w], dp[w - coin] + 1)
+    <span class="kw">return</span> dp[amount] <span class="kw">if</span> dp[amount] != float('inf') <span class="kw">else</span> -1</pre>
+                </div>
+                
+                <div class="example-box">
+                    <h3>
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Example Case: 416. Partition Equal Subset Sum
+                    </h3>
+                    <p style="margin-bottom: 8px;"><strong>Problem:</strong> Determine if an array can be partitioned into two subsets with equal sum.</p>
+                    <p><strong>Explanation:</strong> This is a 0/1 Knapsack problem where the capacity is <code>sum / 2</code>. You want to know if a subset of elements adds up exactly to this target. <code>dp[w] = dp[w] or dp[w - num]</code>.</p>
+                </div>
+
+                <div style="margin-top: 24px; font-size: 14px; font-weight: 600; color: var(--text-muted-bright);">Essential Problem Set</div>
+                <div class="problems-row">
+                    <span class="problem-tag medium">322. Coin Change</span>
+                    <span class="problem-tag medium">416. Partition Equal Subset Sum</span>
+                    <span class="problem-tag medium">518. Coin Change II</span>
+                    <span class="problem-tag hard">474. Ones and Zeroes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

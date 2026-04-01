@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interval DP — AlgoPractice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <style>
+        .page-header { background: linear-gradient(160deg, #270707 0%, #0d1117 55%, #1f0505 100%); }
+        .page-header h1 {
+            background: linear-gradient(90deg, #f87171, #ef4444);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .section-card::before { background: var(--color-p5); }
+        .section-card-header h2 { color: #f87171; }
+        .mental-model strong { color: #f87171; }
+        .example-box h3 { color: #f87171; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="dp_guide.html" class="nav-back">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to DP Guide
+        </a>
+        <h1>Interval DP</h1>
+        <p>Signal: subarray/substring ranges, merge costs, optimal subdivision</p>
+    </div>
+
+    <div class="container">
+        <div class="section-card">
+            <div class="section-card-header">
+                <span style="font-size:16px">🔗</span>
+                <h2>Pattern Breakdown</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> <code>dp[i][j]</code> = best answer for the subproblem on the range <code>[i, j]</code>. You iterate by <em>length</em> of the interval (from small to large), and for each interval you try every possible split point <code>k</code>.
+                </div>
+                <div class="recurrence">
+                    <span class="label">Interval DP recurrence (e.g. Matrix Chain / Burst Balloons)</span>
+                    <span class="hl-red">dp[i][j]</span> = min/max over all k in [i, j-1]:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-yellow">dp[i][k]</span> + <span class="hl-green">dp[k+1][j]</span> + cost(i, k, j)
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — interval DP template (burst balloons)</span>
+                    </div>
+                    <pre><span class="kw">def</span> maxCoins(nums):
+    nums = [1] + nums + [1]  <span class="cm"># pad boundaries</span>
+    n = len(nums)
+    dp = [[0] * n <span class="kw">for</span> _ <span class="kw">in</span> range(n)]
+
+    <span class="kw">for</span> length <span class="kw">in</span> range(2, n):       <span class="cm"># interval length</span>
+        <span class="kw">for</span> i <span class="kw">in</span> range(0, n - length):  <span class="cm"># left boundary</span>
+            j = i + length               <span class="cm"># right boundary</span>
+            <span class="kw">for</span> k <span class="kw">in</span> range(i+1, j):     <span class="cm"># last balloon to burst</span>
+                coins = nums[i] * nums[k] * nums[j]
+                dp[i][j] = max(dp[i][j],
+                    dp[i][k] + dp[k][j] + coins)
+    <span class="kw">return</span> dp[0][n-1]</pre>
+                </div>
+                
+                <div class="example-box">
+                    <h3>
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Example Case: 516. Longest Palindromic Subsequence
+                    </h3>
+                    <p style="margin-bottom: 8px;"><strong>Problem:</strong> Return the length of the longest palindromic subsequence.</p>
+                    <p><strong>Explanation:</strong> Let <code>dp[i][j]</code> be LPS in <code>s[i:j]</code>. If <code>s[i] == s[j]</code>, <code>dp[i][j] = dp[i+1][j-1] + 2</code>. Else, <code>dp[i][j] = max(dp[i+1][j], dp[i][j-1])</code>.</p>
+                </div>
+
+                <div style="margin-top: 24px; font-size: 14px; font-weight: 600; color: var(--text-muted-bright);">Essential Problem Set</div>
+                <div class="problems-row">
+                    <span class="problem-tag hard">312. Burst Balloons</span>
+                    <span class="problem-tag medium">516. Longest Palindromic Subsequence</span>
+                    <span class="problem-tag medium">647. Palindromic Substrings</span>
+                    <span class="problem-tag hard">1000. Minimum Cost to Merge Stones</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

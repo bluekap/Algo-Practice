@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1D DP (Linear State) — AlgoPractice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <style>
+        .page-header { background: linear-gradient(160deg, #1a1200 0%, #0d1117 55%, #071a10 100%); }
+        .page-header h1 {
+            background: linear-gradient(90deg, #fcd34d, #f59e0b);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .mental-model strong { color: #fcd34d; }
+        .example-box h3 { color: #fcd34d; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="dp_guide.html" class="nav-back">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to DP Guide
+        </a>
+        <h1>1D DP (Linear State)</h1>
+        <p>Signal: single index, linear progression, fixed lookback</p>
+    </div>
+
+    <div class="container">
+        <div class="section-card">
+            <div class="section-card-header">
+                <span style="font-size:16px">🪜</span>
+                <h2>Pattern Breakdown</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> Each cell <code>dp[i]</code> answers: <em>"What is the best answer considering the first i elements?"</em> You only look back at a fixed number of previous states. Think of it as climbing stairs — each step depends on a few steps behind you.
+                </div>
+                <div class="recurrence">
+                    <span class="label">Climbing Stairs / Fibonacci recurrence</span>
+                    <span class="hl-yellow">dp[i]</span> = <span class="hl-green">dp[i-1]</span> + <span class="hl-blue">dp[i-2]</span><br>
+                    <span class="cm"># base cases: dp[0] = 1, dp[1] = 1</span>
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — climbing stairs template</span>
+                    </div>
+                    <pre><span class="kw">def</span> climbStairs(n):
+    <span class="kw">if</span> n &lt;= 1: <span class="kw">return</span> 1
+    dp = [0] * (n + 1)
+    dp[0], dp[1] = 1, 1
+    <span class="kw">for</span> i <span class="kw">in</span> range(2, n + 1):
+        dp[i] = dp[i-1] + dp[i-2]
+    <span class="kw">return</span> dp[n]
+
+<span class="cm"># Space-optimized (O(1) space):</span>
+<span class="kw">def</span> climbStairsOpt(n):
+    a, b = 1, 1
+    <span class="kw">for</span> _ <span class="kw">in</span> range(2, n + 1):
+        a, b = b, a + b
+    <span class="kw">return</span> b</pre>
+                </div>
+                
+                <div class="example-box">
+                    <h3>
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Example Case: 198. House Robber
+                    </h3>
+                    <p style="margin-bottom: 8px;"><strong>Problem:</strong> Rob houses along a street to maximize money, but you cannot rob adjacent houses.</p>
+                    <p><strong>Explanation:</strong> To maximize money at house <code>i</code>, you can either: <br>1. <strong>Skip</strong> this house and take the profit from the previous house: <code>dp[i-1]</code>. <br>2. <strong>Rob</strong> this house, which means you can't rob the previous one, so you take this house's money plus the profit from two houses back: <code>dp[i-2] + nums[i]</code>.<br>Therefore, <code>dp[i] = max(dp[i-1], dp[i-2] + nums[i])</code>.</p>
+                </div>
+
+                <div style="margin-top: 24px; font-size: 14px; font-weight: 600; color: var(--text-muted-bright);">Essential Problem Set</div>
+                <div class="problems-row">
+                    <span class="problem-tag easy">70. Climbing Stairs</span>
+                    <span class="problem-tag medium">198. House Robber</span>
+                    <span class="problem-tag medium">322. Coin Change</span>
+                    <span class="problem-tag medium">139. Word Break</span>
+                    <span class="problem-tag medium">300. Longest Increasing Subsequence</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

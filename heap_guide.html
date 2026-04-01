@@ -7,96 +7,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
     <style>
         :root {
-            --bg-dark: #07090f;
-            --bg-header: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
-            --border-primary: #1e293b;
             --accent-purple: #a78bfa;
             --accent-blue: #38bdf8;
-            --text-main: #e2e8f0;
-            --text-muted: #475569;
-            --text-muted-bright: #94a3b8;
-            --font-main: 'Outfit', sans-serif;
-            --font-code: 'JetBrains Mono', monospace;
+            --border-primary: #1e293b;
             --card-bg: #0d1117;
             --code-bg: #020408;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: var(--font-main);
-            background: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            line-height: 1.6;
+        .page-header {
+            background: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
         }
-
-        /* ── NAVIGATION ── */
-        .nav-back {
-            position: absolute;
-            top: 22px;
-            left: 28px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.15s;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .nav-back:hover {
-            color: var(--text-main);
-        }
-
-        /* ── HEADER ── */
-        .header {
-            background: var(--bg-header);
-            border-bottom: 1px solid var(--border-primary);
-            padding: 44px 28px 0;
-            position: relative;
-        }
-
-        .header-content {
-            max-width: 860px;
-            margin: 0 auto;
-        }
-
-        .header-title-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 2px;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 800;
+        .page-header h1 {
             background: linear-gradient(90deg, #a78bfa 30%, #38bdf8);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .badge {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 4px;
-            padding: 2px 8px;
-            font-size: 10px;
-            color: #475569;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .subtitle {
-            margin: 0 0 14px;
-            color: #334155;
-            font-size: 12px;
         }
 
         /* ── TABS ── */
@@ -128,9 +55,9 @@
 
         /* ── MAIN CONTENT ── */
         main {
-            max-width: 860px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 22px 28px;
+            padding: 20px 48px;
         }
 
         .content-section {
@@ -483,26 +410,19 @@
 </head>
 <body>
 
-    <a href="heap_masterclass.html" class="nav-back">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-        Back to Masterclass
-    </a>
-
     <!-- HEADER -->
-    <header class="header">
-        <div class="header-content">
-            <div class="header-title-row">
-                <span style="font-size: 22px;">🏔️</span>
-                <h1>Heaps in Python</h1>
-                <span class="badge">GOOGLE INTERVIEW PREP</span>
-            </div>
-            <p class="subtitle">Fundamentals → patterns → 4 LeetCode problems (Easy–Hard)</p>
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="learn">📚 Learn</button>
-                <button class="tab-btn" data-tab="problems">🧩 Problems</button>
-            </div>
+    <div class="page-header">
+        <a href="heap_masterclass.html" class="nav-back">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to Masterclass
+        </a>
+        <h1>🏔️ Heaps in Python</h1>
+        <p>Fundamentals → patterns → 4 LeetCode problems (Easy–Hard)</p>
+        <div class="tabs" style="justify-content: center; margin-top: 12px;">
+            <button class="tab-btn active" data-tab="learn">📚 Learn</button>
+            <button class="tab-btn" data-tab="problems">🧩 Problems</button>
         </div>
-    </header>
+    </div>
 
     <main>
         <!-- LEARN SECTION -->

@@ -7,188 +7,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
     <style>
-        :root {
-            --bg-dark: #07090f;
-            --card-bg: #0d1117;
-            --code-bg: #020408;
-            --border: #1e293b;
-            --color-p1: #3b82f6;
-            --color-p2: #10b981;
-            --color-warn: #f59e0b;
-            --text-main: #e2e8f0;
-            --text-muted: #475569;
-            --text-muted-bright: #94a3b8;
-            --font-main: 'Outfit', sans-serif;
-            --font-code: 'JetBrains Mono', monospace;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: var(--font-main);
-            background: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        /* ── HEADER ── */
         .page-header {
             background: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
-            border-bottom: 1px solid var(--border);
-            padding: 44px 28px 22px;
-            position: relative;
-            text-align: center;
         }
-
-        .nav-back {
-            position: absolute;
-            top: 22px;
-            left: 28px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.15s;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .nav-back:hover { color: var(--text-main); }
-
         .page-header h1 {
-            font-size: 2rem;
-            font-weight: 800;
             background: linear-gradient(90deg, #93c5fd, #3b82f6);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-        }
-
-        .page-header p { color: var(--text-muted); font-size: 13px; }
-
-        /* ── LAYOUT ── */
-        .container {
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 28px;
-        }
-
-        /* ── SECTION CARDS ── */
-        .section-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 18px;
-            position: relative;
-        }
-
-        .section-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 4px; height: 100%;
-        }
-
-        .pattern-1::before { background: var(--color-p1); }
-        .pattern-2::before { background: var(--color-p2); }
-        .exception::before { background: var(--color-warn); }
-
-        .section-card-header {
-            padding: 13px 18px 13px 22px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-card-header h2 {
-            margin: 0;
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .pattern-1 .section-card-header h2 { color: #60a5fa; }
-        .pattern-2 .section-card-header h2 { color: #34d399; }
-        .exception .section-card-header h2 { color: #fbbf24; }
-
-        .section-card-body { padding: 18px 18px 18px 22px; }
-
-        /* ── MENTAL MODEL BOX ── */
-        .mental-model {
-            background: #0a0f1a;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 14px 18px;
-            margin-bottom: 14px;
-            font-size: 13px;
-            color: var(--text-muted-bright);
-            line-height: 1.8;
-        }
-
-        .mental-model strong { color: #c4b5fd; }
-
-        /* ── DIRECTION NOTE ── */
-        .direction-note {
-            background: #0a0f1a;
-            border: 1px dashed #2d3748;
-            border-radius: 8px;
-            padding: 14px 18px;
-            margin-bottom: 14px;
-            font-family: var(--font-code);
-            font-size: 12px;
-            line-height: 2;
-            color: var(--text-muted-bright);
-        }
-
-        .highlight-up { color: #ef4444; font-weight: bold; }
-        .highlight-down { color: #60a5fa; font-weight: bold; }
-        .kw { color: #d8b4fe; }
-        .cm { color: #4b5563; font-style: italic; }
-
-        /* ── CODE BLOCKS ── */
-        .code-container {
-            background: var(--code-bg);
-            border: 1px solid #1a2436;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .code-header {
-            padding: 7px 13px;
-            border-bottom: 1px solid #1a2436;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .dots { display: flex; gap: 5px; }
-        .dot { width: 9px; height: 9px; border-radius: 50%; }
-        .dot.red { background: #ef4444; }
-        .dot.yellow { background: #f59e0b; }
-        .dot.green { background: #22c55e; }
-        .code-lang { font-size: 10px; color: #374151; letter-spacing: 0.08em; margin-left: 4px; }
-
-        pre {
-            margin: 0;
-            padding: 14px 18px;
-            font-family: var(--font-code);
-            font-size: 12px;
-            line-height: 1.75;
-            overflow-x: auto;
-            color: #93c5fd;
-        }
-
-        /* ── EXCEPTION NOTE ── */
-        .exception-note {
-            font-size: 13px;
-            color: var(--text-muted-bright);
-            line-height: 1.75;
-            margin-top: 12px;
         }
     </style>
 </head>
@@ -196,7 +24,7 @@
 
     <div class="page-header">
         <a href="binary_search_masterclass.html" class="nav-back">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Back to Masterclass
         </a>
         <h1>Binary Search Revision Guide</h1>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCS / LIS (Subsequence DP) — AlgoPractice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <style>
+        .page-header { background: linear-gradient(160deg, #180727 0%, #0d1117 55%, #150521 100%); }
+        .page-header h1 {
+            background: linear-gradient(90deg, #c084fc, #a855f7);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .section-card::before { background: var(--color-p4); }
+        .section-card-header h2 { color: #c084fc; }
+        .mental-model strong { color: #c084fc; }
+        .example-box h3 { color: #c084fc; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="dp_guide.html" class="nav-back">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to DP Guide
+        </a>
+        <h1>LCS / LIS (Subsequence DP)</h1>
+        <p>Signal: non-contiguous order, pattern matching, longest valid sequence</p>
+    </div>
+
+    <div class="container">
+        <div class="section-card">
+            <div class="section-card-header">
+                <span style="font-size:16px">🧬</span>
+                <h2>Pattern Breakdown</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model (LCS):</strong> <code>dp[i][j]</code> = length of LCS of <code>s1[:i]</code> and <code>s2[:j]</code>. If characters match, extend the diagonal. If not, take the best of skipping one character from either string.<br><br>
+                    <strong>Mental Model (LIS):</strong> <code>dp[i]</code> = length of LIS ending at index <code>i</code>. For each <code>i</code>, scan all <code>j &lt; i</code> where <code>nums[j] &lt; nums[i]</code> and extend.
+                </div>
+                <div class="recurrence">
+                    <span class="label">LCS recurrence</span>
+                    <span class="kw">if</span> s1[i-1] == s2[j-1]: <span class="hl-purple">dp[i][j]</span> = <span class="hl-blue">dp[i-1][j-1]</span> + 1<br>
+                    <span class="kw">else</span>: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-purple">dp[i][j]</span> = max(<span class="hl-yellow">dp[i-1][j]</span>, <span class="hl-green">dp[i][j-1]</span>)
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — LCS + LIS templates</span>
+                    </div>
+                    <pre><span class="kw">def</span> lcs(s1, s2):
+    m, n = len(s1), len(s2)
+    dp = [[0]*(n+1) <span class="kw">for</span> _ <span class="kw">in</span> range(m+1)]
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, m+1):
+        <span class="kw">for</span> j <span class="kw">in</span> range(1, n+1):
+            <span class="kw">if</span> s1[i-1] == s2[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+            <span class="kw">else</span>:
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    <span class="kw">return</span> dp[m][n]
+
+<span class="kw">def</span> lis(nums):  <span class="cm"># O(n^2) — easy to remember</span>
+    n = len(nums)
+    dp = [1] * n
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, n):
+        <span class="kw">for</span> j <span class="kw">in</span> range(i):
+            <span class="kw">if</span> nums[j] &lt; nums[i]:
+                dp[i] = max(dp[i], dp[j] + 1)
+    <span class="kw">return</span> max(dp)</pre>
+                </div>
+                
+                <div class="example-box">
+                    <h3>
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Example Case: 300. Longest Increasing Subsequence
+                    </h3>
+                    <p style="margin-bottom: 8px;"><strong>Problem:</strong> Return the length of the longest strictly increasing subsequence.</p>
+                    <p><strong>Explanation:</strong> Let <code>dp[i]</code> be the max LIS ending exactly at index <code>i</code>. Initialize <code>dp = [1, 1, ..., 1]</code>. For every <code>i</code>, scan preceding <code>j</code>. If <code>nums[j] < nums[i]</code>, <code>dp[i] = max(dp[i], dp[j] + 1)</code>.</p>
+                </div>
+
+                <div style="margin-top: 24px; font-size: 14px; font-weight: 600; color: var(--text-muted-bright);">Essential Problem Set</div>
+                <div class="problems-row">
+                    <span class="problem-tag medium">1143. Longest Common Subsequence</span>
+                    <span class="problem-tag medium">300. Longest Increasing Subsequence</span>
+                    <span class="problem-tag medium">72. Edit Distance</span>
+                    <span class="problem-tag hard">115. Distinct Subsequences</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

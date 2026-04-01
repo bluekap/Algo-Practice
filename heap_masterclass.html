@@ -37,25 +37,29 @@
         
         .nav-back {
             position: absolute;
-            top: 2rem;
-            left: 2rem;
+            top: 50%;
+            left: 48px;
+            transform: translateY(-50%);
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 7px;
             color: var(--text-muted);
             text-decoration: none;
-            transition: color 0.2s;
+            transition: color 0.15s;
             font-weight: 600;
+            font-size: 13px;
             z-index: 10;
         }
 
         .nav-back:hover {
             color: var(--text-main);
         }
+
+        .nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
         
         .header {
             text-align: center;
-            padding: 4rem 1rem 2rem;
+            padding: 28px 48px 18px;
             background: linear-gradient(180deg, rgba(18, 8, 37, 0.8) 0%, rgba(7, 9, 15, 0) 100%);
             border-bottom: 1px solid rgba(255,255,255,0.05);
             position: relative;
@@ -158,7 +162,7 @@
 <body>
 
     <a href="index.html" class="nav-back">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
         Back to Hub
     </a>
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Grid DP — AlgoPractice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <style>
+        .page-header { background: linear-gradient(160deg, #071a10 0%, #0d1117 55%, #0a1f16 100%); }
+        .page-header h1 {
+            background: linear-gradient(90deg, #34d399, #10b981);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .section-card::before { background: var(--color-p2); }
+        .section-card-header h2 { color: #34d399; }
+        .mental-model strong { color: #34d399; }
+        .example-box h3 { color: #34d399; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="dp_guide.html" class="nav-back">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to DP Guide
+        </a>
+        <h1>2D Grid DP</h1>
+        <p>Signal: grid navigation, two independent variables, path discovery</p>
+    </div>
+
+    <div class="container">
+        <div class="section-card">
+            <div class="section-card-header">
+                <span style="font-size:16px">🗺️</span>
+                <h2>Pattern Breakdown</h2>
+            </div>
+            <div class="section-card-body">
+                <div class="mental-model">
+                    <strong>Mental Model:</strong> <code>dp[i][j]</code> answers: <em>"What is the best answer to reach cell (i, j)?"</em> You can only come from the top or left (for path problems). Fill the table row by row. The answer is always at <code>dp[m-1][n-1]</code>.
+                </div>
+                <div class="recurrence">
+                    <span class="label">Unique Paths / Min Path Sum recurrence</span>
+                    <span class="hl-green">dp[i][j]</span> = grid[i][j] + min(<span class="hl-blue">dp[i-1][j]</span>, <span class="hl-yellow">dp[i][j-1]</span>)<br>
+                    <span class="cm"># base case: first row and first column filled with prefix sums</span>
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                        <span class="code-lang">python — min path sum template</span>
+                    </div>
+                    <pre><span class="kw">def</span> minPathSum(grid):
+    m, n = len(grid), len(grid[0])
+    dp = [[0]*n <span class="kw">for</span> _ <span class="kw">in</span> range(m)]
+    dp[0][0] = grid[0][0]
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, m): dp[i][0] = dp[i-1][0] + grid[i][0]
+    <span class="kw">for</span> j <span class="kw">in</span> range(1, n): dp[0][j] = dp[0][j-1] + grid[0][j]
+    <span class="kw">for</span> i <span class="kw">in</span> range(1, m):
+        <span class="kw">for</span> j <span class="kw">in</span> range(1, n):
+            dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])
+    <span class="kw">return</span> dp[m-1][n-1]</pre>
+                </div>
+                
+                <div class="example-box">
+                    <h3>
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Example Case: 62. Unique Paths
+                    </h3>
+                    <p style="margin-bottom: 8px;"><strong>Problem:</strong> Find the number of unique paths from top-left to bottom-right of an <code>m x n</code> grid, moving only down or right.</p>
+                    <p><strong>Explanation:</strong> To reach any cell <code>(i, j)</code>, you can only come from the cell directly above it <code>(i-1, j)</code> or the cell directly to its left <code>(i, j-1)</code>. The total paths to reach <code>(i, j)</code> is exactly the sum of the paths to those two preceding cells. Thus, <code>dp[i][j] = dp[i-1][j] + dp[i][j-1]</code>.</p>
+                </div>
+
+                <div style="margin-top: 24px; font-size: 14px; font-weight: 600; color: var(--text-muted-bright);">Essential Problem Set</div>
+                <div class="problems-row">
+                    <span class="problem-tag medium">62. Unique Paths</span>
+                    <span class="problem-tag medium">64. Minimum Path Sum</span>
+                    <span class="problem-tag medium">221. Maximal Square</span>
+                    <span class="problem-tag hard">85. Maximal Rectangle</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
