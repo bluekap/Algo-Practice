@@ -28,22 +28,7 @@
             padding-bottom: 2rem;
             min-height: 100vh;
         }
-        .nav-back {
-            position: absolute;
-            top: 50%; left: 48px;
-            transform: translateY(-50%);
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.15s;
-            font-weight: 600;
-            font-size: 13px;
-            z-index: 10;
-        }
-        .nav-back:hover { color: var(--text-main); }
-        .nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
+
         .header {
             text-align: center;
             padding: 28px 48px 18px;
@@ -51,6 +36,24 @@
             border-bottom: 1px solid #1e293b;
             position: relative;
         }
+
+        .nav-back {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 48px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: color 0.15s;
+            white-space: nowrap;
+        }
+        .nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .nav-back:hover { color: var(--text-main); }
         .header h1 {
             font-size: 2.8rem;
             background: linear-gradient(90deg, #fcd34d, #f59e0b);
@@ -114,11 +117,11 @@
     </style>
 </head>
 <body>
-    <a href="index.html" class="nav-back">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-        Back to Hub
-    </a>
     <div class="header">
+        <a href="index.html" class="nav-back">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to Hub
+        </a>
         <h1>Dynamic Programming Masterclass</h1>
         <p>From zero to Google-ready. Master the 5 core DP patterns with mental models and interactive table visualizations.</p>
     </div>

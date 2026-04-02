@@ -37,14 +37,33 @@
         }
 
         header {
-            padding: 1rem 2rem;
+            padding: 1rem 2rem 1rem 160px;
             border-bottom: 1px solid var(--panel-border);
             display: flex;
             align-items: center;
             justify-content: space-between;
             backdrop-filter: blur(10px);
             z-index: 10;
+            position: relative;
         }
+
+        .nav-back {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 48px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: color 0.15s;
+            white-space: nowrap;
+        }
+        .nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .nav-back:hover { color: var(--text-main); }
 
         .title {
             font-size: 1.25rem;
@@ -482,12 +501,11 @@
 </head>
 <body>
 
-    <a href="binary_search_masterclass.html" class="nav-back" style="position: absolute; top: 2rem; left: 2rem; display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; font-weight: 600; z-index: 10;">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-        Back to Masterclass
-    </a>
-
     <header>
+        <a href="binary_search_masterclass.html" class="nav-back">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to Masterclass
+        </a>
         <h1 class="title">Binary Search Patterns</h1>
         <div class="tabs">
             <button id="tab-1" class="tab active" onclick="switchMode(1)">1. Exact Search</button>

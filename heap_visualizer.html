@@ -46,7 +46,7 @@
         header {
             background: var(--bg-header);
             border-bottom: 1px solid var(--border-primary);
-            padding: 12px 24px 12px 160px;
+            padding: 12px 24px 12px 180px;
             display: flex;
             align-items: center;
             gap: 16px;
@@ -56,12 +56,12 @@
 
         .nav-back {
             position: absolute;
-            left: 20px;
+            left: 48px;
             top: 50%;
             transform: translateY(-50%);
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
             color: var(--text-bright);
             text-decoration: none;
             font-weight: 600;
@@ -69,6 +69,7 @@
             transition: color 0.15s;
             white-space: nowrap;
         }
+        .nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
         .nav-back:hover { color: var(--text-main); }
 
         .header-title {
