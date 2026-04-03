@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Programming Masterclass — AlgoPractice</title>
+    <title>Array Patterns Masterclass — AlgoPractice</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -12,14 +12,16 @@
             --bg-dark: #07090f;
             --bg-card: rgba(13, 17, 23, 0.9);
             --bg-hover: rgba(30, 41, 59, 0.8);
-            --color-guide: #f59e0b;
-            --color-viz: #10b981;
+            --color-guide: #14b8a6;
+            --color-viz: #f59e0b;
             --text-main: #e2e8f0;
             --text-muted: #475569;
             --text-muted-bright: #94a3b8;
             --font-main: 'Outfit', sans-serif;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: var(--font-main);
             background: var(--bg-dark);
@@ -29,10 +31,12 @@
             min-height: 100vh;
         }
 
+
+
         .header {
             text-align: center;
             padding: 28px 48px 18px;
-            background: linear-gradient(160deg, #1a1200 0%, #0d1117 55%, #071a10 100%);
+            background: linear-gradient(160deg, #120825 0%, #0d1117 55%, #071828 100%);
             border-bottom: 1px solid #1e293b;
             position: relative;
         }
@@ -54,15 +58,23 @@
         }
         .nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
         .nav-back:hover { color: var(--text-main); }
+
         .header h1 {
             font-size: 2.8rem;
-            background: linear-gradient(90deg, #fcd34d, #f59e0b);
+            background: linear-gradient(90deg, #14b8a6, #f59e0b, #a855f7);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 0.5rem;
         }
-        .header p { color: var(--text-muted-bright); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        .header p {
+            color: var(--text-muted-bright);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -71,6 +83,7 @@
             margin: 3rem auto;
             padding: 0 1rem;
         }
+
         .card {
             background: var(--bg-card);
             border: 1px solid #1e293b;
@@ -83,26 +96,32 @@
             flex-direction: column;
             gap: 1.25rem;
         }
+
         .card:hover {
             transform: translateY(-5px);
             background: var(--bg-hover);
-            border-color: rgba(255,255,255,0.15);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
+
         .icon-wrapper {
-            width: 64px; height: 64px;
+            width: 64px;
+            height: 64px;
             border-radius: 16px;
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.04);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
             border: 1px solid #1e293b;
         }
-        .card.guide .icon-wrapper { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); }
-        .card.viz .icon-wrapper { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.3); }
+
+        .card.guide .icon-wrapper { background: rgba(20, 184, 166, 0.15); border-color: rgba(20, 184, 166, 0.3); }
+        .card.viz .icon-wrapper { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); }
+
         .card-title { font-size: 1.5rem; font-weight: 600; }
         .card-desc { color: var(--text-muted-bright); line-height: 1.6; flex-grow: 1; }
+
         .card-footer {
             display: flex;
             align-items: center;
@@ -111,39 +130,45 @@
             color: var(--color-guide);
             font-weight: 600;
         }
+
         .card.viz .card-footer { color: var(--color-viz); }
+
         .card-footer svg { width: 20px; height: 20px; transition: transform 0.3s ease; }
         .card:hover .card-footer svg { transform: translateX(5px); }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <a href="index.html" class="nav-back">
+        <a href="../index.html" class="nav-back">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Back to Hub
         </a>
-        <h1>Dynamic Programming Masterclass</h1>
-        <p>From zero to Google-ready. Master the 5 core DP patterns with mental models and interactive table visualizations.</p>
+        <h1>Array Patterns Masterclass</h1>
+        <p>Master the top patterns for Google interviews: Sliding Window, Two Pointers, and Prefix Sums.</p>
     </div>
+
     <div class="grid">
-        <a href="dp_guide.html" class="card guide">
+        <a href="array_patterns_guide.html" class="card guide">
             <div class="icon-wrapper">📖</div>
             <h2 class="card-title">Revision Guide</h2>
-            <p class="card-desc">The definitive mental models for all 5 DP patterns: 1D, 2D Grid, Knapsack, LCS/LIS, and Interval DP. Includes templates and decision framework.</p>
+            <p class="card-desc">Pattern detector, universal skeleton templates, and expert mental models for interviews.</p>
             <div class="card-footer">
-                <span>Read Guide</span>
+                <span>Start Learning</span>
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </div>
         </a>
-        <a href="dp_visualizer.html" class="card viz">
+
+        <a href="array_patterns_visualizer.html" class="card viz">
             <div class="icon-wrapper">🖥️</div>
             <h2 class="card-title">Visual Playground</h2>
-            <p class="card-desc">Step through DP table construction cell by cell. Watch how subproblems build on each other for Fibonacci, Climbing Stairs, Knapsack, LCS, and Coin Change.</p>
+            <p class="card-desc">Interactive variable sliding window simulation. Step through execution to see pointers in action.</p>
             <div class="card-footer">
                 <span>Launch Visualizer</span>
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </div>
         </a>
     </div>
+
 </body>
 </html>
