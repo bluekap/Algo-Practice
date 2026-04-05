@@ -4,6 +4,7 @@ PROJECT_RULES.md
 .agents/
 .agent/
 .vscode/
+.kiro/
 _agents/
 _agent/
 node_modules/
