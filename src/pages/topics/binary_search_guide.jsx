@@ -38,14 +38,15 @@ export default function BinarySearchGuide() {
                                 <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
                                 <span className="code-lang">python</span>
                             </div>
-                            <pre><span className="kw">while</span> left &lt;= right:{"\n"}
-    mid = (left + right) // 2{"\n"}
-    <span className="kw">if</span> nums[mid] == target:{"\n"}
-        <span className="kw">return</span> mid{"\n"}
-    <span className="kw">elif</span> nums[mid] &lt; target:{"\n"}
-        left = mid + 1{"\n"}
-    <span className="kw">else</span>:{"\n"}
-        right = mid - 1{"\n"}
+                            <pre>
+<span className="kw">while</span> left &lt;= right:{"\n"}
+{"    "}mid = (left + right) // 2{"\n"}
+{"    "}<span className="kw">if</span> nums[mid] == target:{"\n"}
+{"        "}<span className="kw">return</span> mid{"\n"}
+{"    "}<span className="kw">elif</span> nums[mid] &lt; target:{"\n"}
+{"        "}left = mid + 1{"\n"}
+{"    "}<span className="kw">else</span>:{"\n"}
+{"        "}right = mid - 1{"\n"}
 <span className="kw">return</span> -1</pre>
                         </div>
                     </div>
@@ -67,12 +68,13 @@ export default function BinarySearchGuide() {
                                 <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
                                 <span className="code-lang">python</span>
                             </div>
-                            <pre><span className="kw">while</span> left &lt; right:{"\n"}
-    mid = (left + right) // 2{"\n"}
-    <span className="kw">if</span> some_condition:{"\n"}
-        right = mid{"\n"}
-    <span className="kw">else</span>:{"\n"}
-        left = mid + 1{"\n"}
+                            <pre>
+<span className="kw">while</span> left &lt; right:{"\n"}
+{"    "}mid = (left + right) // 2{"\n"}
+{"    "}<span className="kw">if</span> some_condition:{"\n"}
+{"        "}right = mid{"\n"}
+{"    "}<span className="kw">else</span>:{"\n"}
+{"        "}left = mid + 1{"\n"}
 <span className="kw">return</span> nums[left]</pre>
                         </div>
                     </div>

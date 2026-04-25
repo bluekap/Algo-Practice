@@ -262,7 +262,16 @@ export default function BinarySearchVisualizer() {
                     <div className="playback">
                         <button className="btn btn-ghost" onClick={handleReset}>Reset</button>
                         <button className="btn btn-ghost" onClick={() => setStepIndex(Math.max(0, stepIndex - 1))}>◀ Prev</button>
-                        <button className="btn btn-primary" onClick={() => setIsPlaying(!isPlaying)}>{isPlaying ? '⏸ Pause' : '▶ Play'}</button>
+                        <button className="btn btn-primary" onClick={() => {
+                            if (isPlaying) {
+                                setIsPlaying(false);
+                            } else {
+                                if (steps.length === 0 || stepIndex === steps.length - 1) handleStart();
+                                setIsPlaying(true);
+                            }
+                        }}>
+                            {isPlaying ? '⏸ Pause' : (steps.length > 0 && stepIndex === steps.length - 1 ? '↺ Restart' : '▶ Play')}
+                        </button>
                         <button className="btn btn-ghost" onClick={() => setStepIndex(Math.min(steps.length - 1, stepIndex + 1))}>Next ▶</button>
                     </div>
 

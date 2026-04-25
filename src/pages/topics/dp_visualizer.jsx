@@ -343,7 +343,16 @@ export default function DpVisualizer() {
                     <div className="playback">
                         <button className="btn btn-ghost" onClick={resetViz}>Reset</button>
                         <button className="btn btn-ghost" onClick={() => setStepIdx(Math.max(0, stepIdx - 1))}>◀ Prev</button>
-                        <button className="btn btn-primary" onClick={() => setIsPlaying(!isPlaying)}>{isPlaying ? '⏸ Pause' : '▶ Play'}</button>
+                        <button className="btn btn-primary" onClick={() => {
+                            if (isPlaying) {
+                                setIsPlaying(false);
+                            } else {
+                                if (steps.length === 0 || stepIdx === steps.length - 1) startViz();
+                                setIsPlaying(true);
+                            }
+                        }}>
+                            {isPlaying ? '⏸ Pause' : (steps.length > 0 && stepIdx === steps.length - 1 ? '↺ Restart' : '▶ Play')}
+                        </button>
                         <button className="btn btn-ghost" onClick={() => setStepIdx(Math.min(steps.length - 1, stepIdx + 1))}>Next ▶</button>
                     </div>
 
