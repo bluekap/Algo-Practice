@@ -30,6 +30,7 @@ A built-in execution environment to visualize your own Python code. Trace state 
 
 - **Frontend**: React 18 + Vite
 - **Styling**: Vanilla CSS (Custom Glassmorphism Design System)
+- **Architecture**: Iframe-based sandbox for isolated, real-time code visualization and debugging.
 - **Routing**: React Router v6
 - **Icons**: Custom SVG + Lucide-style iconography
 
