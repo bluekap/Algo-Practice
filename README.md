@@ -1,16 +1,65 @@
-# React + Vite
+# 🏔️ AlgoPractice Hub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A premium, interactive platform for mastering data structures and algorithms. Built with a focus on **mental models**, **pattern recognition**, and **visual intuition**.
 
-Currently, two official plugins are available:
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Key Features
 
-## React Compiler
+### 1. Interactive Visualizers
+Real-time, step-by-step visualizations for core algorithm patterns:
+- **Array Patterns**: Sliding Window (Fixed/Variable), Two Pointers.
+- **Binary Search**: Exact match, boundary search, and rotated array logic.
+- **Dynamic Programming**: 1D/2D state transitions and grid paths.
+- **Heaps**: Min-heap/Max-heap operations and Top-K patterns.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. Pattern Revision Guides
+Comprehensive guides designed for quick revision before interviews:
+- **Trigger Recognition**: Keywords to look for in problem descriptions.
+- **Universal Templates**: Skeleton code that solves 80% of problems in a category.
+- **Advanced Extensions**: Deep dives into complex variants (e.g., **3Sum & Generalized K-Sum**).
+- **Expert Mental Models**: Intuition-first explanations that stick.
 
-## Expanding the ESLint configuration
+### 3. Live Python Debugger
+A built-in execution environment to visualize your own Python code. Trace state changes and pointer movements in real-time.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18 + Vite
+- **Styling**: Vanilla CSS (Custom Glassmorphism Design System)
+- **Routing**: React Router v6
+- **Icons**: Custom SVG + Lucide-style iconography
+
+## 🏁 Getting Started
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/bluekap/Algo-Practice.git
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Open in browser**:
+   Navigate to `http://localhost:5173`
+
+## 📸 Screenshots
+
+*(Add screenshots of your premium UI here)*
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+Built with ❤️ by [bluekap](https://github.com/bluekap)
