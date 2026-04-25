@@ -81,9 +81,9 @@ body {
 
 /* ── LAYOUT ── */
 .container {
-    max-width: 1400px;
+    max-width: 1800px;
     margin: 0 auto;
-    padding: 20px 48px;
+    padding: 20px 24px;
 }
 
 @media (max-width: 900px) {

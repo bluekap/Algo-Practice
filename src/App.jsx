@@ -27,6 +27,16 @@ import DpPatternKnapsack from './pages/topics/dp_pattern_knapsack';
 import DpPatternSubsequence from './pages/topics/dp_pattern_lcs_lis';
 import DpPatternInterval from './pages/topics/dp_pattern_interval';
 
+// Trees Topic
+import TreesMasterclass from './pages/topics/TreesMasterclass';
+
+// Graphs Topic
+import GraphsMasterclass from './pages/topics/GraphsMasterclass';
+
+// Debugger/Visualizer Topic
+import LivePythonVisualizer from './pages/topics/live_python_visualizer';
+
+
 function App() {
   return (
     <Router>
@@ -59,7 +69,15 @@ function App() {
           <Route path="topics/dp/pattern-subsequence" element={<DpPatternSubsequence />} />
           <Route path="topics/dp/pattern-interval" element={<DpPatternInterval />} />
 
+          {/* Trees & Graphs Routes */}
+          <Route path="topics/trees" element={<TreesMasterclass />} />
+          <Route path="topics/graphs" element={<GraphsMasterclass />} />
+
+          {/* Debugger Routes */}
+          <Route path="topics/debugger" element={<LivePythonVisualizer />} />
+
           {/* Topics will be nested here later */}
+
         </Route>
       </Routes>
     </Router>
