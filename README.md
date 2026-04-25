@@ -58,9 +58,10 @@ A built-in execution environment to visualize your own Python code. Trace state 
 
 *(Add screenshots of your premium UI here)*
 
-## 📄 License
+## 📄 License & Terms
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- **Project License**: MIT License - see the [LICENSE](LICENSE) file for details.
+- **Service Attribution**: This project utilizes Python Tutor - see [TERMS.md](TERMS.md) for usage terms and screenshot policies.
 
 ---
 Built with ❤️ by [bluekap](https://github.com/bluekap)
