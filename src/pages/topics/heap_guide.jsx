@@ -131,14 +131,16 @@ export default function HeapGuide() {
                         </div>
 
                         <div className="concept-content">
-                            <div className="card">
-                                <div className="card-header">
+                            <div className="section-card">
+                                <div className="section-card-header">
                                     <span style={{ fontSize: '18px' }}>{activeConcept.icon}</span>
                                     <h2>{activeConcept.title}</h2>
                                 </div>
-                                <div className="card-body">
+                                <div className="section-card-body">
                                     {activeConcept.content.split('\n').map((line, i) => (
-                                        line.trim() === '' ? <div key={i} style={{ height: '6px' }} /> : <p key={i}>{line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')}</p>
+                                        line.trim() === '' 
+                                            ? <div key={i} style={{ height: '6px' }} /> 
+                                            : <p key={i} dangerouslySetInnerHTML={{ __html: line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') }}></p>
                                     ))}
                                 </div>
                             </div>
