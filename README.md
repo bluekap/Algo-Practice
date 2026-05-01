@@ -15,6 +15,7 @@ Real-time, step-by-step visualizations for core algorithm patterns:
 - **Binary Search**: Exact match, boundary search, and rotated array logic.
 - **Dynamic Programming**: 1D/2D state transitions and grid paths.
 - **Heaps**: Min-heap/Max-heap operations and Top-K patterns.
+- **Trees**: Interactive DFS (Preorder, Inorder, Postorder) and BFS (Level Order) traversals.
 
 ### 2. Pattern Revision Guides
 Comprehensive guides designed for quick revision before interviews:
@@ -31,7 +32,9 @@ A built-in execution environment to visualize your own Python code. Trace state 
 - **Frontend**: React 18 + Vite
 - **Styling**: Vanilla CSS (Custom Glassmorphism Design System)
 - **Architecture**: Iframe-based sandbox for isolated, real-time code visualization and debugging.
-- **Routing**: React Router v6
+- **Routing**: React Router v6 (HashRouter for GitHub Pages compatibility)
+- **Security**: Husky + Secretlint pre-commit hooks to prevent credential leaks.
+- **Deployment**: Automated GitHub Actions pipeline to GitHub Pages.
 - **Icons**: Custom SVG + Lucide-style iconography
 
 ## 🏁 Getting Started
@@ -53,6 +56,11 @@ A built-in execution environment to visualize your own Python code. Trace state 
 
 4. **Open in browser**:
    Navigate to `http://localhost:5173`
+
+## 🌐 Deployment
+
+This project is configured for **Continuous Deployment (CD)** to GitHub Pages.
+Whenever you push changes to the `main` branch, a GitHub Action workflow automatically builds the Vite project and deploys the `dist` folder to your live GitHub Pages site.
 
 ## 📸 Screenshots
 
