@@ -103,11 +103,11 @@ export default function TreeGuide() {
                 <p>Fundamentals → traversals → 4 LeetCode problems (Easy–Medium)</p>
                 <div className="tabs" style={{ justifyContent: 'center', marginTop: '12px' }}>
                     <button 
-                        className={\`tab \${activeTab === 'learn' ? 'active' : ''}\`}
+                        className={`tab ${activeTab === 'learn' ? 'active' : ''}`}
                         onClick={() => setActiveTab('learn')}
                     >📚 Learn</button>
                     <button 
-                        className={\`tab \${activeTab === 'problems' ? 'active' : ''}\`}
+                        className={`tab ${activeTab === 'problems' ? 'active' : ''}`}
                         onClick={() => setActiveTab('problems')}
                     >🧩 Problems</button>
                 </div>
@@ -120,7 +120,7 @@ export default function TreeGuide() {
                             {treeData.concepts.map(c => (
                                 <button 
                                     key={c.id}
-                                    className={\`tab \${activeConceptId === c.id ? 'active' : ''}\`}
+                                    className={`tab ${activeConceptId === c.id ? 'active' : ''}`}
                                     onClick={() => setActiveConceptId(c.id)}
                                     style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
                                 >
@@ -136,10 +136,10 @@ export default function TreeGuide() {
                                     <h2>{activeConcept.title}</h2>
                                 </div>
                                 <div className="section-card-body">
-                                    {activeConcept.content.split('\\n').map((line, i) => (
+                                    {activeConcept.content.split('\n').map((line, i) => (
                                         line.trim() === '' 
                                             ? <div key={i} style={{ height: '6px' }} /> 
-                                            : <p key={i} dangerouslySetInnerHTML={{ __html: line.replace(/\\*\\*([^*]+)\\*\\*/g, '<strong>$1</strong>') }}></p>
+                                            : <p key={i} dangerouslySetInnerHTML={{ __html: line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') }}></p>
                                     ))}
                                 </div>
                             </div>
@@ -159,9 +159,9 @@ export default function TreeGuide() {
                         <p className="problems-intro">4 curated problems · Easy → Medium · covers all essential tree patterns</p>
                         <div id="problems-list">
                             {treeData.problems.map((p, idx) => (
-                                <div key={idx} className={\`problem-item \${expandedProblems[idx] ? 'expanded' : ''}\`}>
+                                <div key={idx} className={`problem-item ${expandedProblems[idx] ? 'expanded' : ''}`}>
                                     <div className="problem-header" onClick={() => toggleProblem(idx)}>
-                                        <span className="diff-badge" style={{ background: p.bg, border: \`1px solid \${p.dimColor}\`, color: p.color }}>{p.difficulty}</span>
+                                        <span className="diff-badge" style={{ background: p.bg, border: `1px solid ${p.dimColor}`, color: p.color }}>{p.difficulty}</span>
                                         <span className="prob-num">#{p.number}</span>
                                         <span className="prob-title">{p.title}</span>
                                         <span className="pattern-badge">{p.pattern}</span>
@@ -177,7 +177,7 @@ export default function TreeGuide() {
                                             <div className="prob-actions">
                                                 <a href={p.link} target="_blank" rel="noopener noreferrer" className="action-btn btn-secondary">🔗 Open LeetCode</a>
                                                 <button 
-                                                    className={\`action-btn btn-toggle-sol \${revealedSolutions[idx] ? 'active' : ''}\`}
+                                                    className={`action-btn btn-toggle-sol ${revealedSolutions[idx] ? 'active' : ''}`}
                                                     onClick={() => toggleSolution(idx)}
                                                 >
                                                     {revealedSolutions[idx] ? '🙈 Hide Solution' : '👁 View Solution'}

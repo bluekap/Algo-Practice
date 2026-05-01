@@ -126,7 +126,7 @@ export default function TreeVisualizer() {
         if (node.left) {
             items.push(
                 <line 
-                    key={\`edge-\${node.val}-\${node.left.val}\`}
+                    key={`edge-${node.val}-${node.left.val}`}
                     x1={x} y1={y} 
                     x2={x - dx} y2={y + 60}
                     stroke="#555" strokeWidth="2"
@@ -137,7 +137,7 @@ export default function TreeVisualizer() {
         if (node.right) {
             items.push(
                 <line 
-                    key={\`edge-\${node.val}-\${node.right.val}\`}
+                    key={`edge-${node.val}-${node.right.val}`}
                     x1={x} y1={y} 
                     x2={x + dx} y2={y + 60}
                     stroke="#555" strokeWidth="2"
@@ -162,7 +162,7 @@ export default function TreeVisualizer() {
         }
 
         items.push(
-            <g key={\`node-\${node.val}\`} className="transition-all duration-300">
+            <g key={`node-${node.val}`} className="transition-all duration-300">
                 <circle cx={x} cy={y} r={R} fill={fill} stroke={stroke} strokeWidth="2" />
                 <text x={x} y={y} textAnchor="middle" dy=".3em" fill="#fff" fontSize="14" fontWeight="bold">
                     {node.val}
@@ -240,7 +240,7 @@ export default function TreeVisualizer() {
 
                     <div className="array-view" style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', padding: '20px' }}>
                         <h3 style={{ marginTop: 0, marginBottom: '15px', color: '#e2e8f0', fontSize: '16px' }}>
-                            Traversal Result {traversalResult.length > 0 ? \`(\${traversalResult.length}/7)\` : ''}
+                            Traversal Result {traversalResult.length > 0 ? `(${traversalResult.length}/7)` : ''}
                         </h3>
                         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', minHeight: '40px' }}>
                             {traversalResult.map((val, idx) => (
@@ -271,13 +271,13 @@ export default function TreeVisualizer() {
 
                 </div>
 
-                <style dangerouslySetInnerHTML={{__html: \`
+                <style dangerouslySetInnerHTML={{__html: `
                     @keyframes popIn {
                         0% { transform: scale(0.5); opacity: 0; }
                         70% { transform: scale(1.1); }
                         100% { transform: scale(1); opacity: 1; }
                     }
-                \`}} />
+                `}} />
             </main>
         </div>
     );
