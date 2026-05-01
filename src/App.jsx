@@ -40,6 +40,8 @@ import DpPatternInterval from './pages/topics/dp_pattern_interval';
 
 // Trees Topic
 import TreesMasterclass from './pages/topics/TreesMasterclass';
+import TreeGuide from './pages/topics/tree_guide';
+import TreeVisualizer from './pages/topics/tree_visualizer';
 
 // Graphs Topic
 import GraphsMasterclass from './pages/topics/GraphsMasterclass';
@@ -83,6 +85,8 @@ function App() {
 
           {/* Trees & Graphs Routes */}
           <Route path="topics/trees" element={<TreesMasterclass />} />
+          <Route path="topics/trees/guide" element={<TreeGuide />} />
+          <Route path="topics/trees/visualizer" element={<TreeVisualizer />} />
           <Route path="topics/graphs" element={<GraphsMasterclass />} />
 
           {/* Debugger Routes */}
