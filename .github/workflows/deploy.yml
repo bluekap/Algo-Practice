@@ -23,6 +23,8 @@ concurrency:
 jobs:
   # Single deploy job since we're just building and deploying
   deploy:
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
