@@ -24,26 +24,38 @@ export default function DpPattern1d() {
                             <strong>Mental Model:</strong> Each cell <code>dp[i]</code> answers: <em>"What is the best answer considering the first i elements?"</em> You only look back at a fixed number of previous states. Think of it as climbing stairs — each step depends on a few steps behind you.
                         </div>
                         <div className="recurrence">
-                            <span className="label">Climbing Stairs / Fibonacci recurrence</span>
-                            <span className="hl-yellow">dp[i]</span> = <span className="hl-green">dp[i-1]</span> + <span className="hl-blue">dp[i-2]</span><br />
-                            <span className="cm"># base cases: dp[0] = 1, dp[1] = 1</span>
+                            <span className="label">5 Steps for 1D DP Framework</span>
+                            <ol style={{ margin: '8px 0 0 24px', padding: 0, color: 'var(--text)', fontSize: '15px', lineHeight: '1.6' }}>
+                                <li><strong>dp[i] = ?</strong> → define in plain English first</li>
+                                <li><strong>recurrence?</strong> → what choices exist at step i?</li>
+                                <li><strong>base cases?</strong> → dp[0], dp[1]</li>
+                                <li><strong>answer location?</strong> → dp[n-1]? dp[n]? max(dp)?</li>
+                                <li><strong>can I optimize space?</strong></li>
+                            </ol>
                         </div>
                         <div className="code-container">
                             <div className="code-header">
                                 <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                <span className="code-lang">python — climbing stairs template</span>
+                                <span className="code-lang">python — 5 steps applied to climbing stairs</span>
                             </div>
                             <pre>
-{`def climbStairs(n):
-    if n <= 1: return 1
+{`def countWays(n):
+    # 1. dp[i] = number of ways to reach current ith step
+    # 2. recurrence? choices at each step - take 1 step or 2
+    # 3. base cases? dp[0] = 1, dp[1] = 1
+    # 4. answer location? dp[n]
+    
     dp = [0] * (n + 1)
-    dp[0], dp[1] = 1, 1
+    dp[0] = 1
+    dp[1] = 1
+    
     for i in range(2, n + 1):
         dp[i] = dp[i-1] + dp[i-2]
+        
     return dp[n]
 
-# Space-optimized (O(1) space):
-def climbStairsOpt(n):
+# 5. can I optimize space? (O(1) space):
+def countWaysOpt(n):
     a, b = 1, 1
     for _ in range(2, n + 1):
         a, b = b, a + b
