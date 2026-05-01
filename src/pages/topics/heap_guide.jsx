@@ -104,11 +104,11 @@ export default function HeapGuide() {
                 <p>Fundamentals → patterns → 4 LeetCode problems (Easy–Hard)</p>
                 <div className="tabs" style={{ justifyContent: 'center', marginTop: '12px' }}>
                     <button 
-                        className={`tab-btn ${activeTab === 'learn' ? 'active' : ''}`}
+                        className={`tab ${activeTab === 'learn' ? 'active' : ''}`}
                         onClick={() => setActiveTab('learn')}
                     >📚 Learn</button>
                     <button 
-                        className={`tab-btn ${activeTab === 'problems' ? 'active' : ''}`}
+                        className={`tab ${activeTab === 'problems' ? 'active' : ''}`}
                         onClick={() => setActiveTab('problems')}
                     >🧩 Problems</button>
                 </div>
@@ -117,12 +117,13 @@ export default function HeapGuide() {
             <main>
                 {activeTab === 'learn' && (
                     <section id="learn" className="content-section learn-container active">
-                        <div className="side-nav">
+                        <div className="side-nav" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
                             {heapData.concepts.map(c => (
                                 <button 
                                     key={c.id}
-                                    className={`concept-btn ${activeConceptId === c.id ? 'active' : ''}`}
+                                    className={`tab ${activeConceptId === c.id ? 'active' : ''}`}
                                     onClick={() => setActiveConceptId(c.id)}
+                                    style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
                                 >
                                     <span>{c.icon}</span><span>{c.title}</span>
                                 </button>
