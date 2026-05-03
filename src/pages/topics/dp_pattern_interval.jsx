@@ -11,7 +11,7 @@ export default function DpPatternInterval() {
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Back to DP Guide
                 </Link>
-                <h1>Interval DP</h1>
+                <h1 style={{ background: 'linear-gradient(135deg, #f87171, #dc2626)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Interval DP</h1>
                 <p>Signal: subarray/substring ranges, merge costs, optimal subdivision</p>
             </div>
 
@@ -22,6 +22,16 @@ export default function DpPatternInterval() {
                         <h2>Pattern Breakdown</h2>
                     </div>
                     <div className="section-card-body">
+                        <div className="signals-card" style={{ borderLeftColor: '#f87171' }}>
+                            <div className="signals-card-label">🎯 Recognition Signals</div>
+                            <div className="signals-pills">
+                                <span className="signal-pill">burst / remove elements optimally</span>
+                                <span className="signal-pill">merge intervals for min cost</span>
+                                <span className="signal-pill">split at optimal pivot point</span>
+                                <span className="signal-pill">subproblem is a contiguous range [i,j]</span>
+                                <span className="signal-pill">cost depends on boundary elements</span>
+                            </div>
+                        </div>
                         <div className="mental-model">
                             <strong>Mental Model:</strong> <code>dp[i][j]</code> = best answer for the subproblem on the range <code>[i, j]</code>. You iterate by <em>length</em> of the interval (from small to large), and for each interval you try every possible split point <code>k</code>.
                         </div>
@@ -78,6 +88,12 @@ export default function DpPatternInterval() {
                             </div>
                         </div>
 
+                        <div className="complexity-strip">
+                            <span className="complexity-strip-label">Complexity</span>
+                            <span className="complexity-badge time">⏱ Time: O(n³)</span>
+                            <span className="complexity-badge space">💾 Space: O(n²)</span>
+                            <span className="complexity-badge opt" style={{ opacity: 0.6 }}>⚡ No trivial space opt</span>
+                        </div>
                         {/* ── SOLUTION TABS ── */}
                         <div className="sol-section-label">Solutions</div>
                         <div className="sol-tabs">
@@ -171,6 +187,12 @@ def longestPalindromeSubseq(s):
                             )}
                         </div>
 
+                        <div className="pitfalls-card">
+                            <div className="pitfalls-header">Common Pitfalls</div>
+                            <div className="pitfall-item">Iterate by interval <strong>length</strong> (2, 3, 4…), not by i or j index. <code>dp[i][k]</code> and <code>dp[k][j]</code> must be fully solved before <code>dp[i][j]</code>.</div>
+                            <div className="pitfall-item">Burst Balloons must pad with <code>[1] + nums + [1]</code> — without boundaries, the edge multiplications reference out-of-bounds indices.</div>
+                            <div className="pitfall-item">The split point <code>k</code> in Burst Balloons is the <strong>last balloon burst inside (i, j)</strong>, not a midpoint. The interval (i, j) is open — i and j are never burst.</div>
+                        </div>
                         <div className="example-box">
                             <h3>
                                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

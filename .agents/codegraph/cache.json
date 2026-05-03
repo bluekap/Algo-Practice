@@ -1,0 +1,874 @@
+{
+  "commit_hash": "c6365d517b610baa08c66226d886bee2686f61e5",
+  "data": {
+    "nodes": [
+      {
+        "id": "vite.config.js",
+        "name": "vite.config.js",
+        "path": "vite.config.js",
+        "loc": 8,
+        "complexity": 0.0,
+        "language": "javascript",
+        "imports": [
+          "vite",
+          "@vitejs/plugin-react"
+        ],
+        "size": 20,
+        "symbols": {
+          "classes": [],
+          "functions": []
+        },
+        "function_details": []
+      },
+      {
+        "id": "eslint.config.js",
+        "name": "eslint.config.js",
+        "path": "eslint.config.js",
+        "loc": 29,
+        "complexity": 0.0,
+        "language": "javascript",
+        "imports": [
+          "eslint-plugin-react-refresh",
+          "globals",
+          "@eslint/js",
+          "eslint-plugin-react-hooks",
+          "eslint/config"
+        ],
+        "size": 27,
+        "symbols": {
+          "classes": [],
+          "functions": []
+        },
+        "function_details": []
+      },
+      {
+        "id": "scripts/convert.mjs",
+        "name": "convert.mjs",
+        "path": "scripts/convert.mjs",
+        "loc": 53,
+        "complexity": 0.75,
+        "language": "unknown",
+        "imports": [
+          "fs",
+          "path"
+        ],
+        "size": 29,
+        "symbols": {
+          "classes": [],
+          "functions": []
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/Layout.jsx",
+        "name": "Layout.jsx",
+        "path": "src/Layout.jsx",
+        "loc": 16,
+        "complexity": 0.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "./layout.css"
+        ],
+        "size": 24,
+        "symbols": {
+          "classes": [],
+          "functions": []
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/main.jsx",
+        "name": "main.jsx",
+        "path": "src/main.jsx",
+        "loc": 10,
+        "complexity": 0.0,
+        "language": "javascript-react",
+        "imports": [
+          "./App.jsx",
+          "react-dom/client",
+          "react",
+          "./index.css"
+        ],
+        "size": 21,
+        "symbols": {
+          "classes": [],
+          "functions": []
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/App.jsx",
+        "name": "App.jsx",
+        "path": "src/App.jsx",
+        "loc": 103,
+        "complexity": 0.0,
+        "language": "javascript-react",
+        "imports": [
+          "./pages/Home",
+          "./pages/topics/TreesMasterclass",
+          "./pages/topics/binary_search_masterclass",
+          "./pages/topics/heap_masterclass",
+          "./pages/topics/heap_guide",
+          "./pages/topics/array_patterns_guide",
+          "./pages/topics/array_patterns_masterclass",
+          "./pages/topics/dp_visualizer",
+          "./pages/topics/dp_pattern_knapsack",
+          "./pages/topics/heap_visualizer",
+          "./pages/topics/dp_guide",
+          "./pages/topics/dp_pattern_2d",
+          "./pages/topics/tree_guide",
+          "./pages/topics/dp_pattern_1d",
+          "./pages/topics/live_python_visualizer",
+          "./pages/topics/dp_pattern_lcs_lis",
+          "./pages/topics/binary_search_guide",
+          "./pages/topics/dp_pattern_interval",
+          "react-router-dom",
+          "./pages/topics/tree_visualizer",
+          "./pages/topics/array_patterns_visualizer",
+          "react",
+          "./pages/topics/dp_masterclass",
+          "./pages/topics/binary_search_visualizer",
+          "./pages/topics/GraphsMasterclass",
+          "./Layout"
+        ],
+        "size": 33,
+        "symbols": {
+          "classes": [],
+          "functions": []
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/Home.jsx",
+        "name": "Home.jsx",
+        "path": "src/pages/Home.jsx",
+        "loc": 79,
+        "complexity": 3.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "./home.css"
+        ],
+        "size": 31,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "Home",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/dp_pattern_1d.jsx",
+        "name": "dp_pattern_1d.jsx",
+        "path": "src/pages/topics/dp_pattern_1d.jsx",
+        "loc": 204,
+        "complexity": 3.8,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 36,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "DpPattern1d",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/dp_pattern_interval.jsx",
+        "name": "dp_pattern_interval.jsx",
+        "path": "src/pages/topics/dp_pattern_interval.jsx",
+        "loc": 195,
+        "complexity": 3.17,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 36,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "DpPatternInterval",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/array_patterns_guide.jsx",
+        "name": "array_patterns_guide.jsx",
+        "path": "src/pages/topics/array_patterns_guide.jsx",
+        "loc": 277,
+        "complexity": 3.17,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 38,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "ArrayPatternsGuide",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "checkQuiz",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/dp_guide.jsx",
+        "name": "dp_guide.jsx",
+        "path": "src/pages/topics/dp_guide.jsx",
+        "loc": 64,
+        "complexity": 0.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 30,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "DpGuide",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/heap_visualizer.jsx",
+        "name": "heap_visualizer.jsx",
+        "path": "src/pages/topics/heap_visualizer.jsx",
+        "loc": 248,
+        "complexity": 0.68,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 37,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "HeapVisualizer",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "updateWidth",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "resetViz",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "generatePushSteps",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "generatePopSteps",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "compare",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "getPos",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "x",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/dp_pattern_lcs_lis.jsx",
+        "name": "dp_pattern_lcs_lis.jsx",
+        "path": "src/pages/topics/dp_pattern_lcs_lis.jsx",
+        "loc": 238,
+        "complexity": 2.12,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 37,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "DpPatternLcsLis",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/array_patterns_visualizer.jsx",
+        "name": "array_patterns_visualizer.jsx",
+        "path": "src/pages/topics/array_patterns_visualizer.jsx",
+        "loc": 237,
+        "complexity": 1.36,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 37,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "ArrayPatternsVisualizer",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "handleStart",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "handleReset",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/dp_visualizer.jsx",
+        "name": "dp_visualizer.jsx",
+        "path": "src/pages/topics/dp_visualizer.jsx",
+        "loc": 386,
+        "complexity": 1.03,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 39,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "DpVisualizer",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "resetViz",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "startViz",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "generateClimbingStairs",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "generateHouseRobber",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "generateCoinChange",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "generateLCS",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "generateMinPath",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/array_patterns_masterclass.jsx",
+        "name": "array_patterns_masterclass.jsx",
+        "path": "src/pages/topics/array_patterns_masterclass.jsx",
+        "loc": 39,
+        "complexity": 2.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 28,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "ArrayPatternsMasterclass",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/tree_guide.jsx",
+        "name": "tree_guide.jsx",
+        "path": "src/pages/topics/tree_guide.jsx",
+        "loc": 219,
+        "complexity": 1.5,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 36,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "TreeGuide",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "toggleProblem",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "toggleSolution",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/TreesMasterclass.jsx",
+        "name": "TreesMasterclass.jsx",
+        "path": "src/pages/topics/TreesMasterclass.jsx",
+        "loc": 39,
+        "complexity": 0.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 28,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "TreesMasterclass",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/GraphsMasterclass.jsx",
+        "name": "GraphsMasterclass.jsx",
+        "path": "src/pages/topics/GraphsMasterclass.jsx",
+        "loc": 26,
+        "complexity": 0.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 26,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "GraphsMasterclass",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/heap_guide.jsx",
+        "name": "heap_guide.jsx",
+        "path": "src/pages/topics/heap_guide.jsx",
+        "loc": 220,
+        "complexity": 1.48,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 36,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "HeapGuide",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "toggleProblem",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "toggleSolution",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/live_python_visualizer.jsx",
+        "name": "live_python_visualizer.jsx",
+        "path": "src/pages/topics/live_python_visualizer.jsx",
+        "loc": 312,
+        "complexity": 1.21,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 38,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "LivePythonVisualizer",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "initEditor",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/dp_masterclass.jsx",
+        "name": "dp_masterclass.jsx",
+        "path": "src/pages/topics/dp_masterclass.jsx",
+        "loc": 39,
+        "complexity": 2.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 28,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "DpMasterclass",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/binary_search_guide.jsx",
+        "name": "binary_search_guide.jsx",
+        "path": "src/pages/topics/binary_search_guide.jsx",
+        "loc": 102,
+        "complexity": 6.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 33,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "BinarySearchGuide",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/dp_pattern_knapsack.jsx",
+        "name": "dp_pattern_knapsack.jsx",
+        "path": "src/pages/topics/dp_pattern_knapsack.jsx",
+        "loc": 208,
+        "complexity": 4.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 36,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "DpPatternKnapsack",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/heap_masterclass.jsx",
+        "name": "heap_masterclass.jsx",
+        "path": "src/pages/topics/heap_masterclass.jsx",
+        "loc": 39,
+        "complexity": 1.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 28,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "HeapMasterclass",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/tree_visualizer.jsx",
+        "name": "tree_visualizer.jsx",
+        "path": "src/pages/topics/tree_visualizer.jsx",
+        "loc": 284,
+        "complexity": 1.03,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 38,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "TreeVisualizer",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "sleep",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "generateSequence",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "dfs",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "dfs",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "dfs",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "startTraversal",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "reset",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "renderTree",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/dp_pattern_2d.jsx",
+        "name": "dp_pattern_2d.jsx",
+        "path": "src/pages/topics/dp_pattern_2d.jsx",
+        "loc": 181,
+        "complexity": 2.86,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 36,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "DpPattern2d",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/binary_search_visualizer.jsx",
+        "name": "binary_search_visualizer.jsx",
+        "path": "src/pages/topics/binary_search_visualizer.jsx",
+        "loc": 301,
+        "complexity": 1.44,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 38,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "BinarySearchVisualizer",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "cond",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "handleStart",
+              "docstring": "",
+              "args": []
+            },
+            {
+              "name": "handleReset",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      },
+      {
+        "id": "src/pages/topics/binary_search_masterclass.jsx",
+        "name": "binary_search_masterclass.jsx",
+        "path": "src/pages/topics/binary_search_masterclass.jsx",
+        "loc": 39,
+        "complexity": 1.0,
+        "language": "javascript-react",
+        "imports": [
+          "react-router-dom",
+          "react"
+        ],
+        "size": 28,
+        "symbols": {
+          "classes": [],
+          "functions": [
+            {
+              "name": "BinarySearchMasterclass",
+              "docstring": "",
+              "args": []
+            }
+          ]
+        },
+        "function_details": []
+      }
+    ],
+    "edges": [],
+    "metrics": {
+      "total_files": 29,
+      "total_loc": 4195,
+      "avg_complexity": 2.12,
+      "max_complexity": 6.0,
+      "languages": {
+        "javascript": 2,
+        "unknown": 1,
+        "javascript-react": 26
+      },
+      "most_connected": []
+    }
+  }
+}

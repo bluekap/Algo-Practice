@@ -11,7 +11,7 @@ export default function DpPattern2d() {
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Back to DP Guide
                 </Link>
-                <h1>2D Grid DP</h1>
+                <h1 style={{ background: 'linear-gradient(135deg, #34d399, #059669)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>2D Grid DP</h1>
                 <p>Signal: grid navigation, two independent variables, path discovery</p>
             </div>
 
@@ -22,6 +22,16 @@ export default function DpPattern2d() {
                         <h2>Pattern Breakdown</h2>
                     </div>
                     <div className="section-card-body">
+                        <div className="signals-card" style={{ borderLeftColor: '#34d399' }}>
+                            <div className="signals-card-label">🎯 Recognition Signals</div>
+                            <div className="signals-pills">
+                                <span className="signal-pill">move right or down only</span>
+                                <span className="signal-pill">count paths in a grid</span>
+                                <span className="signal-pill">min cost from top-left to bottom-right</span>
+                                <span className="signal-pill">grid[i][j] built from top + left neighbors</span>
+                                <span className="signal-pill">path with obstacles</span>
+                            </div>
+                        </div>
                         <div className="mental-model">
                             <strong>Mental Model:</strong> <code>dp[i][j]</code> answers: <em>"What is the best answer to reach cell (i, j)?"</em> You can only come from the top or left (for path problems). Fill the table row by row. The answer is always at <code>dp[m-1][n-1]</code>.
                         </div>
@@ -78,6 +88,12 @@ export default function DpPattern2d() {
                             </div>
                         </div>
 
+                        <div className="complexity-strip">
+                            <span className="complexity-strip-label">Complexity</span>
+                            <span className="complexity-badge time">⏱ Time: O(m×n)</span>
+                            <span className="complexity-badge space">💾 Space: O(m×n)</span>
+                            <span className="complexity-badge opt">⚡ Optimized: O(n) one row</span>
+                        </div>
                         {/* ── SOLUTION TABS ── */}
                         <div className="sol-section-label">Solutions</div>
                         <div className="sol-tabs">
@@ -157,6 +173,12 @@ def minPathSum(grid):
                             )}
                         </div>
 
+                        <div className="pitfalls-card">
+                            <div className="pitfalls-header">Common Pitfalls</div>
+                            <div className="pitfall-item">Initialize the entire first row AND first column — <code>dp[0][0]</code> alone is not enough. Miss one and edge cells return wrong values.</div>
+                            <div className="pitfall-item">The main double loop starts at <code>(1,1)</code> — <code>dp[0][j]</code> and <code>dp[i][0]</code> are your base cases, set them separately beforehand.</div>
+                            <div className="pitfall-item">In the 1D rolling-row, <code>dp[j] += dp[j-1]</code> overwrites in-place. Verify that the old (top) value is read before being overwritten by the left update.</div>
+                        </div>
                         <div className="example-box">
                             <h3>
                                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

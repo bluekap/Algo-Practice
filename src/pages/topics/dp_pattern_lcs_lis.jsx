@@ -11,7 +11,7 @@ export default function DpPatternLcsLis() {
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Back to DP Guide
                 </Link>
-                <h1>LCS / LIS (Subsequence DP)</h1>
+                <h1 style={{ background: 'linear-gradient(135deg, #c084fc, #9333ea)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>LCS / LIS (Subsequence DP)</h1>
                 <p>Signal: non-contiguous order, pattern matching, longest valid sequence</p>
             </div>
 
@@ -22,6 +22,16 @@ export default function DpPatternLcsLis() {
                         <h2>Pattern Breakdown</h2>
                     </div>
                     <div className="section-card-body">
+                        <div className="signals-card" style={{ borderLeftColor: '#c084fc' }}>
+                            <div className="signals-card-label">🎯 Recognition Signals</div>
+                            <div className="signals-pills">
+                                <span className="signal-pill">longest common subsequence</span>
+                                <span className="signal-pill">edit distance (insert / delete / replace)</span>
+                                <span className="signal-pill">non-contiguous character matching</span>
+                                <span className="signal-pill">strictly increasing sequence</span>
+                                <span className="signal-pill">string alignment / transformation</span>
+                            </div>
+                        </div>
                         <div className="mental-model">
                             <strong>Mental Model (LCS):</strong> <code>dp[i][j]</code> = length of LCS of <code>s1[:i]</code> and <code>s2[:j]</code>. If characters match, extend the diagonal. If not, take the best of skipping one character from either string.<br /><br />
                             <strong>Mental Model (LIS):</strong> <code>dp[i]</code> = length of LIS ending at index <code>i</code>. For each <code>i</code>, scan all <code>j &lt; i</code> where <code>nums[j] &lt; nums[i]</code> and extend.
@@ -115,6 +125,13 @@ export default function DpPatternLcsLis() {
                             </div>
                         </div>
 
+                        <div className="complexity-strip">
+                            <span className="complexity-strip-label">Complexity</span>
+                            <span className="complexity-badge time">⏱ LCS: O(m×n)</span>
+                            <span className="complexity-badge space">💾 LCS: O(n) two rows</span>
+                            <span className="complexity-badge time">⏱ LIS: O(n²)</span>
+                            <span className="complexity-badge opt">⚡ LIS: O(n log n)</span>
+                        </div>
                         {/* ── SOLUTION TABS ── */}
                         <div className="sol-section-label">Solutions</div>
                         <div className="sol-tabs">
@@ -214,6 +231,12 @@ def lis(nums):
                             )}
                         </div>
 
+                        <div className="pitfalls-card">
+                            <div className="pitfalls-header">Common Pitfalls</div>
+                            <div className="pitfall-item">LCS = 2D table (two sequences compared); LIS = 1D array (single sequence). Using a 1D array for LCS produces incorrect results.</div>
+                            <div className="pitfall-item"><code>tails[]</code> in patience sort is NOT the actual LIS — it's a bookkeeping structure. To reconstruct the real sequence you need a separate parent-tracking array.</div>
+                            <div className="pitfall-item">Verify the problem's inequality: strictly increasing uses <code>bisect_left</code> (replaces equal values); non-decreasing uses <code>bisect_right</code> (allows equal values to extend).</div>
+                        </div>
                         <div className="example-box">
                             <h3>
                                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

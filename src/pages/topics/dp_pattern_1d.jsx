@@ -11,7 +11,7 @@ export default function DpPattern1d() {
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Back to DP Guide
                 </Link>
-                <h1>1D DP (Linear State)</h1>
+                <h1 style={{ background: 'linear-gradient(135deg, #fcd34d, #f59e0b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>1D DP (Linear State)</h1>
                 <p>Signal: single index, linear progression, fixed lookback</p>
             </div>
 
@@ -22,6 +22,16 @@ export default function DpPattern1d() {
                         <h2>Pattern Breakdown</h2>
                     </div>
                     <div className="section-card-body">
+                        <div className="signals-card" style={{ borderLeftColor: '#fcd34d' }}>
+                            <div className="signals-card-label">🎯 Recognition Signals</div>
+                            <div className="signals-pills">
+                                <span className="signal-pill">dp[i] depends on 1–2 previous cells</span>
+                                <span className="signal-pill">count ways to reach step i</span>
+                                <span className="signal-pill">min/max cost ending at position i</span>
+                                <span className="signal-pill">cannot pick adjacent elements</span>
+                                <span className="signal-pill">fixed-size lookback window</span>
+                            </div>
+                        </div>
                         <div className="mental-model">
                             <strong>Mental Model:</strong> Each cell <code>dp[i]</code> answers: <em>"What is the best answer considering the first i elements?"</em> You only look back at a fixed number of previous states. Think of it as climbing stairs — each step depends on a few steps behind you.
                         </div>
@@ -85,6 +95,12 @@ export default function DpPattern1d() {
                             </div>
                         </div>
 
+                        <div className="complexity-strip">
+                            <span className="complexity-strip-label">Complexity</span>
+                            <span className="complexity-badge time">⏱ Time: O(n)</span>
+                            <span className="complexity-badge space">💾 Space: O(n)</span>
+                            <span className="complexity-badge opt">⚡ Optimized: O(1)</span>
+                        </div>
                         {/* ── SOLUTION TABS ── */}
                         <div className="sol-section-label">Solutions</div>
                         <div className="sol-tabs">
@@ -179,6 +195,12 @@ def rob(nums):
                             )}
                         </div>
 
+                        <div className="pitfalls-card">
+                            <div className="pitfalls-header">Common Pitfalls</div>
+                            <div className="pitfall-item">Off-by-one: know if the answer lives at <code>dp[n]</code> or <code>dp[n-1]</code> — it depends entirely on whether your dp is 0-indexed or 1-indexed.</div>
+                            <div className="pitfall-item">Always initialize <code>dp[0]</code> and <code>dp[1]</code> before the loop — the recurrence assumes both base values exist.</div>
+                            <div className="pitfall-item">Write what <code>dp[i]</code> means in plain English first. "dp[i] = max profit from houses 0 through i" prevents almost every bug.</div>
+                        </div>
                         <div className="example-box">
                             <h3>
                                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

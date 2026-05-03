@@ -11,7 +11,7 @@ export default function DpPatternKnapsack() {
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Back to DP Guide
                 </Link>
-                <h1>Knapsack DP</h1>
+                <h1 style={{ background: 'linear-gradient(135deg, #60a5fa, #2563eb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Knapsack DP</h1>
                 <p>Signal: binary selection, finite resources, bounded optimization</p>
             </div>
 
@@ -22,6 +22,16 @@ export default function DpPatternKnapsack() {
                         <h2>Pattern Breakdown</h2>
                     </div>
                     <div className="section-card-body">
+                        <div className="signals-card" style={{ borderLeftColor: '#60a5fa' }}>
+                            <div className="signals-card-label">🎯 Recognition Signals</div>
+                            <div className="signals-pills">
+                                <span className="signal-pill">take or skip each item</span>
+                                <span className="signal-pill">limited capacity / budget</span>
+                                <span className="signal-pill">subset sum / equal partition</span>
+                                <span className="signal-pill">0/1 binary choice per element</span>
+                                <span className="signal-pill">maximize value under constraint</span>
+                            </div>
+                        </div>
                         <div className="mental-model">
                             <strong>Mental Model:</strong> For each item, you make a binary choice: <em>take it or leave it.</em> <code>dp[i][w]</code> = max value using first <code>i</code> items with capacity <code>w</code>. The key insight: if you take item <code>i</code>, you use up <code>weight[i]</code> capacity, so you look back at <code>dp[i-1][w - weight[i]]</code>.
                         </div>
@@ -92,6 +102,12 @@ export default function DpPatternKnapsack() {
                             </div>
                         </div>
 
+                        <div className="complexity-strip">
+                            <span className="complexity-strip-label">Complexity</span>
+                            <span className="complexity-badge time">⏱ Time: O(n×W)</span>
+                            <span className="complexity-badge space">💾 Space: O(n×W)</span>
+                            <span className="complexity-badge opt">⚡ Optimized: O(W) reversed</span>
+                        </div>
                         {/* ── SOLUTION TABS ── */}
                         <div className="sol-section-label">Solutions</div>
                         <div className="sol-tabs">
@@ -184,6 +200,12 @@ def coinChange(coins, amount):
                             )}
                         </div>
 
+                        <div className="pitfalls-card">
+                            <div className="pitfalls-header">Common Pitfalls</div>
+                            <div className="pitfall-item">0/1 inner loop = <code>range(W, wt-1, -1)</code> (reverse). Unbounded = <code>range(wt, W+1)</code> (forward). Mixing them lets items be reused incorrectly.</div>
+                            <div className="pitfall-item">Always check <code>weights[i] &lt;= w</code> before reading <code>dp[w - weights[i]]</code> — a negative index silently wraps around in Python, causing subtle bugs.</div>
+                            <div className="pitfall-item">In the 1D version, the array reflects the previous item's row. It's safe to read <code>dp[w - wt]</code> only because the reverse loop hasn't overwritten that position yet.</div>
+                        </div>
                         <div className="example-box">
                             <h3>
                                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
