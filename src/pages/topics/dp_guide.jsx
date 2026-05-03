@@ -114,20 +114,8 @@ export default function DpGuide() {
                     </div>
                 </div>
 
-                {/* ── PATTERN DECISION FRAMEWORK ── */}
-                <div className="framework-box">
-                    <h2>🧭 Pattern Decision Framework</h2>
-                    <div className="decision-grid">
-                        {dpPatterns.map((p, i) => (
-                            <Link key={i} to={p.path} className="decision-item">
-                                <div className="signal">Signal: {p.signal}</div>
-                                <div className="pattern" style={{ color: p.color }}>→ {p.title}</div>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-
                 {/* ── PATTERN CARDS ── */}
+
                 <div style={{ marginTop: '24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
                         <div style={{ height: '1px', flex: 1, background: 'var(--border)' }}></div>

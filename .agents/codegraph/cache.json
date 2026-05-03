@@ -1,5 +1,7 @@
 {
-  "commit_hash": "c6365d517b610baa08c66226d886bee2686f61e5",
+  "schema_version": "2",
+  "commit_hash": "0f51fd622bff0c6a4980981748eb0f3cc2ea6527",
+  "working_tree_fingerprint": "1e247d373693e8872859d65e67734d90c99ae3c825eb8134f271bf1279e82785",
   "data": {
     "nodes": [
       {
@@ -10,8 +12,8 @@
         "complexity": 0.0,
         "language": "javascript",
         "imports": [
-          "vite",
-          "@vitejs/plugin-react"
+          "@vitejs/plugin-react",
+          "vite"
         ],
         "size": 20,
         "symbols": {
@@ -28,11 +30,11 @@
         "complexity": 0.0,
         "language": "javascript",
         "imports": [
-          "eslint-plugin-react-refresh",
-          "globals",
-          "@eslint/js",
+          "eslint/config",
           "eslint-plugin-react-hooks",
-          "eslint/config"
+          "@eslint/js",
+          "eslint-plugin-react-refresh",
+          "globals"
         ],
         "size": 27,
         "symbols": {
@@ -49,8 +51,8 @@
         "complexity": 0.75,
         "language": "unknown",
         "imports": [
-          "fs",
-          "path"
+          "path",
+          "fs"
         ],
         "size": 29,
         "symbols": {
@@ -67,8 +69,8 @@
         "complexity": 0.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "./layout.css"
+          "./layout.css",
+          "react-router-dom"
         ],
         "size": 24,
         "symbols": {
@@ -85,10 +87,10 @@
         "complexity": 0.0,
         "language": "javascript-react",
         "imports": [
-          "./App.jsx",
-          "react-dom/client",
+          "./index.css",
           "react",
-          "./index.css"
+          "./App.jsx",
+          "react-dom/client"
         ],
         "size": 21,
         "symbols": {
@@ -105,32 +107,32 @@
         "complexity": 0.0,
         "language": "javascript-react",
         "imports": [
-          "./pages/Home",
-          "./pages/topics/TreesMasterclass",
-          "./pages/topics/binary_search_masterclass",
-          "./pages/topics/heap_masterclass",
-          "./pages/topics/heap_guide",
-          "./pages/topics/array_patterns_guide",
-          "./pages/topics/array_patterns_masterclass",
-          "./pages/topics/dp_visualizer",
+          "./pages/topics/dp_masterclass",
           "./pages/topics/dp_pattern_knapsack",
-          "./pages/topics/heap_visualizer",
-          "./pages/topics/dp_guide",
           "./pages/topics/dp_pattern_2d",
           "./pages/topics/tree_guide",
-          "./pages/topics/dp_pattern_1d",
-          "./pages/topics/live_python_visualizer",
-          "./pages/topics/dp_pattern_lcs_lis",
-          "./pages/topics/binary_search_guide",
-          "./pages/topics/dp_pattern_interval",
-          "react-router-dom",
+          "./pages/topics/heap_masterclass",
           "./pages/topics/tree_visualizer",
-          "./pages/topics/array_patterns_visualizer",
-          "react",
-          "./pages/topics/dp_masterclass",
-          "./pages/topics/binary_search_visualizer",
+          "./pages/topics/array_patterns_masterclass",
+          "./pages/topics/TreesMasterclass",
+          "./pages/topics/array_patterns_guide",
+          "./pages/topics/dp_pattern_lcs_lis",
+          "./pages/topics/live_python_visualizer",
+          "./pages/topics/heap_visualizer",
+          "./Layout",
           "./pages/topics/GraphsMasterclass",
-          "./Layout"
+          "./pages/topics/dp_visualizer",
+          "./pages/Home",
+          "./pages/topics/binary_search_visualizer",
+          "./pages/topics/dp_guide",
+          "./pages/topics/dp_pattern_1d",
+          "./pages/topics/binary_search_masterclass",
+          "./pages/topics/array_patterns_visualizer",
+          "./pages/topics/dp_pattern_interval",
+          "react",
+          "react-router-dom",
+          "./pages/topics/heap_guide",
+          "./pages/topics/binary_search_guide"
         ],
         "size": 33,
         "symbols": {
@@ -147,8 +149,8 @@
         "complexity": 3.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "./home.css"
+          "./home.css",
+          "react-router-dom"
         ],
         "size": 31,
         "symbols": {
@@ -167,14 +169,14 @@
         "id": "src/pages/topics/dp_pattern_1d.jsx",
         "name": "dp_pattern_1d.jsx",
         "path": "src/pages/topics/dp_pattern_1d.jsx",
-        "loc": 204,
-        "complexity": 3.8,
+        "loc": 226,
+        "complexity": 4.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
-        "size": 36,
+        "size": 37,
         "symbols": {
           "classes": [],
           "functions": [
@@ -191,12 +193,12 @@
         "id": "src/pages/topics/dp_pattern_interval.jsx",
         "name": "dp_pattern_interval.jsx",
         "path": "src/pages/topics/dp_pattern_interval.jsx",
-        "loc": 195,
-        "complexity": 3.17,
+        "loc": 217,
+        "complexity": 3.33,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 36,
         "symbols": {
@@ -219,8 +221,8 @@
         "complexity": 3.17,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 38,
         "symbols": {
@@ -244,14 +246,14 @@
         "id": "src/pages/topics/dp_guide.jsx",
         "name": "dp_guide.jsx",
         "path": "src/pages/topics/dp_guide.jsx",
-        "loc": 64,
-        "complexity": 0.0,
+        "loc": 152,
+        "complexity": 1.12,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
-        "size": 30,
+        "size": 35,
         "symbols": {
           "classes": [],
           "functions": [
@@ -272,8 +274,8 @@
         "complexity": 0.68,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 37,
         "symbols": {
@@ -327,12 +329,12 @@
         "id": "src/pages/topics/dp_pattern_lcs_lis.jsx",
         "name": "dp_pattern_lcs_lis.jsx",
         "path": "src/pages/topics/dp_pattern_lcs_lis.jsx",
-        "loc": 238,
-        "complexity": 2.12,
+        "loc": 261,
+        "complexity": 2.25,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 37,
         "symbols": {
@@ -355,8 +357,8 @@
         "complexity": 1.36,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 37,
         "symbols": {
@@ -389,8 +391,8 @@
         "complexity": 1.03,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 39,
         "symbols": {
@@ -448,8 +450,8 @@
         "complexity": 2.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 28,
         "symbols": {
@@ -472,8 +474,8 @@
         "complexity": 1.5,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 36,
         "symbols": {
@@ -506,8 +508,8 @@
         "complexity": 0.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 28,
         "symbols": {
@@ -530,8 +532,8 @@
         "complexity": 0.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 26,
         "symbols": {
@@ -554,8 +556,8 @@
         "complexity": 1.48,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 36,
         "symbols": {
@@ -588,8 +590,8 @@
         "complexity": 1.21,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 38,
         "symbols": {
@@ -617,8 +619,8 @@
         "complexity": 2.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 28,
         "symbols": {
@@ -641,8 +643,8 @@
         "complexity": 6.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 33,
         "symbols": {
@@ -661,14 +663,14 @@
         "id": "src/pages/topics/dp_pattern_knapsack.jsx",
         "name": "dp_pattern_knapsack.jsx",
         "path": "src/pages/topics/dp_pattern_knapsack.jsx",
-        "loc": 208,
+        "loc": 230,
         "complexity": 4.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
-        "size": 36,
+        "size": 37,
         "symbols": {
           "classes": [],
           "functions": [
@@ -689,8 +691,8 @@
         "complexity": 1.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 28,
         "symbols": {
@@ -713,8 +715,8 @@
         "complexity": 1.03,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 38,
         "symbols": {
@@ -773,12 +775,12 @@
         "id": "src/pages/topics/dp_pattern_2d.jsx",
         "name": "dp_pattern_2d.jsx",
         "path": "src/pages/topics/dp_pattern_2d.jsx",
-        "loc": 181,
+        "loc": 203,
         "complexity": 2.86,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 36,
         "symbols": {
@@ -801,8 +803,8 @@
         "complexity": 1.44,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 38,
         "symbols": {
@@ -840,8 +842,8 @@
         "complexity": 1.0,
         "language": "javascript-react",
         "imports": [
-          "react-router-dom",
-          "react"
+          "react",
+          "react-router-dom"
         ],
         "size": 28,
         "symbols": {
@@ -857,18 +859,150 @@
         "function_details": []
       }
     ],
-    "edges": [],
+    "edges": [
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/dp_pattern_1d.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/dp_masterclass.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/TreesMasterclass.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/array_patterns_visualizer.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/dp_pattern_interval.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/dp_pattern_2d.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/live_python_visualizer.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/heap_visualizer.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/Home.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/binary_search_visualizer.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/dp_guide.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/Layout.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/heap_guide.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/array_patterns_masterclass.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/binary_search_guide.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/dp_pattern_knapsack.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/main.jsx",
+        "target": "src/App.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/array_patterns_guide.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/tree_guide.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/dp_visualizer.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/tree_visualizer.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/heap_masterclass.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/binary_search_masterclass.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/GraphsMasterclass.jsx",
+        "weight": 1
+      },
+      {
+        "source": "src/App.jsx",
+        "target": "src/pages/topics/dp_pattern_lcs_lis.jsx",
+        "weight": 1
+      }
+    ],
     "metrics": {
       "total_files": 29,
-      "total_loc": 4195,
-      "avg_complexity": 2.12,
+      "total_loc": 4394,
+      "avg_complexity": 2.1,
       "max_complexity": 6.0,
       "languages": {
         "javascript": 2,
         "unknown": 1,
         "javascript-react": 26
       },
-      "most_connected": []
+      "most_connected": [
+        "src/App.jsx",
+        "src/pages/topics/dp_pattern_1d.jsx",
+        "src/pages/topics/dp_masterclass.jsx",
+        "src/pages/topics/TreesMasterclass.jsx",
+        "src/pages/topics/array_patterns_visualizer.jsx"
+      ]
     }
   }
 }
