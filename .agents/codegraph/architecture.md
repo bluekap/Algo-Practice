@@ -1,5 +1,5 @@
 # Architecture Index
-- Files: 29 | LOC: 4394 | Avg Cpx: 2.10 | Edges: 25
+- Files: 29 | LOC: 4382 | Avg Cpx: 2.11 | Edges: 25
 - Read order:
 1. Start with `architecture-high-level.md` to understand layers and folder boundaries.
 2. Read `architecture-layered.md` for app-layer flow (`ui`, `api`, `domain`, `infra`).
