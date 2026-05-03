@@ -64,7 +64,14 @@ Whenever you push changes to the `main` branch, a GitHub Action workflow automat
 
 ## 📸 Screenshots
 
-*(Add screenshots of your premium UI here)*
+### 🏠 Homepage — Masterclass Hub
+![Homepage showing all algorithm Masterclass cards](public/homepage_masterclass_hub.png)
+
+### 🎞️ Array Patterns Visualizer — Sliding Window
+![Step-by-step Sliding Window visualizer with live code highlighting](public/array_patterns_visualizer.png)
+
+### ⚡ DP Visual Playground — 1D State Transitions
+![Dynamic Programming visualizer showing Climbing Stairs dp array being built](public/dp_visual_playground.png)
 
 ## 📄 License & Terms
 
