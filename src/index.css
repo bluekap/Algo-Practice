@@ -507,3 +507,189 @@ pre { margin: 0; padding: 14px 18px; font-family: var(--font-code); font-size: 1
 .cheat-row:last-child { border-bottom: none; }
 .cheat-pattern { font-family: var(--font-code); font-weight: 700; font-size: 13px; min-width: 140px; }
 .cheat-desc { color: var(--text-muted-bright); font-size: 14px; line-height: 1.5; }
+
+/* ── RECURRENCE VISUALIZATION ── */
+.recurrence-viz {
+    background: #020408;
+    border: 1px solid #1e293b;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+.recurrence-viz-header {
+    padding: 8px 16px;
+    background: rgba(139, 92, 246, 0.08);
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #a78bfa;
+}
+.recurrence-viz-body {
+    padding: 16px 20px;
+    font-family: var(--font-code);
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--text-muted-bright);
+    overflow-x: auto;
+}
+.recurrence-viz-body .viz-cell {
+    display: inline-block;
+    min-width: 38px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    background: #0d1117;
+    border: 1px solid #1e293b;
+    border-radius: 6px;
+    font-weight: 600;
+    margin: 0 2px;
+    font-size: 13px;
+    color: #60a5fa;
+}
+.recurrence-viz-body .viz-cell.active {
+    background: rgba(251, 191, 36, 0.1);
+    border-color: #fbbf24;
+    color: #fbbf24;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+}
+.recurrence-viz-body .viz-cell.source {
+    background: rgba(168, 85, 247, 0.12);
+    border-color: #a855f7aa;
+    color: #c084fc;
+}
+.recurrence-viz-body .viz-cell.done {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34d399;
+}
+.recurrence-viz-body .viz-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: center;
+    display: inline-block;
+    min-width: 42px;
+    margin: 0 2px;
+}
+.recurrence-viz-body .viz-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 6px;
+    flex-wrap: nowrap;
+}
+.recurrence-viz-body .viz-arrow {
+    color: #a78bfa;
+    font-size: 13px;
+    margin: 0 4px;
+}
+.recurrence-viz-body .viz-note {
+    font-size: 11px;
+    color: #64748b;
+    font-family: var(--font-main);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #1e293b;
+}
+.recurrence-viz-body .viz-grid {
+    display: inline-grid;
+    gap: 3px;
+    margin: 8px 0;
+}
+.recurrence-viz-body .viz-header-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 24px;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* ── SOLUTION TABS (DP Table / Space Optimized) ── */
+.sol-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+    background: rgba(255, 255, 255, 0.01);
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: -1px;
+}
+.sol-tab {
+    flex: 1;
+    padding: 9px 16px;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-main);
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+.sol-tab:last-child { border-right: none; }
+.sol-tab:hover { background: rgba(255,255,255,0.04); color: var(--text-main); }
+.sol-tab.active {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+    border-bottom: 2px solid #3b82f6;
+}
+.sol-tab.active.opt {
+    background: rgba(16, 185, 129, 0.08);
+    color: #34d399;
+    border-bottom-color: #10b981;
+}
+.sol-panel {
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+.sol-panel-inner {
+    padding: 14px 16px;
+    background: #0a0f1a;
+    font-size: 13px;
+    color: var(--text-muted-bright);
+    line-height: 1.7;
+}
+.sol-panel-inner code {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: var(--font-code);
+    font-size: 12px;
+}
+.sol-panel-inner .opt-highlight {
+    display: inline-block;
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #6ee7b7;
+    font-family: var(--font-code);
+    width: 100%;
+}
+.sol-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    margin-top: 16px;
+}

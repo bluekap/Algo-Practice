@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function DpPatternKnapsack() {
+    const [activeTab, setActiveTab] = useState('dp');
+
     return (
         <div className="topic-page">
             <div className="page-header">
@@ -28,34 +30,160 @@ export default function DpPatternKnapsack() {
                             <span className="hl-blue">dp[i][w]</span> = max(<span className="hl-yellow">dp[i-1][w]</span>,  <span className="cm"># skip item i</span><br />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="hl-green">dp[i-1][w - wt[i]]</span> + val[i])  <span className="cm"># take item i</span>
                         </div>
-                        <div className="code-container">
-                            <div className="code-header">
-                                <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                <span className="code-lang">python — 0/1 knapsack template</span>
+
+                        {/* ── RECURRENCE VISUALIZATION ── */}
+                        <div className="recurrence-viz">
+                            <div className="recurrence-viz-header">
+                                <span>📊</span> Recurrence Visualization — 3 items, capacity W=4
                             </div>
-                            <pre>
-{`def knapsack(weights, values, capacity):
+                            <div className="recurrence-viz-body">
+                                {/* items: wt=[2,3,1] val=[3,4,2] */}
+                                <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '8px' }}>
+                                    Items: item1(wt=2,val=3), item2(wt=3,val=4), item3(wt=1,val=2) &nbsp;|&nbsp; Capacity W=4
+                                </div>
+                                {/* Header */}
+                                <div className="viz-row">
+                                    <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '58px' }}></span>
+                                    {['w=0','w=1','w=2','w=3','w=4'].map(h => (
+                                        <span key={h} className="viz-label" style={{ minWidth: '46px' }}>{h}</span>
+                                    ))}
+                                </div>
+                                {/* Row 0: no items */}
+                                <div className="viz-row">
+                                    <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '58px' }}>i=0 (∅)</span>
+                                    {[0,0,0,0,0].map((v,i) => <span key={i} className="viz-cell done" style={{ minWidth: '40px' }}>{v}</span>)}
+                                </div>
+                                {/* Row 1: item1 wt=2 val=3 */}
+                                <div className="viz-row">
+                                    <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '58px' }}>i=1 (2,3)</span>
+                                    <span className="viz-cell done" style={{ minWidth: '40px' }}>0</span>
+                                    <span className="viz-cell done" style={{ minWidth: '40px' }}>0</span>
+                                    <span className="viz-cell done" style={{ minWidth: '40px' }}>3</span>
+                                    <span className="viz-cell done" style={{ minWidth: '40px' }}>3</span>
+                                    <span className="viz-cell done" style={{ minWidth: '40px' }}>3</span>
+                                </div>
+                                {/* Row 2: item2 wt=3 val=4 */}
+                                <div className="viz-row">
+                                    <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '58px' }}>i=2 (3,4)</span>
+                                    <span className="viz-cell done" style={{ minWidth: '40px' }}>0</span>
+                                    <span className="viz-cell done" style={{ minWidth: '40px' }}>0</span>
+                                    <span className="viz-cell done" style={{ minWidth: '40px' }}>3</span>
+                                    <span className="viz-cell source" style={{ minWidth: '40px' }}>4</span>
+                                    <span className="viz-cell active" style={{ minWidth: '40px' }}>7</span>
+                                </div>
+                                {/* Annotation */}
+                                <div className="viz-row" style={{ marginTop: '12px', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>dp[2][4]:</span>
+                                    <span style={{ fontSize: '11px', color: '#64748b' }}>skip→</span>
+                                    <span className="viz-cell done" style={{ minWidth: '42px' }}>dp[1][4]=3</span>
+                                    <span className="viz-arrow">vs</span>
+                                    <span style={{ fontSize: '11px', color: '#64748b' }}>take→</span>
+                                    <span className="viz-cell source" style={{ minWidth: '54px' }}>dp[1][4-3]=3</span>
+                                    <span className="viz-arrow">+4</span>
+                                    <span className="viz-arrow">=</span>
+                                    <span className="viz-cell active" style={{ minWidth: '38px' }}>7 ✓</span>
+                                </div>
+                                <div className="viz-note">
+                                    🟡 <strong style={{color:'#fbbf24'}}>Yellow</strong> = current cell &nbsp;|&nbsp;
+                                    🟣 <strong style={{color:'#c084fc'}}>Purple</strong> = take-item source (w - wt) &nbsp;|&nbsp;
+                                    🟢 <strong style={{color:'#34d399'}}>Green</strong> = filled &nbsp;|&nbsp;
+                                    Fill: <strong style={{color:'#a78bfa'}}>item by item, left→right</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* ── SOLUTION TABS ── */}
+                        <div className="sol-section-label">Solutions</div>
+                        <div className="sol-tabs">
+                            <button className={`sol-tab${activeTab === 'dp' ? ' active' : ''}`} onClick={() => setActiveTab('dp')}>
+                                🗃️ DP Table — O(n×W) space
+                            </button>
+                            <button className={`sol-tab opt${activeTab === 'opt' ? ' active opt' : ''}`} onClick={() => setActiveTab('opt')}>
+                                ⚡ Space Optimized — O(W) space
+                            </button>
+                        </div>
+                        <div className="sol-panel">
+                            {activeTab === 'dp' ? (
+                                <div>
+                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
+                                        <div className="code-header">
+                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
+                                            <span className="code-lang">python — 0/1 knapsack full 2D table</span>
+                                        </div>
+                                        <pre>{`def knapsack(weights, values, capacity):
     n = len(weights)
+    # dp[i][w] = max value using first i items, capacity w
     dp = [[0] * (capacity + 1) for _ in range(n + 1)]
+
     for i in range(1, n + 1):
         for w in range(capacity + 1):
-            dp[i][w] = dp[i-1][w]  # skip
+            # Choice 1: skip item i
+            dp[i][w] = dp[i-1][w]
+            # Choice 2: take item i (if it fits)
             if weights[i-1] <= w:
                 dp[i][w] = max(dp[i][w],
                     dp[i-1][w - weights[i-1]] + values[i-1])
+
     return dp[n][capacity]
 
-# Coin Change variant (unbounded — item reuse allowed):
+# Partition Equal Subset Sum (0/1 knapsack variant):
+def canPartition(nums):
+    total = sum(nums)
+    if total % 2: return False
+    target = total // 2
+    dp = [[False]*(target+1) for _ in range(len(nums)+1)]
+    for i in range(len(nums)+1): dp[i][0] = True
+    for i in range(1, len(nums)+1):
+        for w in range(1, target+1):
+            dp[i][w] = dp[i-1][w]
+            if nums[i-1] <= w:
+                dp[i][w] = dp[i][w] or dp[i-1][w - nums[i-1]]
+    return dp[len(nums)][target]`}</pre>
+                                    </div>
+                                    <div className="sol-panel-inner">
+                                        <strong>Why this works:</strong> Row <code>i</code> is built entirely from row <code>i-1</code> (the previous item). We never modify earlier rows — every skip/take decision is independent per item.
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
+                                        <div className="code-header">
+                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
+                                            <span className="code-lang">python — 1D reverse traversal O(W) space</span>
+                                        </div>
+                                        <pre>{`def knapsack(weights, values, capacity):
+    # Collapse 2D table to 1D by processing w RIGHT-TO-LEFT.
+    # Why reverse? If we went left→right, dp[w - wt] would
+    # already be updated for item i, letting us "take" the
+    # same item twice (unbounded knapsack bug!).
+    # Going right→left ensures dp[w - wt] is still item i-1's value.
+
+    dp = [0] * (capacity + 1)
+
+    for i in range(len(weights)):
+        for w in range(capacity, weights[i] - 1, -1):  # ← reverse!
+            dp[w] = max(dp[w],
+                        dp[w - weights[i]] + values[i])
+
+    return dp[capacity]
+
+# Unbounded knapsack (item reuse OK) — go LEFT-TO-RIGHT:
 def coinChange(coins, amount):
     dp = [float('inf')] * (amount + 1)
     dp[0] = 0
     for coin in coins:
-        for w in range(coin, amount + 1):
+        for w in range(coin, amount + 1):  # ← forward, reuse allowed
             dp[w] = min(dp[w], dp[w - coin] + 1)
-    return dp[amount] if dp[amount] != float('inf') else -1`}
-                            </pre>
+    return dp[amount] if dp[amount] != float('inf') else -1`}</pre>
+                                    </div>
+                                    <div className="sol-panel-inner">
+                                        <strong>Critical Insight — Reverse Traversal:</strong> In 0/1 knapsack, each item can only be used once. If we updated <code>dp[w]</code> left-to-right, then when computing <code>dp[w]</code>, <code>dp[w - wt]</code> would already reflect item <code>i</code> being added — allowing it to be "taken twice." Going <strong>right-to-left</strong> guarantees we always read from the <em>previous item's</em> state.
+                                        <div className="opt-highlight">🟢 Space: O(n×W) → <strong>O(W)</strong> &nbsp;|&nbsp; 0/1 = reverse loop &nbsp;|&nbsp; Unbounded = forward loop</div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                        
+
                         <div className="example-box">
                             <h3>
                                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
