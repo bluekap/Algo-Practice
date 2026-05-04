@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CodeBlock from '../../components/CodeBlock';
 
 export default function DpPatternInterval() {
     const [activeTab, setActiveTab] = useState('dp');
@@ -107,12 +108,10 @@ export default function DpPatternInterval() {
                         <div className="sol-panel">
                             {activeTab === 'dp' ? (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — interval DP (burst balloons)</span>
-                                        </div>
-                                        <pre>{`def maxCoins(nums):
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — interval DP (burst balloons)"
+                                        code={`def maxCoins(nums):
     nums = [1] + nums + [1]   # pad boundaries
     n = len(nums)
     # dp[i][j] = max coins from bursting all balloons in (i, j)
@@ -140,20 +139,18 @@ def longestPalindromeSubseq(s):
                 dp[i][j] = dp[i+1][j-1] + 2
             else:
                 dp[i][j] = max(dp[i+1][j], dp[i][j-1])
-    return dp[0][n-1]`}</pre>
-                                    </div>
+    return dp[0][n-1]`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>Why iterate by length?</strong> <code>dp[i][j]</code> depends on <code>dp[i][k]</code> and <code>dp[k+1][j]</code> which are <em>shorter</em> intervals. By solving smaller intervals first, all dependencies are ready when we need them.
                                     </div>
                                 </div>
                             ) : (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — LPS space optimized O(n) with two rolling rows</span>
-                                        </div>
-                                        <pre>{`# NOTE: General interval DP (Burst Balloons, Matrix Chain)
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — LPS space optimized O(n) with two rolling rows"
+                                        code={`# NOTE: General interval DP (Burst Balloons, Matrix Chain)
 # cannot be trivially space-optimized because dp[i][j] may
 # depend on non-adjacent rows/cols.
 #
@@ -177,8 +174,8 @@ def longestPalindromeSubseq(s):
                               curr[j-1])     # dp[i][j-1]
         prev, curr = curr, [0] * n          # roll the row
 
-    return prev[n-1]`}</pre>
-                                    </div>
+    return prev[n-1]`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>Why LPS can be optimized but Burst Balloons cannot:</strong> LPS's recurrence <code>dp[i][j]</code> only uses the row directly below (<code>i+1</code>) and values to the left in the same row. This "L-shaped" dependency means two rows suffice. Burst Balloons uses an arbitrary split point <code>k</code>, creating cross-row dependencies that prevent simple rolling.
                                         <div className="opt-highlight">🟢 LPS: O(n²) → <strong>O(n)</strong> with two rows &nbsp;|&nbsp; Burst Balloons stays O(n²)</div>

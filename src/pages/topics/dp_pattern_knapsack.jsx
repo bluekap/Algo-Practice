@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CodeBlock from '../../components/CodeBlock';
 
 export default function DpPatternKnapsack() {
     const [activeTab, setActiveTab] = useState('dp');
@@ -121,12 +122,10 @@ export default function DpPatternKnapsack() {
                         <div className="sol-panel">
                             {activeTab === 'dp' ? (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — 0/1 knapsack full 2D table</span>
-                                        </div>
-                                        <pre>{`def knapsack(weights, values, capacity):
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — 0/1 knapsack full 2D table"
+                                        code={`def knapsack(weights, values, capacity):
     n = len(weights)
     # dp[i][w] = max value using first i items, capacity w
     dp = [[0] * (capacity + 1) for _ in range(n + 1)]
@@ -154,20 +153,18 @@ def canPartition(nums):
             dp[i][w] = dp[i-1][w]
             if nums[i-1] <= w:
                 dp[i][w] = dp[i][w] or dp[i-1][w - nums[i-1]]
-    return dp[len(nums)][target]`}</pre>
-                                    </div>
+    return dp[len(nums)][target]`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>Why this works:</strong> Row <code>i</code> is built entirely from row <code>i-1</code> (the previous item). We never modify earlier rows — every skip/take decision is independent per item.
                                     </div>
                                 </div>
                             ) : (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — 1D reverse traversal O(W) space</span>
-                                        </div>
-                                        <pre>{`def knapsack(weights, values, capacity):
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — 1D reverse traversal O(W) space"
+                                        code={`def knapsack(weights, values, capacity):
     # Collapse 2D table to 1D by processing w RIGHT-TO-LEFT.
     # Why reverse? If we went left→right, dp[w - wt] would
     # already be updated for item i, letting us "take" the
@@ -190,8 +187,8 @@ def coinChange(coins, amount):
     for coin in coins:
         for w in range(coin, amount + 1):  # ← forward, reuse allowed
             dp[w] = min(dp[w], dp[w - coin] + 1)
-    return dp[amount] if dp[amount] != float('inf') else -1`}</pre>
-                                    </div>
+    return dp[amount] if dp[amount] != float('inf') else -1`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>Critical Insight — Reverse Traversal:</strong> In 0/1 knapsack, each item can only be used once. If we updated <code>dp[w]</code> left-to-right, then when computing <code>dp[w]</code>, <code>dp[w - wt]</code> would already reflect item <code>i</code> being added — allowing it to be "taken twice." Going <strong>right-to-left</strong> guarantees we always read from the <em>previous item's</em> state.
                                         <div className="opt-highlight">🟢 Space: O(n×W) → <strong>O(W)</strong> &nbsp;|&nbsp; 0/1 = reverse loop &nbsp;|&nbsp; Unbounded = forward loop</div>

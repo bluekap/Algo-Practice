@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CodeBlock from '../../components/CodeBlock';
 
 export default function DpPattern1d() {
     const [activeTab, setActiveTab] = useState('dp');
@@ -120,13 +121,10 @@ export default function DpPattern1d() {
                         <div className="sol-panel">
                             {activeTab === 'dp' ? (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — 1D DP table (climbing stairs)</span>
-                                        </div>
-                                        <pre>
-{`def climbStairs(n):
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — 1D DP table (climbing stairs)"
+                                        code={`def climbStairs(n):
     # Step 1: dp[i] = number of ways to reach step i
     # Step 2: recurrence — take 1 step OR take 2 steps
     #         dp[i] = dp[i-1] + dp[i-2]
@@ -152,22 +150,18 @@ def rob(nums):
     for i in range(2, n):
         dp[i] = max(dp[i-1],          # skip house i
                     dp[i-2] + nums[i]) # rob house i
-    return dp[n-1]`}
-                                        </pre>
-                                    </div>
+    return dp[n-1]`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>Why this works:</strong> Each cell only depends on the 1–2 cells before it. The table fills strictly left→right, so all dependencies are already solved when we reach index <code>i</code>.
                                     </div>
                                 </div>
                             ) : (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — space optimized O(1)</span>
-                                        </div>
-                                        <pre>
-{`def climbStairs(n):
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — space optimized O(1)"
+                                        code={`def climbStairs(n):
     # Step 5: optimize space
     # We only ever need dp[i-1] and dp[i-2].
     # Drop the array — use two rolling variables instead.
@@ -182,9 +176,8 @@ def rob(nums):
     prev2, prev1 = 0, 0
     for num in nums:
         prev2, prev1 = prev1, max(prev1, prev2 + num)
-    return prev1`}
-                                        </pre>
-                                    </div>
+    return prev1`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>Key Insight:</strong> Because the recurrence only looks back at a <em>fixed window</em> of 2 cells, the entire O(n) array is redundant. We only need to track <code>dp[i-1]</code> and <code>dp[i-2]</code> as two variables that "roll" forward each iteration.
                                         <div className="opt-highlight">

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CodeBlock from '../../components/CodeBlock';
 
 export default function DpPatternLcsLis() {
     const [activeTab, setActiveTab] = useState('dp');
@@ -145,12 +146,10 @@ export default function DpPatternLcsLis() {
                         <div className="sol-panel">
                             {activeTab === 'dp' ? (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — LCS O(m×n) + LIS O(n²)</span>
-                                        </div>
-                                        <pre>{`def lcs(s1, s2):
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — LCS O(m×n) + LIS O(n²)"
+                                        code={`def lcs(s1, s2):
     m, n = len(s1), len(s2)
     # dp[i][j] = LCS length of s1[:i] and s2[:j]
     dp = [[0]*(n+1) for _ in range(m+1)]
@@ -171,8 +170,8 @@ def lis(nums):  # O(n²) — intuitive version
         for j in range(i):
             if nums[j] < nums[i]:       # can extend
                 dp[i] = max(dp[i], dp[j] + 1)
-    return max(dp)`}</pre>
-                                    </div>
+    return max(dp)`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>LCS:</strong> Match → diagonal (both chars consumed). No match → take max of skipping one char from either sequence. The grid fills left-to-right, top-to-bottom.<br /><br />
                                         <strong>LIS:</strong> <code>dp[i]</code> is always at least 1 (just the element itself). We extend it by looking at every valid predecessor <code>j</code> where <code>nums[j] &lt; nums[i]</code>.
@@ -180,12 +179,10 @@ def lis(nums):  # O(n²) — intuitive version
                                 </div>
                             ) : (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — LCS O(n) rolling rows + LIS O(n log n) patience sort</span>
-                                        </div>
-                                        <pre>{`# ── LCS: Two Rolling Rows ──────────────────────────────
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — LCS O(n) rolling rows + LIS O(n log n) patience sort"
+                                        code={`# ── LCS: Two Rolling Rows ──────────────────────────────
 # dp[i][j] only needs the row above (dp[i-1]).
 # Replace the full 2D table with two 1D arrays.
 
@@ -220,8 +217,8 @@ def lis(nums):
         else:
             tails[pos] = num    # replace to keep tails minimal
     return len(tails)
-    # Note: tails is NOT the actual LIS, just tracks lengths!`}</pre>
-                                    </div>
+    # Note: tails is NOT the actual LIS, just tracks lengths!`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>LCS rolling rows:</strong> <code>dp[i][j]</code> only reads from <code>dp[i-1][j]</code> (above) and <code>dp[i][j-1]</code> (left). Two rows suffice — swap them after each outer loop iteration.<br /><br />
                                         <strong>LIS patience sort:</strong> The key insight is that we don't need to track exact sequences — only the <em>minimum possible tail</em> for each LIS length. A smaller tail gives more future extension options. Binary search makes each element O(log n).

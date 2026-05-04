@@ -155,15 +155,54 @@ body {
 }
 
 /* ── CODE BLOCKS ── */
-.code-container { background: var(--code-bg); border: 1px solid #1a2436; border-radius: 8px; overflow: hidden; }
-.code-header { padding: 7px 13px; border-bottom: 1px solid #1a2436; display: flex; align-items: center; gap: 7px; }
-.dots { display: flex; gap: 5px; }
-.dot { width: 9px; height: 9px; border-radius: 50%; }
-.dot.red { background: #ef4444; }
-.dot.yellow { background: #f59e0b; }
-.dot.green { background: #22c55e; }
-.code-lang { font-size: 10px; color: #374151; letter-spacing: 0.08em; margin-left: 4px; }
-pre { margin: 0; padding: 14px 18px; font-family: var(--font-code); font-size: 12px; line-height: 1.75; overflow-x: auto; color: #93c5fd; }
+.code-container { 
+    background: #020408; 
+    border: 1px solid #1a2436; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin: 16px 0;
+}
+.code-header { 
+    padding: 10px 16px; 
+    border-bottom: 1px solid #1a2436; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px;
+    background: rgba(255,255,255,0.02);
+}
+.dots { display: flex; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.red { background: #ff5f56; }
+.dot.yellow { background: #ffbd2e; }
+.dot.green { background: #27c93f; }
+.code-lang { 
+    font-size: 11px; 
+    color: var(--text-muted-bright); 
+    letter-spacing: 0.05em; 
+    font-weight: 600;
+    text-transform: uppercase;
+}
+pre { 
+    margin: 0; 
+    padding: 20px; 
+    font-family: var(--font-code); 
+    font-size: 13px; 
+    line-height: 1.6; 
+    overflow-x: auto; 
+    color: #e2e8f0;
+    background: transparent !important; /* Let highlight.js handle it or stay dark */
+}
+
+/* Custom Syntax Highlighting classes (for manual spans) */
+.kw { color: #ff7b72; font-weight: 600; } /* Keyword */
+.hl-purple { color: #d2a8ff; font-weight: 600; }
+.hl-blue { color: #79c0ff; font-weight: 600; }
+.hl-yellow { color: #e3b341; font-weight: 600; }
+.hl-green { color: #7ee787; font-weight: 600; }
+.hl { color: #79c0ff; } /* Number / Constant */
+.st { color: #a5d6ff; } /* String */
+.cm { color: #8b949e; font-style: italic; } /* Comment */
 
 /* ── PROBLEM TAGS ── */
 .problems-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
@@ -347,7 +386,7 @@ pre { margin: 0; padding: 14px 18px; font-family: var(--font-code); font-size: 1
     padding: 1px 16px;
     font-size: 12px;
     line-height: 1.6;
-    color: #94a3b8;
+    color: #cbd5e1; /* Lighter slate for better contrast */
     transition: all 0.1s;
 }
 .code-line.active {

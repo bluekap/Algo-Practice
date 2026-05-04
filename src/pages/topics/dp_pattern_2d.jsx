@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CodeBlock from '../../components/CodeBlock';
 
 export default function DpPattern2d() {
     const [activeTab, setActiveTab] = useState('dp');
@@ -107,12 +108,10 @@ export default function DpPattern2d() {
                         <div className="sol-panel">
                             {activeTab === 'dp' ? (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — full 2D DP table</span>
-                                        </div>
-                                        <pre>{`def uniquePaths(m, n):
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — full 2D DP table"
+                                        code={`def uniquePaths(m, n):
     dp = [[0] * n for _ in range(m)]
     for j in range(n): dp[0][j] = 1  # base: first row
     for i in range(m): dp[i][0] = 1  # base: first col
@@ -130,20 +129,18 @@ def minPathSum(grid):
     for i in range(1, m):
         for j in range(1, n):
             dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])
-    return dp[m-1][n-1]`}</pre>
-                                    </div>
+    return dp[m-1][n-1]`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>Why this works:</strong> Every cell <code>(i,j)</code> only depends on <code>(i-1,j)</code> above and <code>(i,j-1)</code> to the left. Filling row-by-row guarantees both are already solved.
                                     </div>
                                 </div>
                             ) : (
                                 <div>
-                                    <div className="code-container" style={{ borderRadius: '0', border: 'none' }}>
-                                        <div className="code-header">
-                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                            <span className="code-lang">python — 1D rolling row O(n) space</span>
-                                        </div>
-                                        <pre>{`def uniquePaths(m, n):
+                                    <CodeBlock 
+                                        language="python"
+                                        title="python — 1D rolling row O(n) space"
+                                        code={`def uniquePaths(m, n):
     # Only need ONE row at a time — overwrite in place.
     # dp[j] starts as prev-row value (from above),
     # then gets updated to current row's value.
@@ -163,8 +160,8 @@ def minPathSum(grid):
         dp[0] += grid[i][0]
         for j in range(1, n):
             dp[j] = grid[i][j] + min(dp[j], dp[j-1])
-    return dp[n-1]`}</pre>
-                                    </div>
+    return dp[n-1]`} 
+                                    />
                                     <div className="sol-panel-inner">
                                         <strong>Key Insight:</strong> When processing row <code>i</code>, row <code>i-1</code> is the only prior row needed. We can overwrite it in-place — <code>dp[j]</code> holds the old (top) value until we update it.
                                         <div className="opt-highlight">🟢 Space: O(m×n) → <strong>O(n)</strong> — only keep one row in memory</div>

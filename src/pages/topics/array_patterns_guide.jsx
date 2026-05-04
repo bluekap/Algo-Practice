@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CodeBlock from '../../components/CodeBlock';
 
 export default function ArrayPatternsGuide() {
     const [quizSelection, setQuizSelection] = useState(null);
@@ -73,40 +74,32 @@ export default function ArrayPatternsGuide() {
                     </div>
                     <div className="section-card-body">
                         <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>Sliding Window (Variable Size)</p>
-                        <div className="code-container border-sw">
-                            <div className="code-header">
-                                <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                <span className="code-lang">python</span>
-                            </div>
-                            <pre>
-<span className="kw">def</span> variable_window(nums):{"\n"}
-{"    "}left = <span className="hl">0</span>{"\n"}
-{"    "}state = <span className="st">{"{}"}</span>   <span className="cm"># Track your condition</span>{"\n"}
-{"    "}best = <span className="hl">0</span>    <span className="cm"># Track best result</span>{"\n"}
-{"    "}<span className="kw">for</span> right <span className="kw">in</span> range(<span className="hl">len</span>(nums)):{"\n"}
-{"        "}<span className="cm"># add nums[right] to state</span>{"\n"}
-{"        "}<span className="kw">while</span> <span className="cm">condition is broken</span>:{"\n"}
-{"            "}<span className="cm"># remove nums[left] from state</span>{"\n"}
-{"            "}left += <span className="hl">1</span>{"\n"}
-{"        "}best = <span className="hl">max</span>(best, right - left + <span className="hl">1</span>){"\n"}
-{"    "}<span className="kw">return</span> best</pre>
-                        </div>
+                        <CodeBlock 
+                            language="python"
+                            code={`def variable_window(nums):
+    left = 0
+    state = {}   # Track your condition
+    best = 0    # Track best result
+    for right in range(len(nums)):
+        # add nums[right] to state
+        while condition is broken:
+            # remove nums[left] from state
+            left += 1
+        best = max(best, right - left + 1)
+    return best`} 
+                        />
 
                         <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px', marginTop: '20px' }}>Two Pointers (Inward)</p>
-                        <div className="code-container border-tp">
-                            <div className="code-header">
-                                <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                <span className="code-lang">python</span>
-                            </div>
-                            <pre>
-<span className="kw">def</span> two_pointers_inward(nums, target):{"\n"}
-{"    "}left, right = <span className="hl">0</span>, <span className="hl">len</span>(nums) - <span className="hl">1</span>{"\n"}
-{"    "}<span className="kw">while</span> left &lt; right:{"\n"}
-{"        "}curr = nums[left] + nums[right]{"\n"}
-{"        "}<span className="kw">if</span> curr == target: <span className="kw">return</span> [left, right]{"\n"}
-{"        "}<span className="kw">elif</span> curr &lt; target: left += <span className="hl">1</span>{"\n"}
-{"        "}<span className="kw">else</span>: right -= <span className="hl">1</span></pre>
-                        </div>
+                        <CodeBlock 
+                            language="python"
+                            code={`def two_pointers_inward(nums, target):
+    left, right = 0, len(nums) - 1
+    while left < right:
+        curr = nums[left] + nums[right]
+        if curr == target: return [left, right]
+        elif curr < target: left += 1
+        else: right -= 1`} 
+                        />
                     </div>
                 </div>
 
@@ -118,66 +111,58 @@ export default function ArrayPatternsGuide() {
                     </div>
                     <div className="section-card-body">
                         <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>3Sum (Application of Two Pointers)</p>
-                        <div className="code-container border-tp">
-                            <div className="code-header">
-                                <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                <span className="code-lang">python</span>
-                            </div>
-                            <pre>
-<span className="kw">def</span> three_sum(nums, target):{"\n"}
-{"    "}nums.sort(){"\n"}
-{"    "}res = <span className="st">[]</span>{"\n"}
-{"    "}<span className="kw">for</span> i <span className="kw">in</span> range(<span className="hl">len</span>(nums) - <span className="hl">2</span>):{"\n"}
-{"        "}<span className="kw">if</span> i &gt; <span className="hl">0</span> <span className="kw">and</span> nums[i] == nums[i-<span className="hl">1</span>]: <span className="kw">continue</span>{"\n"}
-{"        "}l, r = i + <span className="hl">1</span>, <span className="hl">len</span>(nums) - <span className="hl">1</span>{"\n"}
-{"        "}<span className="kw">while</span> l &lt; r:{"\n"}
-{"            "}curr = nums[i] + nums[l] + nums[r]{"\n"}
-{"            "}<span className="kw">if</span> curr == target:{"\n"}
-{"                "}res.append([nums[i], nums[l], nums[r]]){"\n"}
-{"                "}<span className="kw">while</span> l &lt; r <span className="kw">and</span> nums[l] == nums[l+<span className="hl">1</span>]: l += <span className="hl">1</span>{"\n"}
-{"                "}<span className="kw">while</span> l &lt; r <span className="kw">and</span> nums[r] == nums[r-<span className="hl">1</span>]: r -= <span className="hl">1</span>{"\n"}
-{"                "}l += <span className="hl">1</span>; r -= <span className="hl">1</span>{"\n"}
-{"            "}<span className="kw">elif</span> curr &lt; target: l += <span className="hl">1</span>{"\n"}
-{"            "}<span className="kw">else</span>: r -= <span className="hl">1</span>{"\n"}
-{"    "}<span className="kw">return</span> res</pre>
-                        </div>
+                        <CodeBlock 
+                            language="python"
+                            code={`def three_sum(nums, target):
+    nums.sort()
+    res = []
+    for i in range(len(nums) - 2):
+        if i > 0 and nums[i] == nums[i-1]: continue
+        l, r = i + 1, len(nums) - 1
+        while l < r:
+            curr = nums[i] + nums[l] + nums[r]
+            if curr == target:
+                res.append([nums[i], nums[l], nums[r]])
+                while l < r and nums[l] == nums[l+1]: l += 1
+                while l < r and nums[r] == nums[r-1]: r -= 1
+                l += 1; r -= 1
+            elif curr < target: l += 1
+            else: r -= 1
+    return res`} 
+                        />
 
                         <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px', marginTop: '20px' }}>Generalized K-Sum (Recursive)</p>
-                        <div className="code-container border-ps">
-                            <div className="code-header">
-                                <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                <span className="code-lang">python</span>
-                            </div>
-                            <pre>
-<span className="kw">def</span> KSum(nums, target, k):{"\n"}
-{"    "}nums.sort(){"\n"}
-{"    "}result = <span className="st">[]</span>{"\n"}
-{"\n"}
-{"    "}<span className="kw">def</span> recurse(nums, target, k, tmp):{"\n"}
-{"        "}<span className="kw">if</span> k == <span className="hl">2</span>:{"\n"}
-{"            "}<span className="kw">return</span> twosum(nums, target, tmp){"\n"}
-{"        "}{"\n"}
-{"        "}avg = target // k{"\n"}
-{"        "}<span className="kw">if</span> nums[<span className="hl">0</span>] &gt; avg <span className="kw">or</span> nums[-<span className="hl">1</span>] &lt; avg: <span className="kw">return</span>{"\n"}
-{"\n"}
-{"        "}<span className="kw">for</span> i <span className="kw">in</span> range(<span className="hl">len</span>(nums)):{"\n"}
-{"            "}<span className="kw">if</span> i &gt; <span className="hl">0</span> <span className="kw">and</span> nums[i] == nums[i-<span className="hl">1</span>]: <span className="kw">continue</span>{"\n"}
-{"            "}recurse(nums[i+<span className="hl">1</span>:], target - nums[i], k-<span className="hl">1</span>, tmp + [nums[i]]){"\n"}
-{"\n"}
-{"    "}<span className="kw">def</span> twosum(nums, target, tmp):{"\n"}
-{"        "}l, r = <span className="hl">0</span>, <span className="hl">len</span>(nums) - <span className="hl">1</span>{"\n"}
-{"        "}<span className="kw">while</span> l &lt; r:{"\n"}
-{"            "}s = nums[l] + nums[r]{"\n"}
-{"            "}<span className="kw">if</span> s == target:{"\n"}
-{"                "}result.append(tmp + [nums[l], nums[r]]){"\n"}
-{"                "}l += <span className="hl">1</span>{"\n"}
-{"                "}<span className="kw">while</span> l &lt; r <span className="kw">and</span> nums[l] == nums[l-<span className="hl">1</span>]: l += <span className="hl">1</span>{"\n"}
-{"            "}<span className="kw">elif</span> s &lt; target: l += <span className="hl">1</span>{"\n"}
-{"            "}<span className="kw">else</span>: r -= <span className="hl">1</span>{"\n"}
-{"            "}{"\n"}
-{"    "}recurse(nums, target, k, <span className="st">[]</span>){"\n"}
-{"    "}<span className="kw">return</span> result</pre>
-                        </div>
+                        <CodeBlock 
+                            language="python"
+                            code={`def KSum(nums, target, k):
+    nums.sort()
+    result = []
+
+    def recurse(nums, target, k, tmp):
+        if k == 2:
+            return twosum(nums, target, tmp)
+        
+        avg = target // k
+        if nums[0] > avg or nums[-1] < avg: return
+
+        for i in range(len(nums)):
+            if i > 0 and nums[i] == nums[i-1]: continue
+            recurse(nums[i+1:], target - nums[i], k-1, tmp + [nums[i]])
+
+    def twosum(nums, target, tmp):
+        l, r = 0, len(nums) - 1
+        while l < r:
+            s = nums[l] + nums[r]
+            if s == target:
+                result.append(tmp + [nums[l], nums[r]])
+                l += 1
+                while l < r and nums[l] == nums[l-1]: l += 1
+            elif s < target: l += 1
+            else: r -= 1
+            
+    recurse(nums, target, k, [])
+    return result`} 
+                        />
                     </div>
                 </div>
 
