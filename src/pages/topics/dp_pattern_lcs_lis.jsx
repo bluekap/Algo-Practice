@@ -237,13 +237,42 @@ def lis(nums):
                             <div className="pitfall-item"><code>tails[]</code> in patience sort is NOT the actual LIS — it's a bookkeeping structure. To reconstruct the real sequence you need a separate parent-tracking array.</div>
                             <div className="pitfall-item">Verify the problem's inequality: strictly increasing uses <code>bisect_left</code> (replaces equal values); non-decreasing uses <code>bisect_right</code> (allows equal values to extend).</div>
                         </div>
+                        {/* ── DP RECOGNITION + FRAMEWORK ── */}
+                        <div className="pitfalls-card" style={{ borderLeft: '3px solid #c084fc', marginBottom: '16px' }}>
+                            <div className="pitfalls-header" style={{ color: '#c084fc' }}>🧠 Realizing This Is a DP Problem</div>
+                            <div className="pitfall-item">
+                                LIS has two classic DP signals: <strong>(1)</strong> the question asks for a <em>maximum</em> (longest subsequence length), and <strong>(2)</strong> each decision—whether to include the current element—depends on prior decisions. For example, with <code>nums = [5, 6, 7, 8, 1, 2, 3]</code>, including <code>1</code>, <code>2</code>, or <code>3</code> would eliminate <code>5, 6, 7, 8</code> which form the optimal subsequence. DP lets us evaluate each element's contribution without committing greedily.
+                            </div>
+                        </div>
+
+                        <div className="pitfalls-card" style={{ borderLeft: '3px solid #818cf8', marginBottom: '16px' }}>
+                            <div className="pitfalls-header" style={{ color: '#818cf8' }}>⚙️ Three-Component DP Framework</div>
+                            <div className="pitfall-item">
+                                <strong>① State (dp array):</strong> <code>dp[i]</code> = length of the longest increasing subsequence that ends with the element at index <code>i</code>. The state is 1-D — fully described by a single index.
+                            </div>
+                            <div className="pitfall-item">
+                                <strong>② Recurrence (transition):</strong> For each index <code>i</code>, scan every <code>j &lt; i</code>. If <code>nums[j] &lt; nums[i]</code>, we can append <code>nums[i]</code> to the LIS ending at <code>j</code>:<br />
+                                <code style={{ display: 'block', marginTop: '6px', padding: '6px 10px', background: 'rgba(129,140,248,0.08)', borderRadius: '6px', color: '#a5b4fc' }}>dp[i] = max(dp[j] + 1)  for all j where nums[j] &lt; nums[i] and j &lt; i</code>
+                            </div>
+                            <div className="pitfall-item">
+                                <strong>③ Base Case:</strong> Initialize every <code>dp[i] = 1</code>, because each element is itself an increasing subsequence of length 1.
+                            </div>
+                        </div>
+
                         <div className="example-box">
                             <h3>
                                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 Example Case: 300. Longest Increasing Subsequence
                             </h3>
                             <p style={{ marginBottom: '8px' }}><strong>Problem:</strong> Return the length of the longest strictly increasing subsequence.</p>
-                            <p><strong>Explanation:</strong> Let <code>dp[i]</code> be the max LIS ending exactly at index <code>i</code>. Initialize <code>dp = [1, 1, ..., 1]</code>. For every <code>i</code>, scan preceding <code>j</code>. If <code>nums[j] &lt; nums[i]</code>, <code>dp[i] = max(dp[i], dp[j] + 1)</code>.</p>
+                            <p style={{ marginBottom: '8px' }}><strong>Algorithm:</strong></p>
+                            <ol style={{ margin: '0 0 10px 18px', lineHeight: '1.8', color: 'var(--text-muted-bright)', fontSize: '13.5px' }}>
+                                <li>Initialize <code>dp</code> with length <code>nums.length</code>, all elements set to <code>1</code>.</li>
+                                <li>Iterate <code>i</code> from <code>1</code> to <code>n-1</code>. For each <code>i</code>, iterate <code>j</code> from <code>0</code> to <code>i-1</code>.</li>
+                                <li>If <code>nums[j] &lt; nums[i]</code>, set <code>dp[i] = max(dp[i], dp[j] + 1)</code>.</li>
+                                <li>Return <code>max(dp)</code> — the answer may end at any index.</li>
+                            </ol>
+                            <p><strong>Key insight:</strong> Let <code>dp[i]</code> be the max LIS length ending exactly at index <code>i</code>. We maximize over all valid predecessors <code>j</code>, then take the global max across the entire array.</p>
                         </div>
 
                         <div style={{ marginTop: '24px', fontSize: '14px', fontWeight: 600, color: 'var(--text-muted-bright)' }}>Essential Problem Set</div>
