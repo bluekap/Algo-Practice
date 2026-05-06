@@ -215,6 +215,17 @@ export default function LivePythonVisualizer() {
         let hiddenVars = [];
         if (hideInternals) {
             hiddenVars.push('self', '_sol', '_result');
+
+            // Auto-hide imports
+            const importRegex = /^(?:import\s+([\w\s,]+)|from\s+[\w.]+\s+import\s+([\w\s,]+))/gm;
+            let m;
+            while ((m = importRegex.exec(code)) !== null) {
+                const names = (m[1] || m[2]).split(',');
+                names.forEach(name => {
+                    const trimmed = name.trim().split(/\s+as\s+/).pop().trim();
+                    if (trimmed && !hiddenVars.includes(trimmed)) hiddenVars.push(trimmed);
+                });
+            }
         }
 
         // Detect custom # hide: var1, var2 comments
@@ -286,7 +297,7 @@ export default function LivePythonVisualizer() {
                                     onChange={(e) => setHideInternals(e.target.checked)}
                                     style={{ accentColor: '#a78bfa', width: '16px', height: '16px', cursor: 'pointer' }}
                                 />
-                                <span>Clean Mode (Hide self, _sol)</span>
+                                <span>Clean Mode (Hide self, imports)</span>
                             </label>
                             <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0', lineHeight: '1.4' }}>
                                 Tip: Use <code style={{ color: '#a78bfa' }}># hide: var_name</code> in code to hide any variable or field.
