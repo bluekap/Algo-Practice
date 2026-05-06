@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CodeBlock from '../../components/CodeBlock';
 
 export default function BinarySearchGuide() {
     return (
@@ -33,22 +34,18 @@ export default function BinarySearchGuide() {
                             &nbsp;&nbsp;&nbsp;&nbsp;right = mid - 1 &nbsp;<span className="cm"># target is to the left → move right <span className="highlight-down">DOWN</span></span>
                         </div>
 
-                        <div className="code-container">
-                            <div className="code-header">
-                                <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                <span className="code-lang">python</span>
-                            </div>
-                            <pre>
-<span className="kw">while</span> left &lt;= right:{"\n"}
-{"    "}mid = (left + right) // 2{"\n"}
-{"    "}<span className="kw">if</span> nums[mid] == target:{"\n"}
-{"        "}<span className="kw">return</span> mid{"\n"}
-{"    "}<span className="kw">elif</span> nums[mid] &lt; target:{"\n"}
-{"        "}left = mid + 1{"\n"}
-{"    "}<span className="kw">else</span>:{"\n"}
-{"        "}right = mid - 1{"\n"}
-<span className="kw">return</span> -1</pre>
-                        </div>
+                        <CodeBlock 
+                            language="python"
+                            code={`while left <= right:
+    mid = (left + right) // 2
+    if nums[mid] == target:
+        return mid
+    elif nums[mid] < target:
+        left = mid + 1
+    else:
+        right = mid - 1
+return -1`} 
+                        />
                     </div>
                 </div>
 
@@ -63,20 +60,16 @@ export default function BinarySearchGuide() {
                             <strong>Mental Model:</strong> We are looking for the <em>first</em> element that satisfies a condition (a boundary). When we find it, it <em>could</em> be the answer, so we keep it in our search space (<code style={{ fontFamily: 'var(--font-code)', color: '#93c5fd', background: 'rgba(255,255,255,0.04)', padding: '1px 4px', borderRadius: '3px' }}>right = mid</code>). We don't stop until <code style={{ fontFamily: 'var(--font-code)', color: '#93c5fd', background: 'rgba(255,255,255,0.04)', padding: '1px 4px', borderRadius: '3px' }}>left == right</code>.
                         </div>
 
-                        <div className="code-container">
-                            <div className="code-header">
-                                <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                <span className="code-lang">python</span>
-                            </div>
-                            <pre>
-<span className="kw">while</span> left &lt; right:{"\n"}
-{"    "}mid = (left + right) // 2{"\n"}
-{"    "}<span className="kw">if</span> some_condition:{"\n"}
-{"        "}right = mid{"\n"}
-{"    "}<span className="kw">else</span>:{"\n"}
-{"        "}left = mid + 1{"\n"}
-<span className="kw">return</span> nums[left]</pre>
-                        </div>
+                        <CodeBlock 
+                            language="python"
+                            code={`while left < right:
+    mid = (left + right) // 2
+    if some_condition:
+        right = mid
+    else:
+        left = mid + 1
+return nums[left]`} 
+                        />
                     </div>
                 </div>
 

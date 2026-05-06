@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 
 const DEFAULT_CODE = `class Solution:
     def isPalindrome(self, s: str) -> bool:
-        # Pointers matching pattern
+        # Tip: Use "# hide: var_name" to declutter the visualization!
+        # hide: s
+        
         left, right = 0, len(s) - 1
         
         while left < right:
@@ -30,6 +32,7 @@ export default function LivePythonVisualizer() {
     const [iframeUrl, setIframeUrl] = useState(null);
     const [isExecuting, setIsExecuting] = useState(false);
     const [mode, setMode] = useState('leetcode'); // 'leetcode' or 'script'
+    const [hideInternals, setHideInternals] = useState(true);
 
     // ── Initialize CodeMirror ──
     useEffect(() => {
@@ -208,6 +211,23 @@ export default function LivePythonVisualizer() {
             }
         }
 
+        // Variable Hiding Logic
+        let hiddenVars = [];
+        if (hideInternals) {
+            hiddenVars.push('self', '_sol', '_result');
+        }
+
+        // Detect custom # hide: var1, var2 comments
+        const hideMatch = code.match(/#\s*hide:\s*([^\n]+)/);
+        if (hideMatch) {
+            const extraHides = hideMatch[1].split(',').map(s => s.trim());
+            hiddenVars.push(...extraHides);
+        }
+
+        if (hiddenVars.length > 0) {
+            code += `\n\n# pythontutor_hide: ${hiddenVars.join(', ')}`;
+        }
+
         const encodedCode = encodeURIComponent(code);
         const url = `https://pythontutor.com/iframe-embed.html?t=${Date.now()}#code=${encodedCode}&cumulative=false&heapPrimitives=nevernest&mode=display&origin=opt-frontend.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false`;
 
@@ -249,10 +269,28 @@ export default function LivePythonVisualizer() {
                     <div className="code-window" style={{ flex: 1, padding: 0, overflow: 'hidden' }}>
                         <textarea ref={textareaRef} id="code_input" />
                     </div>
-                    <div className="complexity-bar">
+                    <div className="complexity-bar" style={{ marginTop: 'auto', borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                         <div className="state-row">
-                            <span>Detected Args:</span> 
-                            <span className="cv" style={{ color: argsHintColor, maxWidth: '200px', textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{argsHint}</span>
+                            <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: '600' }}>Detection</span> 
+                            <span className="cv" style={{ color: argsHintColor, maxWidth: '180px', textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{argsHint}</span>
+                        </div>
+                        
+                        <div style={{ height: '1px', background: 'var(--border)', margin: '4px 0' }}></div>
+                        
+                        <div className="state-row" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
+                            <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: '600' }}>Visual Options</span>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '13px', color: 'var(--text-main)', width: '100%' }}>
+                                <input 
+                                    type="checkbox" 
+                                    checked={hideInternals} 
+                                    onChange={(e) => setHideInternals(e.target.checked)}
+                                    style={{ accentColor: '#a78bfa', width: '16px', height: '16px', cursor: 'pointer' }}
+                                />
+                                <span>Clean Mode (Hide self, _sol)</span>
+                            </label>
+                            <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0', lineHeight: '1.4' }}>
+                                Tip: Use <code style={{ color: '#a78bfa' }}># hide: var_name</code> in code to hide any variable or field.
+                            </p>
                         </div>
                     </div>
                 </div>

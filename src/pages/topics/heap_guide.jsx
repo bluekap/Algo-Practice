@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CodeBlock from '../../components/CodeBlock';
 
 const heapData = {
     concepts: [
@@ -144,13 +145,10 @@ export default function HeapGuide() {
                                     ))}
                                 </div>
                             </div>
-                            <div className="code-container">
-                                <div className="code-header">
-                                    <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                    <span className="code-lang">python</span>
-                                </div>
-                                <pre>{activeConcept.code}</pre>
-                            </div>
+                            <CodeBlock 
+                                language="python"
+                                code={activeConcept.code}
+                            />
                         </div>
                     </section>
                 )}
@@ -186,13 +184,11 @@ export default function HeapGuide() {
                                             </div>
                                             {revealedSolutions[idx] && (
                                                 <div className="solution-container active">
-                                                    <div className="code-container">
-                                                        <div className="code-header">
-                                                            <div className="dots"><div className="dot red"></div><div className="dot yellow"></div><div className="dot green"></div></div>
-                                                            <span className="code-lang">solution.py</span>
-                                                        </div>
-                                                        <pre>{p.solution}</pre>
-                                                    </div>
+                                                    <CodeBlock 
+                                                        language="python"
+                                                        title="solution.py"
+                                                        code={p.solution}
+                                                    />
                                                 </div>
                                             )}
                                         </div>
