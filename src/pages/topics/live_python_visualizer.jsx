@@ -179,8 +179,8 @@ export default function LivePythonVisualizer() {
         code = code.replace(/\bset\s*\[/g, 'Set[');
 
         // Ensure typing import exists
-        if (!code.includes('from typing import')) {
-            code = 'from typing import List, Dict, Tuple, Set, Optional\n' + code;
+        if (!code.trim().includes('from typing import')) {
+            code = 'from typing import List, Dict, Tuple, Set, Optional, Any, Union\n' + code;
         }
 
         return code;
@@ -207,6 +207,7 @@ export default function LivePythonVisualizer() {
                 const methodName = methodMatch[1];
                 let args = testArgsEl ? testArgsEl.value.trim() : '';
                 if (!args) args = 'None';
+                // Add leading newlines to ensure it's not appended to a comment or line end
                 code += `\n\n# --- Auto-Generated Execution ---\n_sol = Solution()\n_result = _sol.${methodName}(${args})\nprint("Returned:", _result)`;
             }
         }
@@ -214,29 +215,44 @@ export default function LivePythonVisualizer() {
         // Variable Hiding Logic
         let hiddenVars = [];
         if (hideInternals) {
-            hiddenVars.push('self', '_sol', '_result');
+            hiddenVars.push('self', '_sol', '_result', 'List', 'Dict', 'Tuple', 'Set', 'Optional', 'Any', 'Union');
 
             // Auto-hide imports
-            const importRegex = /^(?:import\s+([\w\s,]+)|from\s+[\w.]+\s+import\s+([\w\s,]+))/gm;
+            // Allow leading whitespace and use [^\n\r;]+ to stay on the same line
+            const importRegex = /^\s*(?:import\s+([^\n\r;]+)|from\s+[\w.]+\s+import\s+([^\n\r;]+))/gm;
             let m;
             while ((m = importRegex.exec(code)) !== null) {
-                const names = (m[1] || m[2]).split(',');
+                const lineMatch = m[1] || m[2];
+                const names = lineMatch.split(',');
                 names.forEach(name => {
-                    const trimmed = name.trim().split(/\s+as\s+/).pop().trim();
-                    if (trimmed && !hiddenVars.includes(trimmed)) hiddenVars.push(trimmed);
+                    // Handle "import a as b" -> hide b
+                    // Handle "from x import a, b" -> hide a, b
+                    const parts = name.trim().split(/\s+/);
+                    const asIndex = parts.indexOf('as');
+                    const actualName = asIndex !== -1 ? parts[asIndex + 1] : parts[0];
+                    
+                    if (actualName) {
+                        const cleanName = actualName.trim();
+                        // Final safety check: ensure we didn't pick up keywords or empty strings
+                        if (cleanName && !['import', 'from', 'class', 'def', 'as'].includes(cleanName)) {
+                            if (!hiddenVars.includes(cleanName)) hiddenVars.push(cleanName);
+                        }
+                    }
                 });
             }
         }
 
         // Detect custom # hide: var1, var2 comments
-        const hideMatch = code.match(/#\s*hide:\s*([^\n]+)/);
+        const hideMatch = code.match(/#\s*hide:\s*([^\n\r]+)/);
         if (hideMatch) {
             const extraHides = hideMatch[1].split(',').map(s => s.trim());
             hiddenVars.push(...extraHides);
         }
 
         if (hiddenVars.length > 0) {
-            code += `\n\n# pythontutor_hide: ${hiddenVars.join(', ')}`;
+            // Deduplicate and filter any possible trash
+            const finalHidden = [...new Set(hiddenVars)].filter(v => v && v.length < 50); 
+            code += `\n\n# pythontutor_hide: ${finalHidden.join(', ')}`;
         }
 
         const encodedCode = encodeURIComponent(code);
