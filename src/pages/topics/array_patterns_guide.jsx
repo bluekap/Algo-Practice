@@ -3,24 +3,27 @@ import { Link } from 'react-router-dom';
 import CodeBlock from '../../components/CodeBlock';
 
 export default function ArrayPatternsGuide() {
-    const [quizSelection, setQuizSelection] = useState(null);
-    const [quizFeedback, setQuizFeedback] = useState({ visible: false, correct: false, text: '' });
-
-    const checkQuiz = (selected) => {
-        setQuizSelection(selected);
-        if (selected === 'sw') {
-            setQuizFeedback({
-                visible: true,
-                correct: true,
-                text: '✓ Correct! Contiguous + Sum condition = Sliding Window.'
-            });
-        } else {
-            setQuizFeedback({
-                visible: true,
-                correct: false,
-                text: '✗ Incorrect. Think about contiguous subarray elements.'
-            });
+    const [quizStates, setQuizStates] = useState({
+        q1: { selection: null, feedback: { visible: false, correct: false, text: '' } },
+        q2: { selection: null, feedback: { visible: false, correct: false, text: '' } }
+    });
+    
+    const checkQuiz = (qid, selected) => {
+        let correct = false;
+        let text = '';
+        
+        if (qid === 'q1') {
+            correct = selected === 'sw';
+            text = correct ? '✓ Correct! Contiguous + Sum condition = Sliding Window.' : '✗ Incorrect. Think about contiguous subarray elements.';
+        } else if (qid === 'q2') {
+            correct = selected === 'so';
+            text = correct ? '✓ Correct! Custom sorting (comparators) is needed for non-obvious ordering.' : '✗ Incorrect. Two pointers won\'t help with custom ordering across all elements.';
         }
+        
+        setQuizStates(prev => ({
+            ...prev,
+            [qid]: { selection: selected, feedback: { visible: true, correct, text } }
+        }));
     };
 
     return (
@@ -166,6 +169,76 @@ export default function ArrayPatternsGuide() {
                     </div>
                 </div>
 
+                {/* Custom Sorting */}
+                <div className="section-card">
+                    <div className="section-card-header">
+                        <span style={{ fontSize: '16px' }}>⚖️</span>
+                        <h2>Custom Sorting (Merge Sort)</h2>
+                    </div>
+                    <div className="section-card-body">
+                        <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>
+                            <strong>Interview Pro-Tip:</strong> Understanding sorting algorithms from scratch (Merge, Quick, Heap) is vital. 
+                            While built-in functions are usually preferred, many interview problems require you to modify the internal logic 
+                            of a sort (e.g., custom comparators or finding inversions).
+                        </p>
+                        <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>Example: LeetCode - Largest Number (Modified Merge Sort)</p>
+                        <CodeBlock 
+                            language="python"
+                            code={`class Solution:
+    def largestNumber(self, nums: List[int]) -> str:
+        if max(nums) == 0:
+            return "0"
+
+        result = []
+        for i in nums:
+            result.append(str(i))
+        
+        def divide(nums):
+            if len(nums) <= 1:
+                return nums
+
+            n = len(nums)//2
+            n1 = divide(nums[:n])
+            n2 = divide(nums[n:])
+
+            return conquer(n1, n2)
+
+        def conquer(nums1, nums2):
+            curr = []
+            if len(nums2) < len(nums1):
+                nums2, nums1 = nums1, nums2
+            
+            p1, p2 = 0, 0
+            while p1 < len(nums1) and p2 < len(nums2):
+                output = compare(nums1[p1], nums2[p2])
+                if output == nums1[p1]:
+                    p1 += 1
+                else:
+                    p2 += 1
+                curr.append(output)
+
+            while p2 != len(nums2):
+                curr.append(nums2[p2])
+                p2 += 1
+            
+            while p1 != len(nums1):
+                curr.append(nums1[p1])
+                p1 += 1
+            
+            return curr
+        
+        def compare(s1, s2):
+            o1 = s1 + s2
+            o2 = s2 + s1
+            if o1 > o2:
+                return s1
+            return s2
+        
+        return "".join(divide(result))`} 
+                        />
+                    </div>
+                </div>
+
                 {/* Mental Models */}
                 <div className="section-card">
                     <div className="section-card-header">
@@ -215,6 +288,11 @@ export default function ArrayPatternsGuide() {
                                     <td style={{ padding: '12px' }}><span className="trigger-pill">Range query</span></td>
                                     <td style={{ padding: '12px' }}>Match target</td>
                                 </tr>
+                                <tr>
+                                    <td style={{ padding: '12px' }}><span className="pattern-badge badge-so">Sorting</span></td>
+                                    <td style={{ padding: '12px' }}><span className="trigger-pill">Custom Order</span><span className="trigger-pill">Inversions</span></td>
+                                    <td style={{ padding: '12px' }}><code>compare(a, b)</code></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -227,30 +305,58 @@ export default function ArrayPatternsGuide() {
                         <h2>Identify the Pattern</h2>
                     </div>
                     <div className="section-card-body">
-                        <div className="quiz-card" id="q1">
+                        <div className="quiz-card" id="q1" style={{ marginBottom: '24px' }}>
                             <p className="quiz-question">1. "Find the minimal length of a contiguous subarray whose sum is &gt;= k."</p>
                             <div className="quiz-opts" style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
                                 <button 
-                                    className={`quiz-btn ${quizSelection === 'sw' ? 'active' : ''}`} 
-                                    onClick={() => checkQuiz('sw')}
-                                    style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid var(--border)', background: quizSelection === 'sw' ? 'var(--card-hover-bg)' : 'transparent', color: 'inherit', cursor: 'pointer' }}
+                                    className={`quiz-btn ${quizStates.q1.selection === 'sw' ? 'active' : ''}`} 
+                                    onClick={() => checkQuiz('q1', 'sw')}
+                                    style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid var(--border)', background: quizStates.q1.selection === 'sw' ? 'var(--card-hover-bg)' : 'transparent', color: 'inherit', cursor: 'pointer' }}
                                 >
                                     Sliding Window
                                 </button>
                                 <button 
-                                    className={`quiz-btn ${quizSelection === 'tp' ? 'active' : ''}`} 
-                                    onClick={() => checkQuiz('tp')}
-                                    style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid var(--border)', background: quizSelection === 'tp' ? 'var(--card-hover-bg)' : 'transparent', color: 'inherit', cursor: 'pointer' }}
+                                    className={`quiz-btn ${quizStates.q1.selection === 'tp' ? 'active' : ''}`} 
+                                    onClick={() => checkQuiz('q1', 'tp')}
+                                    style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid var(--border)', background: quizStates.q1.selection === 'tp' ? 'var(--card-hover-bg)' : 'transparent', color: 'inherit', cursor: 'pointer' }}
                                 >
                                     Two Pointers
                                 </button>
                             </div>
-                            {quizFeedback.visible && (
+                            {quizStates.q1.feedback.visible && (
                                 <div 
-                                    className={`quiz-feedback ${quizFeedback.correct ? 'feedback-correct' : 'feedback-incorrect'}`}
-                                    style={{ marginTop: '12px', padding: '10px', borderRadius: '6px', backgroundColor: quizFeedback.correct ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', color: quizFeedback.correct ? '#34d399' : '#f87171', border: `1px solid ${quizFeedback.correct ? '#059669' : '#b91c1c'}` }}
+                                    className={`quiz-feedback ${quizStates.q1.feedback.correct ? 'feedback-correct' : 'feedback-incorrect'}`}
+                                    style={{ marginTop: '12px', padding: '10px', borderRadius: '6px', backgroundColor: quizStates.q1.feedback.correct ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', color: quizStates.q1.feedback.correct ? '#34d399' : '#f87171', border: `1px solid ${quizStates.q1.feedback.correct ? '#059669' : '#b91c1c'}` }}
                                 >
-                                    {quizFeedback.text}
+                                    {quizStates.q1.feedback.text}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="quiz-card" id="q2">
+                            <p className="quiz-question">2. "Arrange a list of non-negative integers such that they form the largest number."</p>
+                            <div className="quiz-opts" style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+                                <button 
+                                    className={`quiz-btn ${quizStates.q2.selection === 'tp' ? 'active' : ''}`} 
+                                    onClick={() => checkQuiz('q2', 'tp')}
+                                    style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid var(--border)', background: quizStates.q2.selection === 'tp' ? 'var(--card-hover-bg)' : 'transparent', color: 'inherit', cursor: 'pointer' }}
+                                >
+                                    Two Pointers
+                                </button>
+                                <button 
+                                    className={`quiz-btn ${quizStates.q2.selection === 'so' ? 'active' : ''}`} 
+                                    onClick={() => checkQuiz('q2', 'so')}
+                                    style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid var(--border)', background: quizStates.q2.selection === 'so' ? 'var(--card-hover-bg)' : 'transparent', color: 'inherit', cursor: 'pointer' }}
+                                >
+                                    Sorting
+                                </button>
+                            </div>
+                            {quizStates.q2.feedback.visible && (
+                                <div 
+                                    className={`quiz-feedback ${quizStates.q2.feedback.correct ? 'feedback-correct' : 'feedback-incorrect'}`}
+                                    style={{ marginTop: '12px', padding: '10px', borderRadius: '6px', backgroundColor: quizStates.q2.feedback.correct ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', color: quizStates.q2.feedback.correct ? '#34d399' : '#f87171', border: `1px solid ${quizStates.q2.feedback.correct ? '#059669' : '#b91c1c'}` }}
+                                >
+                                    {quizStates.q2.feedback.text}
                                 </div>
                             )}
                         </div>

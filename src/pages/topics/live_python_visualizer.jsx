@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const DEFAULT_CODE = `class Solution:
-    def isPalindrome(self, s: str) -> bool:
+    def isPalindrome(self, s):
         # Tip: Use "# hide: var_name" to declutter the visualization!
         # hide: s
         
@@ -170,18 +170,45 @@ export default function LivePythonVisualizer() {
         });
     }
 
-    // ── Preprocessor ──
-    function normalizeTyping(code) {
-        // Convert built-in generics to typing equivalents
-        code = code.replace(/\blist\s*\[/g, 'List[');
-        code = code.replace(/\bdict\s*\[/g, 'Dict[');
-        code = code.replace(/\btuple\s*\[/g, 'Tuple[');
-        code = code.replace(/\bset\s*\[/g, 'Set[');
+    // ── Preprocessor: Clean Typing ──
+    function cleanCode(code) {
+        // 1. Remove all typing-related imports
+        code = code.replace(/^\s*(?:from\s+typing\s+import\s+|import\s+typing).*\n?/gm, '');
 
-        // Ensure typing import exists
-        if (!code.trim().includes('from typing import')) {
-            code = 'from typing import List, Dict, Tuple, Set, Optional, Any, Union\n' + code;
-        }
+        // 2. Remove return type hints (e.g., " -> bool", " -> List[int]")
+        code = code.replace(/\s*->\s*[^:]+(?=:)/g, '');
+
+        // 3. Remove parameter type hints (e.g., "s: str", "nums: List[int]")
+        // We use a robust loop to handle nested brackets like List[Tuple[int, int]]
+        code = code.replace(/(def\s+\w+\s*\()([\s\S]*?)(\)\s*:)/g, (match, p1, p2, p3) => {
+            let args = p2;
+            let result = '';
+            let depth = 0;
+            let inType = false;
+            for (let i = 0; i < args.length; i++) {
+                const c = args[i];
+                if (c === ':' && depth === 0) {
+                    inType = true;
+                    continue;
+                }
+                if (inType) {
+                    if (c === '[' || c === '(' || c === '{') depth++;
+                    if (c === ']' || c === ')' || c === '}') depth--;
+                    
+                    if (depth === 0 && (c === ',' || c === '=' || c === ')')) {
+                        inType = false;
+                        // fall through to append this delimiter
+                    } else {
+                        continue; // skip type hint content
+                    }
+                }
+                result += c;
+            }
+            return p1 + result + p3;
+        });
+
+        // 4. Remove variable annotations (e.g., "x: int = 5")
+        code = code.replace(/^(\s*\w+)\s*:\s*[^=]+(?=\s*=)/gm, '$1');
 
         return code;
     }
@@ -195,8 +222,8 @@ export default function LivePythonVisualizer() {
             return;
         }
 
-        // Preprocess typing
-        code = normalizeTyping(code);
+        // Preprocess to remove typing boilerplate and hints
+        code = cleanCode(code);
 
         // Auto-execution logic
         if (mode === 'leetcode') {
