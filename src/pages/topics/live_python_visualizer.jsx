@@ -176,7 +176,7 @@ export default function LivePythonVisualizer() {
         code = code.replace(/^\s*(?:from\s+typing\s+import\s+|import\s+typing).*\n?/gm, '');
 
         // 2. Remove return type hints (e.g., " -> bool", " -> List[int]")
-        code = code.replace(/\s*->\s*[^:]+(?=:)/g, '');
+        code = code.replace(/\s*->\s*[^:\n]+(?=:)/g, '');
 
         // 3. Remove parameter type hints (e.g., "s: str", "nums: List[int]")
         // We use a robust loop to handle nested brackets like List[Tuple[int, int]]
@@ -208,7 +208,8 @@ export default function LivePythonVisualizer() {
         });
 
         // 4. Remove variable annotations (e.g., "x: int = 5")
-        code = code.replace(/^(\s*\w+)\s*:\s*[^=]+(?=\s*=)/gm, '$1');
+        // We use [^=\n] to ensure we don't match across line boundaries and a lookahead to avoid keywords
+        code = code.replace(/^(\s*(?!if|else|elif|for|while|try|except|def|class|with|return)\w+)\s*:\s*[^=\n]+(?=\s*=)/gm, '$1');
 
         return code;
     }
