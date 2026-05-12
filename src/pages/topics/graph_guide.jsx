@@ -8,7 +8,9 @@ const graphData = {
             id: "graph",
             title: "Graph Fundamentals",
             icon: "🕸️",
-            content: `A graph is a set of **nodes** (vertices) connected by **edges**. Unlike trees, graphs can have cycles, disconnected components, and bidirectional/weighted edges.\n\n• **Adjacency List**: Most common — dict mapping node → list of neighbors. Space O(V+E).\n• **Adjacency Matrix**: Grid of size V×V. Fast edge lookup O(1), but O(V²) space.\n• **Directed vs Undirected**: Directed edges have a one-way relationship.\n• **Weighted**: Each edge carries a cost (used in Dijkstra, Bellman-Ford).\n\nFor most LeetCode problems, build an adjacency list from the input.`,
+            content: `A graph is a set of **nodes** (vertices) connected by **edges**. Unlike trees, graphs can have cycles, disconnected components, and bidirectional edges.\n\n• **Adjacency List**: Most common — dict mapping node → list of neighbors. Space \`O(V+E)\`.\n• **Adjacency Matrix**: Grid of size \`V×V\`. Fast edge lookup \`O(1)\`, but \`O(V²)\` space.\n• **Directed vs Undirected**: Directed edges have a one-way relationship.\n• **Weighted**: Each edge carries a cost (used in Dijkstra).`,
+            mentalModel: "Think of a graph as a social network. Nodes are people, edges are friendships. An adjacency list is like a contact list for each person.",
+            complexity: { time: "O(V + E)", space: "O(V + E)" },
             code: `# ── Adjacency List (most common) ──────────────────────
 # Undirected graph with 5 nodes
 edges = [[0,1],[0,2],[1,3],[2,4]]
@@ -32,11 +34,13 @@ for u, v, w in weighted_edges:
             id: "bfs",
             title: "BFS — Breadth-First Search",
             icon: "🌊",
-            content: `BFS explores all neighbors at depth d before moving to depth d+1. It uses a **Queue (deque)** and is ideal for finding **shortest paths** in unweighted graphs.\n\n**Template:**\n1. Push starting node into queue, mark visited.\n2. While queue not empty: pop node, process, push unvisited neighbors.\n\n**When to use BFS:**\n• Shortest path in unweighted graph/grid\n• Level-by-level processing (word ladder, rotting oranges)\n• Detecting bipartiteness\n\n**Time:** O(V + E) — every node and edge visited once.\n**Space:** O(V) — queue at most holds all nodes.`,
+            content: `BFS explores all neighbors at depth \`d\` before moving to depth \`d+1\`. It uses a **Queue (deque)** and is ideal for finding **shortest paths** in unweighted graphs.\n\n• **Layer by Layer**: Process all nodes at the current distance before moving further.\n• **Shortest Path**: Guaranteed to find the shortest path in an unweighted graph.\n• **Grid Problems**: Use BFS for "minimum steps" to reach a target in a 2D grid.`,
+            mentalModel: "Like a ripple in a pond. The wave expands outward layer by layer. Everything the wave hits at the same time is at the same distance.",
+            complexity: { time: "O(V + E)", space: "O(V)" },
             code: `from collections import deque
 
 def bfs(graph, start):
-    visited = set([start])
+    visited = {start}
     queue = deque([start])
     order = []
 
@@ -54,7 +58,7 @@ def bfs(graph, start):
 # ── BFS on a 2D grid ──────────────────────────────────
 def bfs_grid(grid, sr, sc):
     rows, cols = len(grid), len(grid[0])
-    visited = set([(sr, sc)])
+    visited = {(sr, sc)}
     queue = deque([(sr, sc)])
     dirs = [(0,1),(0,-1),(1,0),(-1,0)]
 
@@ -72,7 +76,9 @@ def bfs_grid(grid, sr, sc):
             id: "dfs",
             title: "DFS — Depth-First Search",
             icon: "⬇️",
-            content: `DFS explores as deep as possible before backtracking. Implemented **recursively** (call stack) or **iteratively** (explicit stack).\n\n**When to use DFS:**\n• Detecting cycles in a directed/undirected graph\n• Topological sort (reverse post-order)\n• Finding connected components\n• Pathfinding / flood fill\n\n**3-color cycle detection for directed graphs:**\n• ⬜ WHITE (0) — unvisited\n• 🔵 GRAY (1) — in current DFS path (recursion stack)\n• ⬛ BLACK (2) — fully processed\n\nIf you hit a GRAY node → cycle exists.\n\n**Time:** O(V + E). **Space:** O(V) for the recursion stack.`,
+            content: `DFS explores as deep as possible before backtracking. Implemented **recursively** (call stack) or **iteratively** (explicit stack).\n\n• **Pathfinding**: Useful for exploring all possible paths.\n• **Cycle Detection**: Use 3 colors (White, Gray, Black) to detect cycles in directed graphs.\n• **Topological Sort**: Use post-order traversal to order tasks with dependencies.`,
+            mentalModel: "Like exploring a maze. You go down one path until you hit a dead end, then backtrack to the last intersection and try a different path.",
+            complexity: { time: "O(V + E)", space: "O(V)" },
             code: `# ── Recursive DFS ─────────────────────────────────────
 def dfs(graph, node, visited, order):
     visited.add(node)
@@ -116,81 +122,57 @@ def has_cycle(n, adj):
             id: "union-find",
             title: "Union Find (DSU)",
             icon: "🔗",
-            content: `Union Find (Disjoint Set Union) tracks which elements are in the same connected **component**. Two key operations:\n\n• **find(x)** — returns the root/representative of x's component.\n• **union(x, y)** — merges the components of x and y.\n\n**Two optimizations (always use both):**\n• **Path Compression** — in find(), point every node directly to root.\n• **Union by Rank** — always attach the smaller tree under the larger.\n\nWith both: near O(1) amortized per operation — O(α(n)) inverse Ackermann.\n\n**When to use:**\n• Number of connected components\n• Detecting cycles in undirected graphs\n• Kruskal's MST\n• Dynamic connectivity queries`,
+            content: `Union Find tracks which elements are in the same connected **component**. It is extremely efficient for dynamic connectivity.\n\n• **Path Compression**: Flatten the tree structure during \`find()\` for near-constant time lookups.\n• **Union by Rank**: Keep the tree shallow by attaching the smaller tree to the larger one.\n• **Cycle Detection**: If \`find(u) == find(v)\`, adding an edge \`(u, v)\` creates a cycle.`,
+            mentalModel: "Think of merging companies. Each person has a manager. 'Find' tells you the CEO. 'Union' merges two companies by making one CEO report to the other.",
+            complexity: { time: "O(α(N))", space: "O(N)" },
             code: `class UnionFind:
     def __init__(self, n):
-        self.parent = list(range(n))    # each node is own root
+        self.parent = list(range(n))
         self.rank = [0] * n
-        self.components = n             # track component count
+        self.components = n
 
     def find(self, x):
-        # Path compression — flatten the tree
         if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])
+            self.parent[x] = self.find(self.parent[x]) # Path compression
         return self.parent[x]
 
     def union(self, x, y):
         rx, ry = self.find(x), self.find(y)
-        if rx == ry:
-            return False                # already connected
-        # Union by rank — smaller tree under bigger
+        if rx == ry: return False
+        
         if self.rank[rx] < self.rank[ry]:
-            rx, ry = ry, rx
-        self.parent[ry] = rx
-        if self.rank[rx] == self.rank[ry]:
+            self.parent[rx] = ry
+        elif self.rank[rx] > self.rank[ry]:
+            self.parent[ry] = rx
+        else:
+            self.parent[ry] = rx
             self.rank[rx] += 1
         self.components -= 1
-        return True
-
-    def connected(self, x, y):
-        return self.find(x) == self.find(y)
-
-# Usage:
-uf = UnionFind(5)
-uf.union(0, 1)
-uf.union(1, 2)
-print(uf.connected(0, 2))    # True
-print(uf.components)         # 3`
+        return True`
         },
         {
             id: "dijkstra",
             title: "Dijkstra's Algorithm",
             icon: "🗺️",
-            content: `Dijkstra finds the **shortest path** from a source node to all others in a **weighted graph with non-negative edges**.\n\n**Key idea:** Always relax the cheapest unvisited node first — a greedy priority queue approach.\n\n**Template:**\n1. dist[] = infinity for all, dist[src] = 0.\n2. Push (0, src) into min-heap.\n3. Pop cheapest node. If already visited, skip.\n4. For each neighbor: if dist[u]+w < dist[v], update and push.\n\n**Time:** O((V + E) log V) with a binary heap.\n**Space:** O(V + E)\n\n**Limitation:** Fails with **negative weights** → use Bellman-Ford instead.`,
+            content: `Dijkstra finds the **shortest path** in a **weighted graph** with non-negative edges. It uses a **Priority Queue** to always explore the cheapest path first.\n\n• **Greedy Approach**: Always visit the node with the current smallest distance.\n• **Edge Relaxation**: Update neighbor distances if a shorter path is found through the current node.\n• **Limitation**: Does not work with negative edge weights.`,
+            mentalModel: "Like a GPS. It constantly evaluates all possible roads and always picks the one that gets you closer to the destination the fastest.",
+            complexity: { time: "O((V+E) log V)", space: "O(V + E)" },
             code: `import heapq
 
 def dijkstra(n, adj, src):
-    """
-    adj: list of lists of (neighbor, weight)
-    Returns: dist[] — shortest distance from src to all nodes
-    """
     dist = [float('inf')] * n
     dist[src] = 0
-    heap = [(0, src)]           # (cost, node)
+    pq = [(0, src)]           # (cost, node)
 
-    while heap:
-        cost, u = heapq.heappop(heap)
-
-        if cost > dist[u]:      # stale entry, skip
-            continue
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d > dist[u]: continue
 
         for v, w in adj[u]:
-            new_cost = dist[u] + w
-            if new_cost < dist[v]:
-                dist[v] = new_cost
-                heapq.heappush(heap, (new_cost, v))
-
-    return dist                 # dist[i] = min cost src→i
-
-# ── Example: Network Delay Time (LC 743) ──────────────
-def networkDelayTime(times, n, k):
-    adj = [[] for _ in range(n + 1)]
-    for u, v, w in times:
-        adj[u].append((v, w))
-
-    dist = dijkstra(n + 1, adj, k)
-    ans = max(dist[1:])         # longest of all shortest paths
-    return ans if ans < float('inf') else -1`
+            if d + w < dist[v]:
+                dist[v] = d + w
+                heapq.heappush(pq, (dist[v], v))
+    return dist`
         }
     ],
     problems: [
@@ -221,9 +203,7 @@ def networkDelayTime(times, n, k):
                 if grid[r][c] == '1' and (r, c) not in visited:
                     dfs(r, c)
                     count += 1
-        return count
-
-# Time: O(M×N) | Space: O(M×N)`
+        return count`
         },
         {
             difficulty: "Medium", color: "#facc15", dimColor: "#854d0e", bg: "#1c1400",
@@ -243,7 +223,7 @@ class Solution:
         for r in range(rows):
             for c in range(cols):
                 if grid[r][c] == 2:
-                    queue.append((r, c, 0))   # (row, col, time)
+                    queue.append((r, c, 0))
                 elif grid[r][c] == 1:
                     fresh += 1
 
@@ -261,127 +241,111 @@ class Solution:
                     time = t + 1
                     queue.append((nr, nc, t+1))
 
-        return time if fresh == 0 else -1
-
-# Time: O(M×N) | Space: O(M×N)`
+        return time if fresh == 0 else -1`
         },
         {
             difficulty: "Medium", color: "#facc15", dimColor: "#854d0e", bg: "#1c1400",
             title: "Course Schedule", number: 207,
             link: "https://leetcode.com/problems/course-schedule/",
             pattern: "DFS · Cycle Detection",
-            description: "There are numCourses courses (0 to n-1). prerequisites[i] = [a, b] means you must take b before a. Return true if you can finish all courses (i.e., no cycles).",
-            hint: "Build a directed graph and look for a cycle. Use 3-color DFS: WHITE=unvisited, GRAY=in current path, BLACK=done. A back edge to a GRAY node = cycle.",
+            description: "There are numCourses courses. prerequisites[i] = [a, b] means you must take b before a. Return true if you can finish all courses.",
+            hint: "Build a directed graph and look for a cycle using 3-color DFS.",
             solution: `class Solution:
-    def canFinish(self, numCourses: int,
-                  prerequisites: List[List[int]]) -> bool:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         adj = [[] for _ in range(numCourses)]
         for a, b in prerequisites:
-            adj[b].append(a)           # b must come before a
+            adj[b].append(a)
 
-        # 0=unvisited, 1=in-stack (gray), 2=done (black)
-        color = [0] * numCourses
+        color = [0] * numCourses # 0=white, 1=gray, 2=black
 
         def dfs(u):
-            color[u] = 1              # mark gray
+            color[u] = 1
             for v in adj[u]:
-                if color[v] == 1:     # back edge → cycle
-                    return False
-                if color[v] == 0 and not dfs(v):
-                    return False
-            color[u] = 2              # mark black
+                if color[v] == 1: return False
+                if color[v] == 0 and not dfs(v): return False
+            color[u] = 2
             return True
 
-        return all(
-            dfs(u) for u in range(numCourses)
-            if color[u] == 0
-        )
-
-# Time: O(V+E) | Space: O(V+E)`
+        return all(dfs(u) for u in range(numCourses) if color[u] == 0)`
         },
         {
             difficulty: "Medium", color: "#facc15", dimColor: "#854d0e", bg: "#1c1400",
             title: "Number of Provinces", number: 547,
             link: "https://leetcode.com/problems/number-of-provinces/",
             pattern: "Union Find",
-            description: "There are n cities. isConnected[i][j]=1 if cities i and j are directly connected. A province is a group of directly/indirectly connected cities. Return the number of provinces.",
-            hint: "Classic Union-Find: iterate all pairs, union connected cities. The answer is the number of distinct roots remaining — tracked by uf.components.",
-            solution: `class UnionFind:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.rank = [0] * n
-        self.components = n
-
-    def find(self, x):
-        if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])
-        return self.parent[x]
-
-    def union(self, x, y):
-        rx, ry = self.find(x), self.find(y)
-        if rx == ry: return
-        if self.rank[rx] < self.rank[ry]: rx, ry = ry, rx
-        self.parent[ry] = rx
-        if self.rank[rx] == self.rank[ry]: self.rank[rx] += 1
-        self.components -= 1
-
-class Solution:
+            description: "Given n cities and connections, return the number of provinces (connected components).",
+            hint: "Iterate all pairs, union connected cities. Result is the final number of components.",
+            solution: `class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         n = len(isConnected)
-        uf = UnionFind(n)
+        parent = list(range(n))
+        count = n
+        
+        def find(x):
+            if parent[x] != x: parent[x] = find(parent[x])
+            return parent[x]
+            
+        def union(x, y):
+            nonlocal count
+            rx, ry = find(x), find(y)
+            if rx != ry:
+                parent[rx] = ry
+                count -= 1
+                
         for i in range(n):
             for j in range(i + 1, n):
-                if isConnected[i][j]:
-                    uf.union(i, j)
-        return uf.components
-
-# Time: O(n² · α(n)) ≈ O(n²) | Space: O(n)`
+                if isConnected[i][j]: union(i, j)
+        return count`
         },
         {
             difficulty: "Medium", color: "#facc15", dimColor: "#854d0e", bg: "#1c1400",
             title: "Network Delay Time", number: 743,
             link: "https://leetcode.com/problems/network-delay-time/",
             pattern: "Dijkstra",
-            description: "You have n network nodes (1 to n). times[i]=[u,v,w] is a directed edge from u to v with travel time w. Send a signal from node k. Return the time for all nodes to receive the signal, or -1 if impossible.",
-            hint: "Classic Dijkstra from source k. Once all shortest paths are found, the answer is max(dist[1..n]). If any node is still infinity, return -1.",
+            description: "Find the time for a signal to reach all nodes in a weighted network.",
+            hint: "Classic Dijkstra from source k. The answer is max(dist[1..n]).",
             solution: `import heapq
 
 class Solution:
-    def networkDelayTime(self, times: List[List[int]],
-                         n: int, k: int) -> int:
-        # Build adjacency list (1-indexed)
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         adj = [[] for _ in range(n + 1)]
-        for u, v, w in times:
-            adj[u].append((v, w))
-
+        for u, v, w in times: adj[u].append((v, w))
         dist = [float('inf')] * (n + 1)
         dist[k] = 0
-        heap = [(0, k)]                    # (cost, node)
-
-        while heap:
-            cost, u = heapq.heappop(heap)
-            if cost > dist[u]:
-                continue                   # stale entry
+        pq = [(0, k)]
+        while pq:
+            d, u = heapq.heappop(pq)
+            if d > dist[u]: continue
             for v, w in adj[u]:
                 if dist[u] + w < dist[v]:
                     dist[v] = dist[u] + w
-                    heapq.heappush(heap, (dist[v], v))
-
+                    heapq.heappush(pq, (dist[v], v))
         ans = max(dist[1:])
-        return ans if ans < float('inf') else -1
-
-# Time: O((V+E) log V) | Space: O(V+E)`
+        return ans if ans < float('inf') else -1`
         }
     ]
 };
 
 const cheatsheetData = [
-    { pattern: "BFS (Queue)", desc: "Shortest path in unweighted graph. Multi-source: seed all starting nodes at once.", color: "#60a5fa" },
-    { pattern: "DFS (Stack/Recursion)", desc: "Cycle detection, connected components, topological sort, path finding.", color: "#c084fc" },
+    { pattern: "BFS (Queue)", desc: "Shortest path in unweighted graph. Multi-source: seed all starting nodes.", color: "#60a5fa" },
+    { pattern: "DFS (Stack)", desc: "Cycle detection, connected components, topological sort.", color: "#c084fc" },
     { pattern: "Union Find", desc: "Dynamic connectivity, number of components, cycle detection (undirected).", color: "#34d399" },
-    { pattern: "Dijkstra (Min-Heap)", desc: "Shortest path in weighted graph (non-negative weights). O((V+E) log V).", color: "#fbbf24" },
-    { pattern: "3-Color DFS", desc: "WHITE→GRAY→BLACK. Back edge to GRAY = cycle in directed graph.", color: "#f87171" },
+    { pattern: "Dijkstra", desc: "Shortest path in weighted graph (non-negative). O((V+E) log V).", color: "#fbbf24" },
 ];
+
+function renderMarkdown(text) {
+    return text.split('\n').map((line, i) => {
+        if (line.trim() === '') return <div key={i} style={{ height: '8px' }} />;
+        
+        let html = line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\`([^`]+)\`/g, '<code class="inline-code">$1</code>');
+        if (line.startsWith('• ')) {
+            return <li key={i} style={{ marginLeft: '12px', marginBottom: '4px' }} dangerouslySetInnerHTML={{ __html: html.substring(2) }} />;
+        }
+        
+        return <p key={i} dangerouslySetInnerHTML={{ __html: html }}></p>;
+    });
+}
 
 export default function GraphGuide() {
     const [activeTab, setActiveTab] = useState('learn');
@@ -389,13 +353,8 @@ export default function GraphGuide() {
     const [expandedProblems, setExpandedProblems] = useState({});
     const [revealedSolutions, setRevealedSolutions] = useState({});
 
-    const toggleProblem = (idx) => {
-        setExpandedProblems(prev => ({ ...prev, [idx]: !prev[idx] }));
-    };
-
-    const toggleSolution = (idx) => {
-        setRevealedSolutions(prev => ({ ...prev, [idx]: !prev[idx] }));
-    };
+    const toggleProblem = (idx) => setExpandedProblems(prev => ({ ...prev, [idx]: !prev[idx] }));
+    const toggleSolution = (idx) => setRevealedSolutions(prev => ({ ...prev, [idx]: !prev[idx] }));
 
     const activeConcept = graphData.concepts.find(c => c.id === activeConceptId);
 
@@ -404,34 +363,23 @@ export default function GraphGuide() {
             <div className="page-header">
                 <Link to="/topics/graphs" className="nav-back">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Back to Masterclass
+                    Back to Hub
                 </Link>
-                <h1>🕸️ Graphs in Python</h1>
-                <p>BFS · DFS · Union Find · Dijkstra → 5 LeetCode problems (all Medium)</p>
-                <div className="tabs" style={{ justifyContent: 'center', marginTop: '12px' }}>
-                    <button
-                        className={`tab ${activeTab === 'learn' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('learn')}
-                    >📚 Learn</button>
-                    <button
-                        className={`tab ${activeTab === 'problems' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('problems')}
-                    >🧩 Problems</button>
+                <h1>🕸️ Graphs Masterclass</h1>
+                <p>BFS · DFS · Union Find · Dijkstra · 5 LeetCode Mediums</p>
+                <div className="tabs" style={{ justifyContent: 'center', marginTop: '16px' }}>
+                    <button className={`tab ${activeTab === 'learn' ? 'active' : ''}`} onClick={() => setActiveTab('learn')}>📚 Learn</button>
+                    <button className={`tab ${activeTab === 'problems' ? 'active' : ''}`} onClick={() => setActiveTab('problems')}>🧩 Problems</button>
                 </div>
             </div>
 
             <main>
                 {activeTab === 'learn' && (
                     <section id="learn" className="content-section learn-container active">
-                        <div className="side-nav" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                        <div className="side-nav" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '24px' }}>
                             {graphData.concepts.map(c => (
-                                <button
-                                    key={c.id}
-                                    className={`tab ${activeConceptId === c.id ? 'active' : ''}`}
-                                    onClick={() => setActiveConceptId(c.id)}
-                                    style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-                                >
-                                    <span>{c.icon}</span><span>{c.title}</span>
+                                <button key={c.id} className={`tab ${activeConceptId === c.id ? 'active' : ''}`} onClick={() => setActiveConceptId(c.id)}>
+                                    <span>{c.icon}</span> <span>{c.title}</span>
                                 </button>
                             ))}
                         </div>
@@ -443,24 +391,34 @@ export default function GraphGuide() {
                                     <h2>{activeConcept.title}</h2>
                                 </div>
                                 <div className="section-card-body">
-                                    {activeConcept.content.split('\n').map((line, i) => (
-                                        line.trim() === ''
-                                            ? <div key={i} style={{ height: '6px' }} />
-                                            : <p key={i} dangerouslySetInnerHTML={{ __html: line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') }}></p>
-                                    ))}
+                                    <div className="content-text">{renderMarkdown(activeConcept.content)}</div>
+                                    
+                                    <div className="complexity-bar" style={{ marginTop: '16px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', padding: '12px' }}>
+                                        <div style={{ display: 'flex', gap: '24px' }}>
+                                            <div className="state-row"><span>Time:</span> <span className="cv">{activeConcept.complexity.time}</span></div>
+                                            <div className="state-row"><span>Space:</span> <span className="cv">{activeConcept.complexity.space}</span></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <CodeBlock
-                                language="python"
-                                code={activeConcept.code}
-                            />
+
+                            <div className="section-card" style={{ borderLeft: '4px solid #c4b5fd' }}>
+                                <div className="section-card-header">
+                                    <span>🧠</span>
+                                    <h2>Mental Model</h2>
+                                </div>
+                                <div className="section-card-body" style={{ fontStyle: 'italic', color: 'var(--text-muted-bright)' }}>
+                                    "{activeConcept.mentalModel}"
+                                </div>
+                            </div>
+
+                            <CodeBlock language="python" code={activeConcept.code} />
                         </div>
                     </section>
                 )}
 
                 {activeTab === 'problems' && (
                     <section id="problems" className="content-section active">
-                        <p className="problems-intro">5 curated problems · all Medium · covers BFS, DFS, Union Find & Dijkstra</p>
                         <div id="problems-list">
                             {graphData.problems.map((p, idx) => (
                                 <div key={idx} className={`problem-item ${expandedProblems[idx] ? 'expanded' : ''}`}>
@@ -475,34 +433,23 @@ export default function GraphGuide() {
                                         <div className="problem-details">
                                             <p className="problem-desc">{p.description}</p>
                                             <div className="hint-box">
-                                                <div className="hint-title">💡 HINT</div>
+                                                <div className="hint-title">💡 STRATEGY</div>
                                                 <p className="hint-text">{p.hint}</p>
                                             </div>
                                             <div className="prob-actions">
-                                                <a href={p.link} target="_blank" rel="noopener noreferrer" className="action-btn btn-secondary">🔗 Open LeetCode</a>
-                                                <button
-                                                    className={`action-btn btn-toggle-sol ${revealedSolutions[idx] ? 'active' : ''}`}
-                                                    onClick={() => toggleSolution(idx)}
-                                                >
+                                                <a href={p.link} target="_blank" rel="noopener noreferrer" className="action-btn btn-secondary">🔗 LeetCode</a>
+                                                <button className={`action-btn btn-toggle-sol ${revealedSolutions[idx] ? 'active' : ''}`} onClick={() => toggleSolution(idx)}>
                                                     {revealedSolutions[idx] ? '🙈 Hide Solution' : '👁 View Solution'}
                                                 </button>
                                             </div>
-                                            {revealedSolutions[idx] && (
-                                                <div className="solution-container active">
-                                                    <CodeBlock
-                                                        language="python"
-                                                        title="solution.py"
-                                                        code={p.solution}
-                                                    />
-                                                </div>
-                                            )}
+                                            {revealedSolutions[idx] && <CodeBlock language="python" title="solution.py" code={p.solution} />}
                                         </div>
                                     )}
                                 </div>
                             ))}
                         </div>
 
-                        <div className="cheatsheet">
+                        <div className="cheatsheet" style={{ marginTop: '32px' }}>
                             <div className="cheat-title">📋 PATTERN CHEATSHEET</div>
                             <div id="cheatsheet-content">
                                 {cheatsheetData.map((c, i) => (
