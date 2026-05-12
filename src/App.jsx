@@ -45,6 +45,8 @@ import TreeVisualizer from './pages/topics/tree_visualizer';
 
 // Graphs Topic
 import GraphsMasterclass from './pages/topics/GraphsMasterclass';
+import GraphGuide from './pages/topics/graph_guide';
+import GraphVisualizer from './pages/topics/graph_visualizer';
 
 // Debugger/Visualizer Topic
 import LivePythonVisualizer from './pages/topics/live_python_visualizer';
@@ -88,6 +90,8 @@ function App() {
           <Route path="topics/trees/guide" element={<TreeGuide />} />
           <Route path="topics/trees/visualizer" element={<TreeVisualizer />} />
           <Route path="topics/graphs" element={<GraphsMasterclass />} />
+          <Route path="topics/graphs/guide" element={<GraphGuide />} />
+          <Route path="topics/graphs/visualizer" element={<GraphVisualizer />} />
 
           {/* Debugger Routes */}
           <Route path="topics/debugger" element={<LivePythonVisualizer />} />
