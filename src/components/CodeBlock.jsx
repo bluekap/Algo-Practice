@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/tokyo-night-dark.css'; // Using a vibrant dark theme as base
+import hljs from 'highlight.js/lib/core';
+import python from 'highlight.js/lib/languages/python';
+import 'highlight.js/styles/tokyo-night-dark.css';
+
+hljs.registerLanguage('python', python);
 
 export default function CodeBlock({ code, language = 'python', title }) {
     const codeRef = useRef(null);
